@@ -2,11 +2,14 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.0.0'
 	id 'io.spring.dependency-management' version '1.1.0'
+	id 'application'
+	id 'org.openjfx.javafxplugin' version '0.0.13'
 }
 
 group = 'TO.project'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
+mainClassName = 'TO.project.CinemaStreet.UIApplication'
 
 repositories {
 	mavenCentral()
@@ -14,7 +17,14 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	runtimeOnly 'com.h2database:h2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+javafx {
+	version = "17"
+	modules = ['javafx.base', 'javafx.controls', 'javafx.fxml', 'javafx.graphics', 'javafx.media', 'javafx.swing', 'javafx.web']
 }
 
 tasks.named('test') {
