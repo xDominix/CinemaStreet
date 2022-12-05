@@ -1,9 +1,6 @@
 package TO.project.CinemaStreet.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import javafx.beans.property.*;
 
 
@@ -12,12 +9,14 @@ import java.io.IOException;
 import java.io.ObjectOutput;
 
 @Entity
+@Table(name = "registeredUser")
 public class User implements Externalizable {
-    private final SimpleIntegerProperty id = new SimpleIntegerProperty(this, "id");
-    private SimpleStringProperty firstName = new SimpleStringProperty(this, "firstName");
-    private SimpleStringProperty lastName = new SimpleStringProperty(this, "lastName");
-    private SimpleStringProperty email = new SimpleStringProperty(this, "email");
-    private SimpleObjectProperty<Role> role = new SimpleObjectProperty<>(this, "role");
+    private static final long serialVersionUID = 1L;
+    private final IntegerProperty id = new SimpleIntegerProperty(this, "id");
+    private final StringProperty firstName = new SimpleStringProperty(this, "firstName");
+    private final StringProperty lastName = new SimpleStringProperty(this, "lastName");
+    private final StringProperty email = new SimpleStringProperty(this, "email");
+    private final ObjectProperty<Role> role = new SimpleObjectProperty<>(this, "role");
 
     public User() {
     }
@@ -31,7 +30,7 @@ public class User implements Externalizable {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    public int getId() {
+    public final int getId() {
         return id.get();
     }
 
@@ -39,11 +38,11 @@ public class User implements Externalizable {
         return id;
     }
 
-    public void setId(int id) {
+    public final void setId(int id) {
         this.id.set(id);
     }
 
-    public String getFirstName() {
+    public final String getFirstName() {
         return firstName.get();
     }
 
@@ -51,7 +50,7 @@ public class User implements Externalizable {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
+    public final void setFirstName(String firstName) {
         this.firstName.set(firstName);
     }
 
@@ -59,15 +58,15 @@ public class User implements Externalizable {
         return lastName.get();
     }
 
-    public StringProperty lastNameProperty() {
+    public final StringProperty lastNameProperty() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
+    public final void setLastName(String lastName) {
         this.lastName.set(lastName);
     }
 
-    public String getEmail() {
+    public final String getEmail() {
         return email.get();
     }
 
@@ -75,7 +74,7 @@ public class User implements Externalizable {
         return email;
     }
 
-    public void setEmail(String email) {
+    public final void setEmail(String email) {
         this.email.set(email);
     }
 
@@ -99,7 +98,7 @@ public class User implements Externalizable {
                 ", firstName=" + firstName +
                 ", lastName=" + lastName +
                 ", email=" + email +
-                ", role=" + role +
+//                ", role=" + role +
                 '}';
     }
 

@@ -4,12 +4,19 @@ import TO.project.CinemaStreet.model.Role;
 import TO.project.CinemaStreet.model.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public class UserService {
-    public static ObservableList<User> getAllUsers()
+@Service
+public class UserService{
+    private final UserRepository userRepository;
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+    public List<User> getAllUsers()
     {
-        return FXCollections.observableArrayList(new User("Jan", "Kowalski", "email@gmail.com", Role.USER));
+        return userRepository.findAll();
+//        return FXCollections.observableArrayList(new User("Jan", "Kowalski", "email@gmail.com", Role.USER));
     }
 }

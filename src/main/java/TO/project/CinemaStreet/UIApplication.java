@@ -6,8 +6,18 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 public class UIApplication extends javafx.application.Application{
+    public UserController controller;
+    private ConfigurableApplicationContext springContext;
+    @Override
+    public void init() throws Exception {
+        super.init();
+        springContext = SpringApplication.run(CinemaStreetApplication.class);
+
+    }
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Cinema Street");
@@ -20,11 +30,10 @@ public class UIApplication extends javafx.application.Application{
 
         var loader = new FXMLLoader();
         loader.setLocation(UIApplication.class.getResource("/view/UserView.fxml"));
+
+        loader.setControllerFactory(springContext::getBean);
         AnchorPane rootLayout = loader.load();
         rootLayout.setPrefSize(800, 600);
-
-        UserController controller = loader.getController();
-
 
         configureStage(primaryStage, rootLayout);
         primaryStage.show();
