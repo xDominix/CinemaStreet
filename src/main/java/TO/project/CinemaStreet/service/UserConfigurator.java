@@ -15,7 +15,7 @@ public class UserConfigurator {
                 User kowalski = new User("Jan", "Kowalski", "temp@gmail.com", Role.USER);
                 userRepository.save(kowalski);
             }
-//            else if (userRepository.count() == 1) {
+//            else if (userRepository.count() >= 1) {
 //                userRepository.deleteAll();
 //            }
         };

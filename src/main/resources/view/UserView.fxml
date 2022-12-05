@@ -6,16 +6,49 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <!--            fx:controller="TO.project.CinemaStreet.controller.UserController"-->
-<AnchorPane xmlns="http://javafx.com/javafx"
+<BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             prefHeight="400.0" prefWidth="600.0"
             fx:controller="TO.project.CinemaStreet.controller.UserController"
         minHeight="10" minWidth="10"
 >
-    <HBox styleClass="form-box">
-        <Label text="Search for photos:" prefWidth="360"/>
-    </HBox>
-    <HBox>
-        <ListView fx:id="userListView" prefWidth="300"/>
-    </HBox>
-</AnchorPane>
+    <top>
+        <Label text="Registered Users" prefWidth="120"/>
+    </top>
+    <left>
+        <HBox styleClass="image-box">
+            <ListView fx:id="userListView" prefWidth="300"/>
+        </HBox>
+    </left>
+    <center>
+        <VBox>
+            <Label text="Add user" prefWidth="120"/>
+            <HBox>
+                <Label text="Name:" prefWidth="120"/>
+                <TextField fx:id="nameTextField" prefWidth="120"/>
+            </HBox>
+            <HBox>
+                <Label text="LastName:" prefWidth="120"/>
+                <TextField fx:id="LastNameTextField" prefWidth="120"/>
+            </HBox>
+            <HBox>
+                <Label text="Email:" prefWidth="120"/>
+                <TextField fx:id="emailTextField" prefWidth="120"/>
+            </HBox>
+<!--radio button with Roles: USER, ADMIN, MODERATOR-->
+            <HBox>
+                <Label text="Role:" prefWidth="120"/>
+                <RadioButton text="USER"  fx:id="userRadioButton" prefWidth="120"/>
+                <RadioButton text="ADMIN" fx:id="adminRadioButton" prefWidth="120"/>
+                <RadioButton text="MODERATOR" fx:id="moderatorRadioButton" prefWidth="120"/>
+            </HBox>
+            <HBox>
+                <Button fx:id="addUserButton" text="Add User" onAction="#addNewUser" prefWidth="120"/>
+            </HBox>
+
+        </VBox>
+
+    </center>
+
+
+</BorderPane>

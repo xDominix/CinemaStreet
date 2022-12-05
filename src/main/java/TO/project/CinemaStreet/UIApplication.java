@@ -32,13 +32,13 @@ public class UIApplication extends javafx.application.Application{
         loader.setLocation(UIApplication.class.getResource("/view/UserView.fxml"));
 
         loader.setControllerFactory(springContext::getBean);
-        AnchorPane rootLayout = loader.load();
+        BorderPane rootLayout = loader.load();
         rootLayout.setPrefSize(800, 600);
 
         configureStage(primaryStage, rootLayout);
         primaryStage.show();
     }
-    private void configureStage(Stage primaryStage, AnchorPane rootLayout) {
+    private void configureStage(Stage primaryStage, BorderPane rootLayout) {
         var scene = new Scene(rootLayout);
         primaryStage.setScene(scene);
         primaryStage.setTitle("User List");

@@ -1,5 +1,6 @@
 package TO.project.CinemaStreet.controller;
 
+import TO.project.CinemaStreet.model.Role;
 import TO.project.CinemaStreet.model.User;
 import TO.project.CinemaStreet.service.UserService;
 import javafx.collections.FXCollections;
@@ -7,11 +8,8 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Cell;
+import javafx.scene.control.*;
 
-import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +19,28 @@ public class UserController {
 
     @FXML
     ListView<User> userListView = new ListView<User>();
+
+    @FXML
+    private TextField nameTextField;
+
+    @FXML
+    private TextField LastNameTextField;
+
+    @FXML
+    private TextField emailTextField;
+
+    @FXML
+    private RadioButton userRadioButton;
+
+    @FXML
+    private RadioButton adminRadioButton;
+    @FXML
+    private RadioButton moderatorRadioButton;
+    @FXML
+    private Button addUserButton;
+    final ToggleGroup group = new ToggleGroup();
+
+
 
     private UserService userService;
 
@@ -46,14 +66,25 @@ public class UserController {
         ObservableList<User> items =   FXCollections.observableArrayList(userService.getAllUsers());
         userListView.setItems(items);
 
+        userRadioButton.setToggleGroup(group);
+        userRadioButton.setSelected(true);
+
+        adminRadioButton.setToggleGroup(group);
+
+        moderatorRadioButton.setToggleGroup(group);
+
     }
     public User getUser(int id)
     {
-
+        //TODO
         return null;
     }
-//    public List<User> getAllUsers()
-//    {
-//        return userService.getAllUsers();
-//    }
+    @FXML
+    private void addNewUser(ActionEvent actionEvent) {
+//        TODO Check if data is correct
+        System.out.println(((RadioButton)group.getSelectedToggle()).getText());
+        User user = new User(nameTextField.getText(), LastNameTextField.getText(), emailTextField.getText(), Role.valueOf(((RadioButton)group.getSelectedToggle()).getText()));
+        userService.addUser(user);
+        userListView.getItems().add(user);
+    }
 }

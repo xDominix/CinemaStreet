@@ -19,4 +19,8 @@ public class UserService{
         return userRepository.findAll();
 //        return FXCollections.observableArrayList(new User("Jan", "Kowalski", "email@gmail.com", Role.USER));
     }
+    public void addUser(User user)
+    {
+        userRepository.save(user);
+    }
 }
