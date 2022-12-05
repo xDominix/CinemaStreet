@@ -46,6 +46,16 @@
                 <Button fx:id="addUserButton" text="Add User" onAction="#addNewUser" prefWidth="120"/>
             </HBox>
 
+            <!--DELETE-->
+            <Label text="Delete user" prefWidth="120"/>
+            <HBox>
+                <Label text="Id:" prefWidth="120"/>
+                <TextField fx:id="idTextField" prefWidth="120"/>
+            </HBox>
+            <HBox>
+                <Button text="Delete User" onAction="#deleteUser" prefWidth="120"/>
+            </HBox>
+
         </VBox>
 
     </center>

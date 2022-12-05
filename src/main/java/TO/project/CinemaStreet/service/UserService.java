@@ -23,4 +23,14 @@ public class UserService{
     {
         userRepository.save(user);
     }
+
+    public boolean deleteUserById(Integer id){
+        if(userRepository.existsById(id))
+        {
+            userRepository.deleteById(id);
+            return true;
+        }
+
+        return false;
+    }
 }

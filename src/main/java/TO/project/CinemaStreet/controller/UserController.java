@@ -14,11 +14,17 @@ import javafx.scene.image.ImageView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Controller
 public class UserController {
 
     @FXML
     ListView<User> userListView = new ListView<User>();
+
+    @FXML
+    private TextField idTextField;
 
     @FXML
     private TextField nameTextField;
@@ -38,6 +44,7 @@ public class UserController {
     private RadioButton moderatorRadioButton;
     @FXML
     private Button addUserButton;
+
     final ToggleGroup group = new ToggleGroup();
 
 
@@ -58,13 +65,10 @@ public class UserController {
                 if (empty || item == null || item.getFirstName() == null) {
                     setText(null);
                 } else {
-                    setText(item.getFirstName()+" "+item.getLastName()+" "+item.getEmail()+" "+item.getRole());
+                    setText(item.getId()+" "+item.getFirstName()+" "+item.getLastName()+" "+item.getEmail()+" "+item.getRole());
                 }
             }
         });
-
-        ObservableList<User> items =   FXCollections.observableArrayList(userService.getAllUsers());
-        userListView.setItems(items);
 
         userRadioButton.setToggleGroup(group);
         userRadioButton.setSelected(true);
@@ -73,7 +77,21 @@ public class UserController {
 
         moderatorRadioButton.setToggleGroup(group);
 
+        updateView();
     }
+    private void updateView(){
+        //reset inputs
+        nameTextField.setText("");
+        LastNameTextField.setText("");
+        emailTextField.setText("");
+        userRadioButton.setSelected(true);
+        idTextField.setText("");
+
+        //update list
+        ObservableList<User> items =   FXCollections.observableArrayList(userService.getAllUsers());
+        userListView.setItems(items);
+    }
+
     public User getUser(int id)
     {
         //TODO
@@ -81,10 +99,66 @@ public class UserController {
     }
     @FXML
     private void addNewUser(ActionEvent actionEvent) {
-//        TODO Check if data is correct
-        System.out.println(((RadioButton)group.getSelectedToggle()).getText());
-        User user = new User(nameTextField.getText(), LastNameTextField.getText(), emailTextField.getText(), Role.valueOf(((RadioButton)group.getSelectedToggle()).getText()));
-        userService.addUser(user);
-        userListView.getItems().add(user);
+        if(checkInputs())
+        {
+            System.out.println(((RadioButton)group.getSelectedToggle()).getText());
+            User user = new User(nameTextField.getText(), LastNameTextField.getText(), emailTextField.getText(), Role.valueOf(((RadioButton)group.getSelectedToggle()).getText()));
+            userService.addUser(user);
+            updateView();
+        }
     }
+
+    @FXML
+    private void deleteUser(ActionEvent actionEvent) {
+        removeInputsErrors();
+        try{
+            boolean deleted = userService.deleteUserById(Integer.parseInt(idTextField.getText()));
+
+            if(!deleted){
+                idTextField.getStyleClass().add("error");
+                System.out.println("User does not exists");
+                return;
+            }
+
+            System.out.println("Deleted");
+            updateView();
+        }
+        catch (NumberFormatException ex){
+            idTextField.getStyleClass().add("error");
+            System.out.println("Input is NaN");
+        }
+
+    }
+
+    private boolean checkInputs(){
+        removeInputsErrors();
+
+        if(nameTextField.getText().length()<3)
+        {
+            nameTextField.getStyleClass().add("error");
+            return false;
+        }
+
+        if(LastNameTextField.getText().length()<3) {
+            LastNameTextField.getStyleClass().add("error");
+            return false;
+        }
+
+        Pattern pattern = Pattern.compile("^(.+)@(.+)$");
+        Matcher matcher = pattern.matcher(emailTextField.getText());
+        if(!matcher.matches()) {
+            emailTextField.getStyleClass().add("error");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void removeInputsErrors(){
+        idTextField.getStyleClass().remove("error");
+        nameTextField.getStyleClass().remove("error");
+        LastNameTextField.getStyleClass().remove("error");
+        emailTextField.getStyleClass().remove("error");
+    }
+
 }

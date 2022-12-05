@@ -40,6 +40,8 @@ public class UIApplication extends javafx.application.Application{
     }
     private void configureStage(Stage primaryStage, BorderPane rootLayout) {
         var scene = new Scene(rootLayout);
+        scene.getStylesheets().add(getClass().getResource("/view/UserView.css").toExternalForm());
+
         primaryStage.setScene(scene);
         primaryStage.setTitle("User List");
         primaryStage.minWidthProperty().bind(rootLayout.minWidthProperty());
