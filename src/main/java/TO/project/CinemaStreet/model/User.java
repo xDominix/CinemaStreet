@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.ObjectOutput;
 
 @Entity
-@Table(name = "registeredUser")
+@Table(name = "users")
 public class User implements Externalizable {
     private static final long serialVersionUID = 1L;
     private final IntegerProperty id = new SimpleIntegerProperty(this, "id");
@@ -30,27 +30,23 @@ public class User implements Externalizable {
     }
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.AUTO)
     public final int getId() {
         return id.get();
     }
-
     public IntegerProperty idProperty() {
         return id;
     }
-
-    public final void setId(int id) {
+    public final void setId(Integer id) {
         this.id.set(id);
     }
 
     public final String getFirstName() {
         return firstName.get();
     }
-
     public StringProperty firstNameProperty() {
         return firstName;
     }
-
     public final void setFirstName(String firstName) {
         this.firstName.set(firstName);
     }
@@ -58,11 +54,9 @@ public class User implements Externalizable {
     public String getLastName() {
         return lastName.get();
     }
-
     public final StringProperty lastNameProperty() {
         return lastName;
     }
-
     public final void setLastName(String lastName) {
         this.lastName.set(lastName);
     }
@@ -70,11 +64,9 @@ public class User implements Externalizable {
     public final String getEmail() {
         return email.get();
     }
-
     public StringProperty emailProperty() {
         return email;
     }
-
     public final void setEmail(String email) {
         this.email.set(email);
     }
@@ -82,15 +74,12 @@ public class User implements Externalizable {
     public Roles getRole() {
         return role.get();
     }
-
     public ObjectProperty<Roles> roleProperty() {
         return role;
     }
-
     public void setRole(Roles role) {
         this.role.set(role);
     }
-
 
     @Override
     public String toString() {
@@ -111,7 +100,6 @@ public class User implements Externalizable {
         out.writeObject(email.get());
         out.writeObject(role.get());
     }
-
     @Override
     public void readExternal(java.io.ObjectInput in) throws IOException, ClassNotFoundException {
         id.set(in.readInt());
@@ -120,6 +108,4 @@ public class User implements Externalizable {
         email.set((String) in.readObject());
         role.set((Roles) in.readObject());
     }
-
-
 }
