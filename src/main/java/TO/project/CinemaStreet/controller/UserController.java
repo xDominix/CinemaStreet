@@ -1,6 +1,6 @@
 package TO.project.CinemaStreet.controller;
 
-import TO.project.CinemaStreet.model.Role;
+import TO.project.CinemaStreet.Roles;
 import TO.project.CinemaStreet.model.User;
 import TO.project.CinemaStreet.service.UserService;
 import javafx.collections.FXCollections;
@@ -102,7 +102,7 @@ public class UserController {
         if(checkInputs())
         {
             System.out.println(((RadioButton)group.getSelectedToggle()).getText());
-            User user = new User(nameTextField.getText(), LastNameTextField.getText(), emailTextField.getText(), Role.valueOf(((RadioButton)group.getSelectedToggle()).getText()));
+            User user = new User(nameTextField.getText(), LastNameTextField.getText(), emailTextField.getText(), Roles.valueOf(((RadioButton)group.getSelectedToggle()).getText()));
             userService.addUser(user);
             updateView();
         }

@@ -1,5 +1,6 @@
 package TO.project.CinemaStreet.model;
 
+import TO.project.CinemaStreet.Roles;
 import jakarta.persistence.*;
 import javafx.beans.property.*;
 
@@ -16,12 +17,12 @@ public class User implements Externalizable {
     private final StringProperty firstName = new SimpleStringProperty(this, "firstName");
     private final StringProperty lastName = new SimpleStringProperty(this, "lastName");
     private final StringProperty email = new SimpleStringProperty(this, "email");
-    private final ObjectProperty<Role> role = new SimpleObjectProperty<>(this, "role");
+    private final ObjectProperty<Roles> role = new SimpleObjectProperty<>(this, "role");
 
     public User() {
     }
 
-    public User(String firstName, String lastName, String email, Role role) {
+    public User(String firstName, String lastName, String email, Roles role) {
         this.firstName.set(firstName);
         this.lastName.set(lastName);
         this.email.set(email);
@@ -78,15 +79,15 @@ public class User implements Externalizable {
         this.email.set(email);
     }
 
-    public Role getRole() {
+    public Roles getRole() {
         return role.get();
     }
 
-    public ObjectProperty<Role> roleProperty() {
+    public ObjectProperty<Roles> roleProperty() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(Roles role) {
         this.role.set(role);
     }
 
@@ -117,7 +118,7 @@ public class User implements Externalizable {
         firstName.set((String) in.readObject());
         lastName.set((String) in.readObject());
         email.set((String) in.readObject());
-        role.set((Role) in.readObject());
+        role.set((Roles) in.readObject());
     }
 
 

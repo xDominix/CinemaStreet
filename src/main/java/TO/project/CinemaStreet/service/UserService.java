@@ -1,6 +1,6 @@
 package TO.project.CinemaStreet.service;
 
-import TO.project.CinemaStreet.model.Role;
+import TO.project.CinemaStreet.Roles;
 import TO.project.CinemaStreet.model.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

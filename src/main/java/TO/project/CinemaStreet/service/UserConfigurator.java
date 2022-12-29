@@ -1,6 +1,6 @@
 package TO.project.CinemaStreet.service;
 
-import TO.project.CinemaStreet.model.Role;
+import TO.project.CinemaStreet.Roles;
 import TO.project.CinemaStreet.model.User;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +12,7 @@ public class UserConfigurator {
     CommandLineRunner commandLineRunner(UserRepository userRepository) {
         return args -> {
             if (userRepository.count() == 0) {
-                User kowalski = new User("Jan", "Kowalski", "temp@gmail.com", Role.USER);
+                User kowalski = new User("Jan", "Kowalski", "temp@gmail.com", Roles.EMPLOYEE);
                 userRepository.save(kowalski);
             }
 //            else if (userRepository.count() >= 1) {
