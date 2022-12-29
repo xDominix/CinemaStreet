@@ -14,12 +14,16 @@ public class Hall implements Externalizable {
     private final IntegerProperty id = new SimpleIntegerProperty(this, "id");
     private final IntegerProperty seatsNumber = new SimpleIntegerProperty(this, "seatsNumber");
 
-    public Hall(Integer seatsNumber) {
+    public Hall() {
+    }
+
+    public Hall(Integer id,Integer seatsNumber) {
+        this.id.set(id);
         this.seatsNumber.set(seatsNumber);
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @GeneratedValue(strategy = GenerationType.TABLE)
     public final int getId() {
         return id.get();
     }
@@ -49,5 +53,9 @@ public class Hall implements Externalizable {
     public void readExternal(java.io.ObjectInput in) throws IOException, ClassNotFoundException {
         id.set(in.readInt());
         seatsNumber.set((Integer) in.readObject());
+    }
+    public String toString()
+    {
+        return "Hall: " + id.get() + " seats: " + seatsNumber.get();
     }
 }
