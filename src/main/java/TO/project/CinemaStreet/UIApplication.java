@@ -29,7 +29,7 @@ public class UIApplication extends javafx.application.Application{
         primaryStage.setScene(scene);
 
         var loader = new FXMLLoader();
-        loader.setLocation(UIApplication.class.getResource("/view/UserView.fxml"));
+        loader.setLocation(UIApplication.class.getResource("/view/MenuView.fxml"));
 
         loader.setControllerFactory(springContext::getBean);
         BorderPane rootLayout = loader.load();

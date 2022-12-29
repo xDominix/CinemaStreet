@@ -47,9 +47,8 @@ public class UserController {
 
     final ToggleGroup group = new ToggleGroup();
 
-
-
     private UserService userService;
+
 
     public UserController(UserService userService) {
         this.userService = userService;
