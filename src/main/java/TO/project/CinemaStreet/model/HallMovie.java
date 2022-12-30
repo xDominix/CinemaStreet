@@ -7,6 +7,7 @@ import javafx.beans.property.*;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectOutput;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -17,16 +18,18 @@ public class HallMovie implements Externalizable
     private final IntegerProperty id = new SimpleIntegerProperty(this, "id");
     private final ObjectProperty<Hall> hall = new SimpleObjectProperty<>(this, "hall");
     private final ObjectProperty<Movie> movie = new SimpleObjectProperty<>(this, "movie");
-    private final ObjectProperty<Date> date = new SimpleObjectProperty<>(this, "date");
+    private final IntegerProperty seatsTaken = new SimpleIntegerProperty(this, "seatsTaken");
+    private final ObjectProperty<LocalDateTime> date = new SimpleObjectProperty<>(this, "date");
 
 
     public HallMovie() {
     }
 
-    public HallMovie(Hall hall,Movie movie,Date date) {
+    public HallMovie(Hall hall, Movie movie, LocalDateTime date) {
         this.hall.set(hall);
         this.movie.set(movie);
         this.date.set(date);
+        this.seatsTaken.set(0);
     }
 
     @Id
@@ -62,14 +65,28 @@ public class HallMovie implements Externalizable
     public void setMovie(Movie movie) {
         this.movie.set(movie);
     }
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date.get();
     }
-    public final ObjectProperty<Date> dateProperty() {
+    public final ObjectProperty<LocalDateTime> dateProperty() {
         return date;
     }
-    public final void setDate(Date date) {
+    public final void setDate(LocalDateTime date) {
         this.date.set(date);
+    }
+
+    public final Integer getSeatsTaken() {
+        return seatsTaken.get();
+    }
+    public IntegerProperty seatsTakenProperty() {
+        return seatsTaken;
+    }
+    public final void setSeatsTaken(Integer seatsTaken) {
+        this.seatsTaken.set(seatsTaken);
+    }
+
+    public int howManySeatsLeft() {
+        return hall.get().getSeatsNumber() - seatsTaken.get();
     }
 
 
@@ -77,7 +94,8 @@ public class HallMovie implements Externalizable
     public String toString() {
         return "HallMovie{" +
                 "id=" + id +
-                ", date=" + date.toString()
+                ", date=" + date.toString()+
+                ", seatsTaken=" + seatsTaken
                 +'}';
     }
 
@@ -94,6 +112,6 @@ public class HallMovie implements Externalizable
         id.set(in.readInt());
         hall.set((Hall) in.readObject());
         movie.set((Movie) in.readObject());
-        date.set((Date) in.readObject());
+        date.set((LocalDateTime) in.readObject());
     }
 }

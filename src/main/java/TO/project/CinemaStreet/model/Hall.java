@@ -58,4 +58,19 @@ public class Hall implements Externalizable {
     {
         return "Hall: " + id.get() + " seats: " + seatsNumber.get();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (!Hall.class.isAssignableFrom(obj.getClass())) {
+            return false;
+        }
+        final Hall other = (Hall) obj;
+        if (this.id.get() != other.id.get()) {
+            return false;
+        }
+        return true;
+    }
 }

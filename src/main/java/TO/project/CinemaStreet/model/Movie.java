@@ -19,6 +19,9 @@ public class Movie implements Externalizable {
     private final ObjectProperty<LocalDateTime> releaseDate = new SimpleObjectProperty<>(this, "releaseDate");
     private final FloatProperty ticketCost = new SimpleFloatProperty(this, "ticketCost");
 
+    public Movie() {
+    }
+
     public Movie(String name, Integer length, LocalDateTime releaseDate, Float ticketCost) {
         this.name.set(name);
         this.length.set(length);
@@ -94,5 +97,19 @@ public class Movie implements Externalizable {
         length.set((Integer) in.readObject());
         releaseDate.set((LocalDateTime) in.readObject());
         ticketCost.set((Float) in.readObject());
+    }
+
+    @Override
+    public String toString() {
+        return name.get();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (obj == this) return true;
+        if (!(obj instanceof Movie)) return false;
+        Movie movie = (Movie) obj;
+        return movie.getId() == this.getId();
     }
 }

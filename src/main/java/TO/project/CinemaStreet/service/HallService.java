@@ -34,6 +34,7 @@ public class HallService {
 
     public void removeAllHalls() {
         hallRepository.deleteAll();
+        hallRepository.flush();
     }
 
     public List<Hall> getHallsFromJson(String jsonPath) {
@@ -58,5 +59,10 @@ public class HallService {
         for (Hall hall : newHalls) {
             addHall(hall);
         }
+    }
+
+    public Hall getHallById(int id){
+        Optional<Hall> hall = hallRepository.findById(id);
+        return hall.orElse(null);
     }
 }
