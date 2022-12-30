@@ -6,6 +6,7 @@ import javafx.beans.property.*;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectOutput;
+import java.util.Optional;
 
 @Entity
 @Table(name = "halls")
@@ -58,4 +59,5 @@ public class Hall implements Externalizable {
     {
         return "Hall: " + id.get() + " seats: " + seatsNumber.get();
     }
+
 }

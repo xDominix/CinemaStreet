@@ -3,8 +3,10 @@ package TO.project.CinemaStreet.controller;
 import TO.project.CinemaStreet.Roles;
 import TO.project.CinemaStreet.model.Hall;
 import TO.project.CinemaStreet.model.HallMovie;
+import TO.project.CinemaStreet.model.Movie;
 import TO.project.CinemaStreet.service.HallMovieService;
 import TO.project.CinemaStreet.service.HallService;
+import TO.project.CinemaStreet.service.MovieService;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -22,6 +24,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
@@ -45,34 +48,33 @@ public class HallMovieController
 
     @FXML
     private ComboBox<String> hallComboBox;
-    private StringProperty selectedHall= new SimpleStringProperty(this, "hall");;
+
     @FXML
     private ComboBox<String> movieComboBox;
-    private StringProperty selectedMovie= new SimpleStringProperty(this, "movie");
 
     @FXML
     private DatePicker datePicker;
-    private ObjectProperty<Date> selectedDate= new SimpleObjectProperty<Date>(this, "date");
 
     private HallMovieService hallMovieService;
     private HallService hallService;
+    private MovieService movieService;
 
 
-    public HallMovieController(HallMovieService hallMovieService,HallService hallService) {
+    public HallMovieController(HallMovieService hallMovieService,HallService hallService,MovieService movieService) {
         this.hallMovieService = hallMovieService;
         this.hallService = hallService;
+        this.movieService=movieService;
     }
 
     @FXML
     public void initialize() {
 
-        List<String> hallIds = hallService.getAllHalls().stream().map(key -> key.getId() + " (" + key.getSeatsNumber()+")").collect(Collectors.toList())
+        List<String> halls = hallService.getAllHalls().stream().map(key -> key.getId() + " (" + key.getSeatsNumber()+")").collect(Collectors.toList())
                 .stream().map(Object::toString).collect(Collectors.toList());;
+        hallComboBox.getItems().setAll(halls);
 
-        hallComboBox.getItems().setAll(hallIds);
-        selectedHall.bind(hallComboBox.getSelectionModel().selectedItemProperty());
-        movieComboBox.getItems().setAll("Avatar", "Sex w wielkim miescie", "Glass Onion");//TODO
-        selectedMovie.bind(movieComboBox.getSelectionModel().selectedItemProperty());
+        List<String> movies = movieService.getAllMovies().stream().map(key -> key.getName()).collect(Collectors.toList());
+        movieComboBox.getItems().setAll(movies);
 
         hallMovieListView.setCellFactory(param -> new ListCell<>() {
             @Override
@@ -86,25 +88,15 @@ public class HallMovieController
             }
         });
 
-        //TODO handler nie dziala
-        datePicker.setOnAction(new EventHandler() {
-            public void handle(Event t) {
-                LocalDate date = datePicker.getValue();
-                selectedDate.set(Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()));
-                System.err.println("Selected date: " + date);
-            }
-        });
-
         updateView();
     }
     private void updateView(){
         //reset inputs
-        //selectedHall.set("");
-        //selectedMovie.set("");
-        //selectedDate.set(new Date());
+        idTextField.setText("");
 
         datePicker.setValue(null);
-        idTextField.setText("");
+        movieComboBox.valueProperty().set(null);
+        hallComboBox.valueProperty().set(null);
 
         //update list
         ObservableList<HallMovie> items =   FXCollections.observableArrayList(hallMovieService.getAllHallMovies());
@@ -119,10 +111,18 @@ public class HallMovieController
     private void addHallMovie(ActionEvent actionEvent) {
         if(checkInputs())
         {
-            System.out.println(selectedHall.toString()+" "+selectedDate.toString()+" "+selectedMovie.toString());
-            //TODO
-            //HallMovie hallMovie = new HallMovie(selectedHall.getText(), selectedMovie.getText(), dataPicker);
-            //hallMovieService.addHallMovie(hallMovie);
+            System.out.println(hallComboBox.getValue().toString()+" "+movieComboBox.getValue().toString()+" "+datePicker.getValue().toString());
+
+            int hallID = hallComboBox.getSelectionModel().getSelectedIndex();
+            Hall hall = hallService.getHallById(hallID);
+
+            int movieID = movieComboBox.getSelectionModel().getSelectedIndex();
+            Movie movie = movieService.getMovieById(movieID);
+
+            Date date = Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+            HallMovie hallMovie = new HallMovie(hall,movie,date);
+            hallMovieService.addHallMovie(hallMovie);
             updateView();
         }
     }
@@ -151,21 +151,17 @@ public class HallMovieController
 
     private boolean checkInputs(){
         removeInputsErrors();
-        //TODO errory nie koloruja sie
-        if(selectedDate.get()==null || selectedDate.get().before(new Date()))
-        {
-            System.out.println("date error");
-            datePicker.getStyleClass().add("error");
+        if(hallComboBox.getValue()==null) {
+            hallComboBox.getStyleClass().add("error");
             return false;
         }
-        else if(selectedMovie.get().length()==0) {
-            System.out.println("movie error");
+        else if(movieComboBox.getValue()==null) {
             movieComboBox.getStyleClass().add("error");
             return false;
         }
-        else if(selectedHall.get().length()==0) {
-            System.out.println("hall error");
-            hallComboBox.getStyleClass().add("error");
+        else if(datePicker.getValue()==null || datePicker.getValue().isAfter(LocalDate.now()))
+        {
+            datePicker.getStyleClass().add("error");
             return false;
         }
        return true;
@@ -174,6 +170,9 @@ public class HallMovieController
     private void removeInputsErrors(){
         idTextField.getStyleClass().remove("error");
         datePicker.getStyleClass().remove("error");
+        hallComboBox.getStyleClass().remove("error");
+        movieComboBox.getStyleClass().remove("error");
+
     }
 
 }
