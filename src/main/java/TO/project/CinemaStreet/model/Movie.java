@@ -6,6 +6,7 @@ import javafx.beans.property.*;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectOutput;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -15,10 +16,10 @@ public class Movie implements Externalizable {
     private final IntegerProperty id = new SimpleIntegerProperty(this, "id");
     private final StringProperty name = new SimpleStringProperty(this, "name");
     private final IntegerProperty length = new SimpleIntegerProperty(this, "length");
-    private final ObjectProperty<Date> releaseDate = new SimpleObjectProperty<>(this, "releaseDate");
+    private final ObjectProperty<LocalDateTime> releaseDate = new SimpleObjectProperty<>(this, "releaseDate");
     private final FloatProperty ticketCost = new SimpleFloatProperty(this, "ticketCost");
 
-    public Movie(String name, Integer length, Date releaseDate, Float ticketCost) {
+    public Movie(String name, Integer length, LocalDateTime releaseDate, Float ticketCost) {
         this.name.set(name);
         this.length.set(length);
         this.releaseDate.set(releaseDate);
@@ -57,13 +58,13 @@ public class Movie implements Externalizable {
         this.length.set(length);
     }
 
-    public final Date getReleaseDate() {
+    public final LocalDateTime getReleaseDate() {
         return releaseDate.get();
     }
-    public ObjectProperty<Date> releaseDateProperty() {
+    public ObjectProperty<LocalDateTime> releaseDateProperty() {
         return releaseDate;
     }
-    public final void setReleaseDate(Date releaseDate) {
+    public final void setReleaseDate(LocalDateTime releaseDate) {
         this.releaseDate.set(releaseDate);
     }
 
@@ -91,7 +92,7 @@ public class Movie implements Externalizable {
         id.set(in.readInt());
         name.set((String) in.readObject());
         length.set((Integer) in.readObject());
-        releaseDate.set((Date) in.readObject());
+        releaseDate.set((LocalDateTime) in.readObject());
         ticketCost.set((Float) in.readObject());
     }
 }
