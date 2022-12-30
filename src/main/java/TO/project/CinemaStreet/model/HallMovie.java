@@ -15,8 +15,8 @@ public class HallMovie implements Externalizable
 {
     private static final long serialVersionUID = 1L;
     private final IntegerProperty id = new SimpleIntegerProperty(this, "id");
-    private final ObjectProperty<Hall> hall = new SimpleObjectProperty<>(this, "hall");
-    private final ObjectProperty<Movie> movie = new SimpleObjectProperty<>(this, "movie");
+    private final IntegerProperty hallId = new SimpleIntegerProperty(this, "hallid");
+    private final IntegerProperty movieId = new SimpleIntegerProperty(this, "movieid");
     private final ObjectProperty<Date> date = new SimpleObjectProperty<>(this, "date");
 
 
@@ -24,8 +24,8 @@ public class HallMovie implements Externalizable
     }
 
     public HallMovie(Hall hall,Movie movie,Date date) {
-        this.hall.set(hall);
-        this.movie.set(movie);
+        this.hallId.set(hall.getId());
+        this.movieId.set(movie.getId());
         this.date.set(date);
     }
 
@@ -42,25 +42,23 @@ public class HallMovie implements Externalizable
     }
 
 
-    public final Hall getHall() {
-        return hall.get();
+    public final Integer getHallId() { return hallId.get();
     }
-    public ObjectProperty<Hall> hallProperty() {
-        return hall;
-    }
-
-    public void setHall(Hall hall) {
-        this.hall.set(hall);
-    }
-    public final Movie getMovie() {
-        return movie.get();
-    }
-    public ObjectProperty<Movie> movieProperty() {
-        return movie;
+    public IntegerProperty hallIdProperty() {
+        return hallId;
     }
 
-    public void setMovie(Movie movie) {
-        this.movie.set(movie);
+    public void setHallId(Integer hallId) {
+        this.hallId.set(hallId);
+    }
+    public final Integer getMovieId() { return movieId.get();
+    }
+    public IntegerProperty movieIdProperty() {
+        return movieId;
+    }
+
+    public void setMovieId(Integer movieId) {
+        this.movieId.set(movieId);
     }
     public Date getDate() {
         return date.get();
@@ -77,7 +75,9 @@ public class HallMovie implements Externalizable
     public String toString() {
         return "HallMovie{" +
                 "id=" + id +
-                ", date=" + date.toString()
+                ", hallid=" + getHallId().toString()+
+                ", movieid=" + getMovieId().toString()+
+                ", date=" + date.toString()+
                 +'}';
     }
 
@@ -85,15 +85,15 @@ public class HallMovie implements Externalizable
     public void writeExternal(ObjectOutput out) throws IOException
     {
         out.writeInt(id.get());
-        out.writeObject(hall.get());
-        out.writeObject(movie.get());
+        out.writeObject(hallId.get());
+        out.writeObject(movieId.get());
         out.writeObject(date.get());
     }
     @Override
     public void readExternal(java.io.ObjectInput in) throws IOException, ClassNotFoundException {
         id.set(in.readInt());
-        hall.set((Hall) in.readObject());
-        movie.set((Movie) in.readObject());
+        hallId.set((Integer) in.readObject());
+        movieId.set((Integer) in.readObject());
         date.set((Date) in.readObject());
     }
 }

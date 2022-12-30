@@ -10,51 +10,48 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             prefHeight="400.0" prefWidth="600.0"
-            fx:controller="TO.project.CinemaStreet.controller.UserController"
+            fx:controller="TO.project.CinemaStreet.controller.MovieController"
             minHeight="10" minWidth="10"
 >
     <top>
-        <Label text="Registered Users (name, last name, email, role)" prefWidth="120"/>
+        <Label text="Movie List (id, title, length, release date, ticket cost)" prefWidth="120"/>
     </top>
     <left>
         <HBox styleClass="image-box">
-            <ListView fx:id="userListView" prefWidth="300"/>
+            <ListView fx:id="movieListView" prefWidth="300"/>
         </HBox>
     </left>
     <center>
         <VBox>
-            <Label text="Add user" prefWidth="120"/>
+            <Label text="Add movie" prefWidth="120"/>
             <HBox>
-                <Label text="Name:" prefWidth="120"/>
+                <Label text="Title:" prefWidth="120"/>
                 <TextField fx:id="nameTextField" prefWidth="120"/>
             </HBox>
             <HBox>
-                <Label text="LastName:" prefWidth="120"/>
-                <TextField fx:id="LastNameTextField" prefWidth="120"/>
+                <Label text="Length (min):" prefWidth="120"/>
+                <TextField fx:id="lengthTextField" prefWidth="120"/>
             </HBox>
             <HBox>
-                <Label text="Email:" prefWidth="120"/>
-                <TextField fx:id="emailTextField" prefWidth="120"/>
-            </HBox>
-<!--radio button with Roles: USER, ADMIN, MODERATOR-->
-            <HBox>
-                <Label text="Role:" prefWidth="120"/>
-                <RadioButton text="USER"  fx:id="userRadioButton" prefWidth="120"/>
-                <RadioButton text="ADMIN" fx:id="adminRadioButton" prefWidth="120"/>
-                <RadioButton text="MODERATOR" fx:id="moderatorRadioButton" prefWidth="120"/>
+                <Label text="Release date:" prefWidth="120"/>
+                <DatePicker fx:id="datePicker" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             </HBox>
             <HBox>
-                <Button text="Add User" onAction="#addNewUser" prefWidth="120"/>
+                <Label text="Ticket cost ($):" prefWidth="120"/>
+                <TextField fx:id="ticketCostTextField" prefWidth="120"/>
+            </HBox>
+            <HBox>
+                <Button text="Add Movie" onAction="#addNewMovie" prefWidth="120"/>
             </HBox>
 
             <!--DELETE-->
-            <Label text="Delete user" prefWidth="120"/>
+            <Label text="Delete movie" prefWidth="120"/>
             <HBox>
                 <Label text="Id:" prefWidth="120"/>
                 <TextField fx:id="idTextField" prefWidth="120"/>
             </HBox>
             <HBox>
-                <Button text="Delete User" onAction="#deleteUser" prefWidth="120"/>
+                <Button text="Delete Movie" onAction="#deleteMovie" prefWidth="120"/>
             </HBox>
 
         </VBox>

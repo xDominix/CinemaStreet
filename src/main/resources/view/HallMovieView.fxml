@@ -14,7 +14,7 @@
             fx:controller="TO.project.CinemaStreet.controller.HallMovieController"
             minHeight="10" minWidth="10">
     <top>
-        <Label text="Current Shows" prefWidth="120"/>
+        <Label text="Current Shows (id, title, hall id, date)" prefWidth="120"/>
     </top>
     <left>
         <HBox styleClass="image-box">
@@ -54,6 +54,6 @@
 
     </center>
     <stylesheets>
-        <URL value="@UserView.css" />
+        <URL value="@style.css" />
     </stylesheets>
 </BorderPane>

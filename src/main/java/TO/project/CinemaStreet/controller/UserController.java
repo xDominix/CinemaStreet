@@ -42,8 +42,6 @@ public class UserController {
     private RadioButton adminRadioButton;
     @FXML
     private RadioButton moderatorRadioButton;
-    @FXML
-    private Button addUserButton;
 
     final ToggleGroup group = new ToggleGroup();
 
@@ -56,7 +54,6 @@ public class UserController {
 
     @FXML
     public void initialize() {
-        // TODO additional FX controls initialization
         userListView.setCellFactory(param -> new ListCell<>() {
             @Override
             protected void updateItem(User item, boolean empty) {
