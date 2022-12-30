@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<!--            fx:controller="TO.project.CinemaStreet.controller.UserController"-->
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            prefHeight="400.0" prefWidth="600.0"
+            fx:controller="TO.project.CinemaStreet.controller.TicketController"
+            minHeight="10" minWidth="10"
+>
+    <center>
+        <VBox>
+            <Label text="Wybierz film:"/>
+            <ComboBox fx:id="movieComboBox" prefWidth="180"/>
+            <Label text="Wybierz salę:"/>
+            <ComboBox fx:id="hallComboBox" prefWidth="180"/>
+            <Label text="Wybierz datę:"/>
+            <ComboBox fx:id="dateComboBox" prefWidth="180"/>
+<!--            <Label text="Wybierz godzinę:"/>-->
+<!--            <ComboBox fx:id="hourComboBox" prefWidth="120"/>-->
+            <HBox spacing="20">
+                <Label text="Wybierz ilość biletów"/>
+                <Label fx:id="currentSeatsLabel" text="0"/>
+            </HBox>
+            <TextField fx:id="seatTextField" prefWidth="180"/>
+            <Button text="Sprzedaj bilety" onAction="#buyTicket" prefWidth="120"/>
+        </VBox>
+    </center>
+
+
+
+</BorderPane>

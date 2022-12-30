@@ -67,8 +67,4 @@ public class HallService {
         }
     }
 
-    public Hall getHallById(int id){
-        Optional<Hall> hall = hallRepository.findById(id);
-        return hall.orElse(null);
-    }
 }

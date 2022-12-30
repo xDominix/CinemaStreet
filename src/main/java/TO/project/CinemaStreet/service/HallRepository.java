@@ -11,6 +11,4 @@ import java.util.List;
 
 @Repository
 public interface HallRepository extends JpaRepository<Hall, Integer>{
-//    delete all hallMovies where hallId = id and seats
-//    List<HallMovie> validateHallMovies(int hallId);
 }

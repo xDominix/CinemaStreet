@@ -30,6 +30,7 @@ import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -119,7 +120,7 @@ public class HallMovieController
             int movieID = movieComboBox.getSelectionModel().getSelectedIndex();
             Movie movie = movieService.getMovieById(movieID);
 
-            Date date = Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            LocalDateTime date = LocalDateTime.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
 
             HallMovie hallMovie = new HallMovie(hall,movie,date);
             hallMovieService.addHallMovie(hallMovie);

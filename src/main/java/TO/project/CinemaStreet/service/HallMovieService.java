@@ -69,4 +69,47 @@ public class HallMovieService
     public void updateHallMovie(HallMovie hallMovie) {
         hallMovieRepository.save(hallMovie);
     }
+
+    public void validateHallMovies(){
+        List<HallMovie> hallMovies = hallMovieRepository.findAll();
+        List<HallMovie> hallMoviesToRemove = new ArrayList<>();
+
+//        check if hall exists
+        for (HallMovie hallMovie : hallMovies) {
+            if (hallMovie.getHall() == null) {
+                hallMoviesToRemove.add(hallMovie);
+            }
+        }
+        hallMovieRepository.deleteAll(hallMoviesToRemove);
+        hallMovieRepository.flush();
+
+        hallMovies = hallMovieRepository.findAll();
+        hallMoviesToRemove = new ArrayList<>();
+        for (HallMovie hallMovie : hallMovies) {
+            if (hallMovie.getDate().isBefore(LocalDateTime.now())) {
+                hallMoviesToRemove.add(hallMovie);
+            }
+        }
+        hallMovieRepository.deleteAll(hallMoviesToRemove);
+        hallMovieRepository.flush();
+
+        hallMovies = hallMovieRepository.findAll();
+        hallMoviesToRemove = new ArrayList<>();
+
+        for (HallMovie hallMovie : hallMovies) {
+            if (hallMovie.getSeatsTaken() > hallMovie.getHall().getSeatsNumber()) {
+                hallMoviesToRemove.add(hallMovie);
+                System.out.println("usuń"+hallMovie);
+            }
+        }
+        hallMovieRepository.deleteAll(hallMoviesToRemove);
+        hallMovieRepository.flush();
+    }
+
+    public void updateAllHallMovies(){
+        List<HallMovie> hallMovies = hallMovieRepository.findAll();
+        for (HallMovie hallMovie : hallMovies) {
+            hallMovieRepository.save(hallMovie);
+        }
+    }
 }
