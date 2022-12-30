@@ -36,7 +36,6 @@ public class HallMovieService
         }
 
         return false;
-
     }
 
     public List<HallMovie> getHallMoviesByMovie(Movie movie)

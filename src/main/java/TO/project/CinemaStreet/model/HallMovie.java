@@ -44,6 +44,26 @@ public class HallMovie implements Externalizable
         this.id.set(id);
     }
 
+    @Column(name ="movieId")
+    public final int getMovieId() {
+        return movie.get().getId();
+    }
+    @Column(name ="movieId")
+    public final void setMovieId(int movieId) {
+        this.movie.get().setId(movieId);
+    }
+
+
+    @Column(name ="hallId")
+    public final int getHallId() {
+        return hall.get().getId();
+    }
+    @Column(name ="hallId")
+    public final void setHallId(int hallId) {
+        this.hall.get().setId(hallId);
+    }
+
+
 
     public final Hall getHall() {
         return hall.get();

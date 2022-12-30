@@ -30,6 +30,7 @@ public class HallService {
         hallRepository.save(hall);
     }
 
+
     public boolean deleteHallById(Integer id) {
         if (hallRepository.existsById(id)) {
             hallRepository.deleteById(id);
