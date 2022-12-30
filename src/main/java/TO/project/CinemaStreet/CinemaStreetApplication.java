@@ -10,9 +10,9 @@ public class CinemaStreetApplication {
 //	public static void main(String[] args) {
 //		SpringApplication.run(CinemaStreetApplication.class, args);
 //	}
-public static void main(String[] args) {
-	Application.launch(UIApplication.class, args);
-}
+    public static void main(String[] args) {
+        Application.launch(UIApplication.class, args);
+    }
 
 
 }
