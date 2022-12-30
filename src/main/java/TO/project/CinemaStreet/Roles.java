@@ -10,16 +10,21 @@ public enum Roles {
     private final String role;
 
     final Permissions[] employee = {
-            Permissions.VIEW_USERS
+            Permissions.VIEW_USERS,
+            Permissions.SELL_TICKET
     };
     final Permissions[] moderator = {
-            Permissions.VIEW_USERS
+            Permissions.VIEW_USERS,
+            Permissions.MODIFY_HALL,
+            Permissions.SELL_TICKET
     };
     final Permissions[] admin = {
             Permissions.VIEW_USERS,
             Permissions.ADD_USER,
             Permissions.EDIT_USER,
-            Permissions.REMOVE_USER
+            Permissions.REMOVE_USER,
+            Permissions.MODIFY_HALL,
+            Permissions.SELL_TICKET
     };
 
     Roles(String role) {

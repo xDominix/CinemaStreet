@@ -80,4 +80,20 @@ public class MenuController {
         alert.setContentText("Pomyslnie Zaktualizowano sale");
         alert.showAndWait();
     }
+    @FXML
+    public void sellTickets(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/view/TicketView.fxml"));
+            loader.setControllerFactory(springContext::getBean);
+            Scene scene = new Scene(loader.load(), 600, 400);
+            Stage stage = new Stage();
+            stage.setTitle("Sprzedaż biletów");
+            stage.setScene(scene);
+            stage.show();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

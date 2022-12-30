@@ -7,5 +7,7 @@ public enum Permissions {
     VIEW_USERS,
     ADD_USER,
     EDIT_USER,
-    REMOVE_USER;
+    REMOVE_USER,
+    MODIFY_HALL,
+    SELL_TICKET;
 }

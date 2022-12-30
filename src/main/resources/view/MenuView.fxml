@@ -15,8 +15,9 @@
 <!--    buttons opening each application component-->
     <center>
         <VBox>
-            <Button text="Konfiguracja użytkowników" onAction="#openUsers" prefWidth="120"/>
-            <Button text="Zaktualizuj sale" onAction="#updateHalls" prefWidth="120"/>
+            <Button text="Konfiguracja użytkowników" onAction="#openUsers" prefWidth="180"/>
+            <Button text="Sprzedaj bilety" onAction="#sellTickets" prefWidth="180"/>
+            <Button text="Zaktualizuj sale" onAction="#updateHalls" prefWidth="180"/>
         </VBox>
     </center>
 
