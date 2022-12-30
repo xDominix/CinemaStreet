@@ -12,11 +12,16 @@
             fx:controller="TO.project.CinemaStreet.controller.MenuController"
             minHeight="10" minWidth="10"
 >
-<!--    buttons opening each application component-->
+
+
+    <!--    buttons opening each application component-->
     <center>
         <VBox>
-            <Button text="Konfiguracja użytkowników" onAction="#openUsers" prefWidth="120"/>
-            <Button text="Zaktualizuj sale" onAction="#updateHalls" prefWidth="120"/>
+            <Label text="Welcome to CinemaStreet!" prefWidth="300"/>
+            <Label text="------------------------" prefWidth="300"/>
+            <Button text="Konfiguracja użytkowników" onAction="#openUsers" prefWidth="300"/>
+            <Button text="Zarzadzanie seansami" onAction="#openHallMovies" prefWidth="300"/>
+            <Button text="Zaktualizuj sale" onAction="#updateHalls" prefWidth="300"/>
         </VBox>
     </center>
 
