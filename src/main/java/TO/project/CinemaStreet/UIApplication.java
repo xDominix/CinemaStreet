@@ -11,6 +11,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 public class UIApplication extends javafx.application.Application{
     public UserController controller;
+    public CurrentUserContext currentUserContext;
     private ConfigurableApplicationContext springContext;
     @Override
     public void init() throws Exception {
@@ -29,7 +30,7 @@ public class UIApplication extends javafx.application.Application{
         primaryStage.setScene(scene);
 
         var loader = new FXMLLoader();
-        loader.setLocation(UIApplication.class.getResource("/view/MenuView.fxml"));
+        loader.setLocation(UIApplication.class.getResource("/view/LoginView.fxml"));
 
         loader.setControllerFactory(springContext::getBean);
         BorderPane rootLayout = loader.load();

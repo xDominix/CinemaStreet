@@ -1,4 +1,5 @@
 package TO.project.CinemaStreet.controller;
+
 import TO.project.CinemaStreet.Roles;
 import TO.project.CinemaStreet.UIApplication;
 import TO.project.CinemaStreet.model.Hall;
@@ -14,7 +15,9 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -33,6 +36,9 @@ public class MenuController {
     private ConfigurableApplicationContext springContext;
 
     private HallService hallService;
+
+    @FXML
+    private Button signOutButton;
 
     public MenuController(HallService hallService) {
         this.hallService = hallService;
@@ -55,12 +61,12 @@ public class MenuController {
             stage.setTitle("Konfiguracja użytkowników");
             stage.setScene(scene);
             stage.show();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
+
     @FXML
     public void openHallMovies(ActionEvent actionEvent) {
         try {
@@ -72,12 +78,12 @@ public class MenuController {
             stage.setTitle("Zarzadzanie seansami");
             stage.setScene(scene);
             stage.show();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
+
     @FXML
     public void updateHalls(ActionEvent actionEvent) {
         // update halls from json
@@ -97,6 +103,7 @@ public class MenuController {
         alert.setContentText("Pomyslnie Zaktualizowano sale");
         alert.showAndWait();
     }
+
     @FXML
     public void sellTickets(ActionEvent actionEvent) {
         try {
@@ -108,8 +115,36 @@ public class MenuController {
             stage.setTitle("Sprzedaż biletów");
             stage.setScene(scene);
             stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        catch (IOException e) {
+    }
+
+    @FXML
+    public void signOut(ActionEvent actionEvent) {
+        // open users view
+        ObservableList<Window> windows = Stage.getWindows();
+        for (Window window : windows) {
+            if (!window.isFocused() && window.isShowing()) {
+                window.hide();
+            }
+        }
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/view/LoginView.fxml"));
+            loader.setControllerFactory(springContext::getBean);
+            Scene scene = new Scene(loader.load(), 600, 400);
+            Stage stage = new Stage();
+            stage.setTitle("Logowanie");
+            stage.setScene(scene);
+            stage.show();
+
+            // get a handle to the stage
+            Stage currentStage = (Stage) signOutButton.getScene().getWindow();
+            // do what you have to do
+            currentStage.hide();
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

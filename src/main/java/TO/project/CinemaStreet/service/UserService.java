@@ -2,6 +2,7 @@ package TO.project.CinemaStreet.service;
 
 import TO.project.CinemaStreet.Roles;
 import TO.project.CinemaStreet.model.User;
+import TO.project.CinemaStreet.utils.AuthenticationResponse;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,15 @@ public class UserService{
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
+    public AuthenticationResponse authenticate(String username, String password){
+        if (userRepository.existsByUsernameAndPassword(username, password)) {
+            User user = userRepository.getReferenceByUsernameAndPassword(username, password);
+            return new AuthenticationResponse(user.getId(), user.getRole(), true);
+        }
+        return new AuthenticationResponse(0, Roles.EMPLOYEE, false);
+    }
+
     public List<User> getAllUsers()
     {
         return userRepository.findAll();

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="TO.project.CinemaStreet.controller.LoginController"
+            prefHeight="400.0" prefWidth="600.0"
+            minHeight="10" minWidth="10">
+
+    <center>
+        <VBox>
+            <Label text="Welcome to CinemaStreet!" prefWidth="300"/>
+            <Label text="Zaloguj się" prefWidth="300"/>
+            <HBox>
+                <Label text="Name:" prefWidth="120"/>
+                <TextField fx:id="usernameTextField" prefWidth="120"/>
+            </HBox>
+            <HBox>
+                <Label text="LastName:" prefWidth="120"/>
+                <TextField fx:id="passwordTextField" prefWidth="120"/>
+            </HBox>
+            <HBox>
+                <Button fx:id="signInButton" text="Zaloguj" onAction="#signIn" prefWidth="300"/>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

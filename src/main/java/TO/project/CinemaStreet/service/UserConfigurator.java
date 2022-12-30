@@ -12,12 +12,13 @@ public class UserConfigurator {
     CommandLineRunner commandLineRunner(UserRepository userRepository) {
         return args -> {
             if (userRepository.count() == 0) {
-                User kowalski = new User("Jan", "Kowalski", "temp@gmail.com", Roles.EMPLOYEE);
-                userRepository.save(kowalski);
+                User admin = new User("admin", "123qwe", "Admin", "Adminowy", "admin@citystreet.com", Roles.ADMIN);
+                userRepository.save(admin);
             }
-//            else if (userRepository.count() >= 1) {
-//                userRepository.deleteAll();
-//            }
+            else if (userRepository.count() >= 1) {
+                userRepository.deleteAll();
+                this.commandLineRunner(userRepository);
+            }
         };
     }
 }

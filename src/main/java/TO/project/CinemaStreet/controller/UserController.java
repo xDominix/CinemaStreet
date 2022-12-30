@@ -101,7 +101,7 @@ public class UserController {
         if(checkInputs())
         {
             System.out.println(((RadioButton)group.getSelectedToggle()).getText());
-            User user = new User(nameTextField.getText(), LastNameTextField.getText(), emailTextField.getText(), Roles.valueOf(((RadioButton)group.getSelectedToggle()).getText()));
+            User user = new User(nameTextField.getText(), nameTextField.getText(), nameTextField.getText(), LastNameTextField.getText(), emailTextField.getText(), Roles.valueOf(((RadioButton)group.getSelectedToggle()).getText()));
             userService.addUser(user);
             updateView();
         }

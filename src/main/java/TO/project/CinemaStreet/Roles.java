@@ -31,7 +31,7 @@ public enum Roles {
         this.role = role;
     }
 
-    public boolean authorize(String role,  Permissions permission) {
+    public boolean authorize(Permissions permission) {
         return switch (role) {
             case "EMPLOYEE" -> Arrays.asList(employee).contains(permission);
             case "MODERATOR" -> Arrays.asList(moderator).contains(permission);

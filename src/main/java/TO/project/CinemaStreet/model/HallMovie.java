@@ -11,8 +11,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "hallmovie")
-public class HallMovie implements Externalizable
-{
+public class HallMovie implements Externalizable {
     private static final long serialVersionUID = 1L;
     private final IntegerProperty id = new SimpleIntegerProperty(this, "id");
     private final ObjectProperty<Hall> hall = new SimpleObjectProperty<>(this, "hall");
