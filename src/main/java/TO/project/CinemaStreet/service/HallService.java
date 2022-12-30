@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class HallService {
     private final HallRepository hallRepository;
@@ -20,6 +22,10 @@ public class HallService {
         return hallRepository.findAll();
     }
 
+    public Hall getHallById(int id){
+        Optional<Hall> hall = hallRepository.findById(id);
+        return hall.orElse(null);
+    }
     public void addHall(Hall hall) {
         hallRepository.save(hall);
     }
