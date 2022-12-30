@@ -4,6 +4,8 @@ import TO.project.CinemaStreet.model.Hall;
 import TO.project.CinemaStreet.model.Movie;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +32,7 @@ public class MovieService {
 
     public boolean deleteMovieById(Integer id) {
         if (movieRepository.existsById(id)) {
+
             movieRepository.deleteById(id);
             return true;
         }

@@ -28,7 +28,6 @@ public class Movie implements Externalizable {
         this.releaseDate.set(releaseDate);
         this.ticketCost.set(ticketCost);
     }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public final int getId() {

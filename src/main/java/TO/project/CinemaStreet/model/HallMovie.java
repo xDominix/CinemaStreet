@@ -53,38 +53,24 @@ public class HallMovie implements Externalizable
         this.movie.get().setId(movieId);
     }
 
-
     @Column(name ="hallId")
     public final int getHallId() {
         return hall.get().getId();
     }
+
+    public final Hall getHall() {
+        return hall.get();
+    }
+
+    public final void setHall(Hall hall) {
+        this.hall.set(hall);
+    }
+
     @Column(name ="hallId")
     public final void setHallId(int hallId) {
         this.hall.get().setId(hallId);
     }
 
-
-
-    public final Hall getHall() {
-        return hall.get();
-    }
-    public ObjectProperty<Hall> hallProperty() {
-        return hall;
-    }
-
-    public void setHall(Hall hall) {
-        this.hall.set(hall);
-    }
-    public final Movie getMovie() {
-        return movie.get();
-    }
-    public ObjectProperty<Movie> movieProperty() {
-        return movie;
-    }
-
-    public void setMovie(Movie movie) {
-        this.movie.set(movie);
-    }
     public LocalDateTime getDate() {
         return date.get();
     }
@@ -114,8 +100,8 @@ public class HallMovie implements Externalizable
     public String toString() {
         return "HallMovie{" +
                 "id=" + id +
+                ", seatsTaken=" + seatsTaken+
                 ", date=" + date.toString()+
-                ", seatsTaken=" + seatsTaken
                 +'}';
     }
 
@@ -133,5 +119,6 @@ public class HallMovie implements Externalizable
         hall.set((Hall) in.readObject());
         movie.set((Movie) in.readObject());
         date.set((LocalDateTime) in.readObject());
+        seatsTaken.set((int) in.readObject());
     }
 }

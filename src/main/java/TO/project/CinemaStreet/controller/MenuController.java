@@ -72,6 +72,24 @@ public class MenuController {
 
     }
     @FXML
+    public void openMovies(ActionEvent actionEvent) {
+        // open users view
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/view/MovieView.fxml"));
+            loader.setControllerFactory(springContext::getBean);
+            Scene scene = new Scene(loader.load(), 600, 400);
+            Stage stage = new Stage();
+            stage.setTitle("Zarzadzanie filmami");
+            stage.setScene(scene);
+            stage.show();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+    @FXML
     public void openHallMovies(ActionEvent actionEvent) {
         try {
             FXMLLoader loader = new FXMLLoader();

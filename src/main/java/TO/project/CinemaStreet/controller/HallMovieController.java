@@ -81,10 +81,12 @@ public class HallMovieController
             @Override
             protected void updateItem(HallMovie item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty || item == null || item.getHall() == null) {
+                if (empty || item == null ) {
                     setText(null);
                 } else {
-                    setText(item.getId()+" "+item.getHall().getId()+" "+item.getMovie().getName()+" "+item.getDate());
+                    Hall hall =hallService.getHallById((item.getHallId()));
+                    Movie movie =movieService.getMovieById((item.getMovieId()));
+                    setText(item.getId()+", "+movie.getName()+", "+hall.getId()+", "+item.getDate());
                 }
             }
         });
@@ -112,13 +114,13 @@ public class HallMovieController
     private void addHallMovie(ActionEvent actionEvent) {
         if(checkInputs())
         {
-            System.out.println(hallComboBox.getValue().toString()+" "+movieComboBox.getValue().toString()+" "+datePicker.getValue().toString());
+            //System.out.println(hallComboBox.getValue().toString()+" "+movieComboBox.getValue().toString()+" "+datePicker.getValue().toString());
 
-            int hallID = hallComboBox.getSelectionModel().getSelectedIndex();
-            Hall hall = hallService.getHallById(hallID);
+            int hallindex = hallComboBox.getSelectionModel().getSelectedIndex();
+            Hall hall = hallService.getAllHalls().get(hallindex);
 
-            int movieID = movieComboBox.getSelectionModel().getSelectedIndex();
-            Movie movie = movieService.getMovieById(movieID);
+            int movieindex = movieComboBox.getSelectionModel().getSelectedIndex();
+            Movie movie = movieService.getAllMovies().get(movieindex);
 
             LocalDateTime date = LocalDateTime.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
 
@@ -160,7 +162,7 @@ public class HallMovieController
             movieComboBox.getStyleClass().add("error");
             return false;
         }
-        else if(datePicker.getValue()==null || datePicker.getValue().isAfter(LocalDate.now()))
+        else if(datePicker.getValue()==null || datePicker.getValue().isBefore(LocalDate.now()))
         {
             datePicker.getStyleClass().add("error");
             return false;
