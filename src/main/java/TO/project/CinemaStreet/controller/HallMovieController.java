@@ -122,7 +122,7 @@ public class HallMovieController
             int movieindex = movieComboBox.getSelectionModel().getSelectedIndex();
             Movie movie = movieService.getAllMovies().get(movieindex);
 
-            LocalDateTime date = LocalDateTime.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            LocalDateTime date = datePicker.getValue().atStartOfDay();
 
             HallMovie hallMovie = new HallMovie(hall,movie,date);
             hallMovieService.addHallMovie(hallMovie);
