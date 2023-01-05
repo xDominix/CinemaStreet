@@ -1,7 +1,6 @@
 package TO.project.CinemaStreet.model;
 
 import TO.project.CinemaStreet.Roles;
-import TO.project.CinemaStreet.service.HallService;
 import jakarta.persistence.*;
 import javafx.beans.property.*;
 
@@ -16,17 +15,18 @@ import java.util.Date;
 public class HallMovie implements Externalizable {
     private static final long serialVersionUID = 1L;
     private final IntegerProperty id = new SimpleIntegerProperty(this, "id");
-    private final IntegerProperty hallId = new SimpleIntegerProperty(this, "hallId");
-    private final IntegerProperty movieId = new SimpleIntegerProperty(this, "movieId");
+    private final ObjectProperty<Hall> hall = new SimpleObjectProperty<>(this, "hall");
+    private final ObjectProperty<Movie> movie = new SimpleObjectProperty<>(this, "movie");
     private final IntegerProperty seatsTaken = new SimpleIntegerProperty(this, "seatsTaken");
     private final ObjectProperty<LocalDateTime> date = new SimpleObjectProperty<>(this, "date");
+
 
     public HallMovie() {
     }
 
     public HallMovie(Hall hall, Movie movie, LocalDateTime date) {
-        this.hallId.set(hall.getId());
-        this.movieId.set(movie.getId());
+        this.hall.set(hall);
+        this.movie.set(movie);
         this.date.set(date);
         this.seatsTaken.set(0);
     }
@@ -45,20 +45,29 @@ public class HallMovie implements Externalizable {
 
     @Column(name ="movieId")
     public final int getMovieId() {
-        return movieId.get();
+        return movie.get().getId();
     }
     @Column(name ="movieId")
     public final void setMovieId(int movieId) {
-        this.movieId.set(movieId);
+        this.movie.get().setId(movieId);
     }
 
     @Column(name ="hallId")
     public final int getHallId() {
-        return hallId.get();
+        return hall.get().getId();
     }
+
+    public final Hall getHall() {
+        return hall.get();
+    }
+
+    public final void setHall(Hall hall) {
+        this.hall.set(hall);
+    }
+
     @Column(name ="hallId")
     public final void setHallId(int hallId) {
-        this.hallId.set(hallId);
+        this.hall.get().setId(hallId);
     }
 
     public LocalDateTime getDate() {
@@ -81,12 +90,17 @@ public class HallMovie implements Externalizable {
         this.seatsTaken.set(seatsTaken);
     }
 
+    public int howManySeatsLeft() {
+        return hall.get().getSeatsNumber() - seatsTaken.get();
+    }
+
+
     @Override
     public String toString() {
         return "HallMovie{" +
                 "id=" + id +
                 ", seatsTaken=" + seatsTaken+
-                ", date=" + date+
+                ", date=" + date.toString()+
                 +'}';
     }
 
@@ -94,15 +108,15 @@ public class HallMovie implements Externalizable {
     public void writeExternal(ObjectOutput out) throws IOException
     {
         out.writeInt(id.get());
-        out.writeObject(hallId.get());
-        out.writeObject(movieId.get());
+        out.writeObject(hall.get());
+        out.writeObject(movie.get());
         out.writeObject(date.get());
     }
     @Override
     public void readExternal(java.io.ObjectInput in) throws IOException, ClassNotFoundException {
         id.set(in.readInt());
-        hallId.set((int) in.readObject());
-        movieId.set((int) in.readObject());
+        hall.set((Hall) in.readObject());
+        movie.set((Movie) in.readObject());
         date.set((LocalDateTime) in.readObject());
         seatsTaken.set((int) in.readObject());
     }
