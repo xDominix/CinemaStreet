@@ -116,14 +116,13 @@ public class MenuController {
     public void updateHalls(ActionEvent actionEvent) {
         // update halls from json
 
-//        alert.showAndWait();
         hallService.removeAllHalls();
 
         List<Hall> newHalls = hallService.getHallsFromJson("src/main/resources/halls.json");
         hallService.addHalls(newHalls);
         System.out.println(hallService.getAllHalls());
-        hallMovieService.validateHallMovies();
-        hallMovieService.updateAllHallMovies();
+//        hallMovieService.validateHallMovies();
+//        hallMovieService.updateAllHallMovies();
 
 
 
@@ -136,22 +135,22 @@ public class MenuController {
         LocalDateTime avatarDate = LocalDateTime.of(2009, 12, 10, 0, 0);
         LocalDateTime godfatherDate = LocalDateTime.of(1972, 3, 15, 0, 0);
 
-//        movieService.removeAllMovies();
-//        hallMovieService.removeAllHallMovies();
-//        Movie movie = new Movie("Avatar", 135, avatarDate, 25.0f);
-//        Movie movie2 = new Movie("Godfather", 90, godfatherDate, 10.0f);
+        movieService.removeAllMovies();
+        hallMovieService.removeAllHallMovies();
+        Movie movie = new Movie("Avatar", 135, avatarDate, 25.0f);
+        Movie movie2 = new Movie("Godfather", 90, godfatherDate, 10.0f);
 
-//        movieService.addMovie(movie);
-//        movieService.addMovie(movie2);
+        movieService.addMovie(movie);
+        movieService.addMovie(movie2);
 
-//        HallMovie godfatherHallMovie = new HallMovie(hallService.getHallById(1),movie2, LocalDateTime.now().plus(2, ChronoUnit.DAYS));
-//        hallMovieService.addHallMovie(godfatherHallMovie);
-//
-//        HallMovie godfatherHallMovie2 = new HallMovie(hallService.getHallById(2),movie2, LocalDateTime.now().plus(1, ChronoUnit.DAYS));
-//        hallMovieService.addHallMovie(godfatherHallMovie2);
-//
-//        HallMovie avatarHallMovie = new HallMovie(hallService.getHallById(1),movie, LocalDateTime.now().plus(3, ChronoUnit.DAYS).plus(12, ChronoUnit.HOURS));
-//        hallMovieService.addHallMovie(avatarHallMovie);
+        HallMovie godfatherHallMovie = new HallMovie(hallService.getHallById(1),movie2, LocalDateTime.now().plus(2, ChronoUnit.DAYS));
+        hallMovieService.addHallMovie(godfatherHallMovie);
+
+        HallMovie godfatherHallMovie2 = new HallMovie(hallService.getHallById(2),movie2, LocalDateTime.now().plus(1, ChronoUnit.DAYS));
+        hallMovieService.addHallMovie(godfatherHallMovie2);
+
+        HallMovie avatarHallMovie = new HallMovie(hallService.getHallById(1),movie, LocalDateTime.now().plus(3, ChronoUnit.DAYS).plus(12, ChronoUnit.HOURS));
+        hallMovieService.addHallMovie(avatarHallMovie);
 
 
 
