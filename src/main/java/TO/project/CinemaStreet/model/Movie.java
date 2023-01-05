@@ -18,6 +18,8 @@ public class Movie implements Externalizable {
     private final IntegerProperty length = new SimpleIntegerProperty(this, "length");
     private final ObjectProperty<LocalDateTime> releaseDate = new SimpleObjectProperty<>(this, "releaseDate");
     private final FloatProperty ticketCost = new SimpleFloatProperty(this, "ticketCost");
+    private final StringProperty imageUrl = new SimpleStringProperty(this, "imageUrl");
+    private final StringProperty category = new SimpleStringProperty(this, "category");
 
     public Movie() {
     }
@@ -27,6 +29,8 @@ public class Movie implements Externalizable {
         this.length.set(length);
         this.releaseDate.set(releaseDate);
         this.ticketCost.set(ticketCost);
+        this.category.set("");
+        this.imageUrl.set("https://cdn.shopify.com/s/files/1/0057/3728/3618/products/interstellar5_480x.progressive.jpg?v=1585846879");
     }
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -49,6 +53,28 @@ public class Movie implements Externalizable {
     public final void setName(String name) {
         this.name.set(name);
     }
+
+
+    public final String getCategory() {
+        return category.get();
+    }
+    public StringProperty categoryProperty() {
+        return category;
+    }
+    public final void setCategory(String category) {
+        this.category.set(category);
+    }
+
+    public final String getImageUrl() {
+        return imageUrl.get();
+    }
+    public StringProperty imageUrlProperty() {
+        return imageUrl;
+    }
+    public final void setImageUrl(String imageUrl) {
+        this.imageUrl.set(imageUrl);
+    }
+
 
     public final Integer getLength() {
         return length.get();

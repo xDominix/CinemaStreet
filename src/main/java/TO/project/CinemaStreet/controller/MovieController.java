@@ -1,175 +1,96 @@
 package TO.project.CinemaStreet.controller;
 
-import TO.project.CinemaStreet.Roles;
 import TO.project.CinemaStreet.model.Movie;
-import TO.project.CinemaStreet.model.User;
 import TO.project.CinemaStreet.service.MovieService;
-import TO.project.CinemaStreet.service.UserService;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.IOException;
+import java.util.List;
+
 
 @Controller
-public class MovieController
-{
+public class MovieController {
+
+    @Autowired
+    private ConfigurableApplicationContext springContext;
     @FXML
-    ListView<Movie> movieListView = new ListView<Movie>();
+    FlowPane movieFlowPane;
 
-    @FXML
-    private TextField idTextField;
-
-    @FXML
-    private TextField nameTextField;
-
-    @FXML
-    private TextField lengthTextField;
-
-    @FXML
-    private DatePicker datePicker;
-
-    @FXML
-    private TextField ticketCostTextField;
-
-    private MovieService movieService;
-
+    MovieService movieService;
     public MovieController(MovieService movieService) {
         this.movieService = movieService;
     }
 
     @FXML
     public void initialize() {
-        movieListView.setCellFactory(param -> new ListCell<>() {
-            @Override
-            protected void updateItem(Movie item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null || item.getName() == null) {
-                    setText(null);
-                } else {
-                    setText(item.getId()+" '"+item.getName()+"' "+item.getLength()+"min "+item.getTicketCost()+"$ "+item.getReleaseDate().toLocalDate());
-                }
+//        set space between each children element in flow pane
+        movieFlowPane.setHgap(20);
+//        insert movies into gridpane
+        List<Movie> movies = movieService.getAllMovies();
+        for (Movie movie :
+                movies) {
+            VBox movieCard = createMovieCard(movie);
+            movieFlowPane.getChildren().add(movieCard);
+        }
+    }
+
+    private VBox createMovieCard(Movie movie){
+        Image image = new Image(movie.getImageUrl());
+        ImageView imageView = new ImageView(image);
+        float multiplier = 0.8f;
+        imageView.setFitHeight(450*multiplier);
+        imageView.setFitWidth(300*multiplier);
+
+
+        Label movieTitle = new Label(movie.getName());
+        movieTitle.setPadding(new Insets(0,0,0,0));
+        movieTitle.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #ffffff;-fx-cursor: hand;");
+        VBox movieCard = new VBox(imageView, movieTitle);
+        movieCard.setPadding(new Insets(10,10,10,10));
+        movieCard.setSpacing(0);
+        movieCard.setAlignment(javafx.geometry.Pos.CENTER);
+        movieCard.setStyle("-fx-background-color: #4e4e4e;-fx-border-radius: 5px; -fx-border-color: #AFB1B3; -fx-border-width: 2px; -fx-cursor: hand;");
+
+//        set on hover
+        movieCard.setOnMouseEntered(event -> {
+            movieCard.setStyle("-fx-background-color: #4e4e4e;-fx-border-radius: 5px; -fx-border-color: #AFB1B3; -fx-border-width: 2px; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, #ffffff, 10, 0, 0, 0);");
+        });
+        movieCard.setOnMouseExited(event -> {
+            movieCard.setStyle("-fx-background-color: #4e4e4e;-fx-border-radius: 5px; -fx-border-color: #AFB1B3; -fx-border-width: 2px; -fx-cursor: hand;");
+        });
+//        set on click event
+        movieCard.setOnMouseClicked(event -> {
+            try {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("/view/MovieDetailsView.fxml"));
+                loader.setControllerFactory(springContext::getBean);
+                Scene scene = new Scene(loader.load(), 500, 700);
+                MovieDetailsController movieDetailsController = loader.getController();
+                movieDetailsController.setMovie(movie);
+                Stage stage = new Stage();
+                stage.setScene(scene);
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
 
-        updateView();
-    }
-    private void updateView(){
-        //reset inputs
-        nameTextField.setText("");
-        lengthTextField.setText("");
-        ticketCostTextField.setText("");
-        datePicker.setValue(null);
-        idTextField.setText("");
 
-        //update list
-        ObservableList<Movie> items =   FXCollections.observableArrayList(movieService.getAllMovies());
-        movieListView.setItems(items);
+        return movieCard;
     }
 
-    @FXML
-    private void addNewMovie(ActionEvent actionEvent) {
-        if(checkInputs())
-        {
 
-            try{
-                int lenght = Integer.parseInt(lengthTextField.getText());
-                float ticketcost = Float.parseFloat(ticketCostTextField.getText());
-
-                Movie movie = new Movie(nameTextField.getText(),lenght,datePicker.getValue().atStartOfDay(),ticketcost);
-                movieService.addMovie(movie);
-                updateView();
-            }
-            catch (NumberFormatException ex){
-                ex.printStackTrace();
-            }
-
-        }
-    }
-
-    @FXML
-    private void deleteMovie(ActionEvent actionEvent) {
-        removeInputsErrors();
-        try{
-            boolean deleted = movieService.deleteMovieById(Integer.parseInt(idTextField.getText()));
-
-            if(!deleted){
-                idTextField.getStyleClass().add("error");
-                System.out.println("User does not exists");
-                return;
-            }
-
-            System.out.println("Deleted");
-            updateView();
-        }
-        catch (NumberFormatException ex){
-            idTextField.getStyleClass().add("error");
-            System.out.println("Input is NaN");
-        }
-
-    }
-
-    private boolean checkInputs(){
-        removeInputsErrors();
-
-        if(nameTextField.getText().length()<3) {
-            nameTextField.getStyleClass().add("error");
-            return false;
-        } else if(!isInt(lengthTextField.getText()))
-        {
-            lengthTextField.getStyleClass().add("error");
-            return false;
-        }else if(datePicker.getValue()==null || datePicker.getValue().isAfter(LocalDate.now()))
-        {
-            datePicker.getStyleClass().add("error");
-            return false;
-        }else if(!isFloat(ticketCostTextField.getText()))
-        {
-            ticketCostTextField.getStyleClass().add("error");
-            return false;
-        }
-
-        return true;
-    }
-
-    private void removeInputsErrors(){
-        idTextField.getStyleClass().remove("error");
-        nameTextField.getStyleClass().remove("error");
-        lengthTextField.getStyleClass().remove("error");
-        datePicker.getStyleClass().remove("error");
-        ticketCostTextField.getStyleClass().remove("error");
-    }
-
-    public static boolean isInt(String strNum) {
-        if (strNum == null) {
-            return false;
-        }
-        try {
-            double d = Integer.parseInt(strNum);
-        } catch (NumberFormatException nfe) {
-            return false;
-        }
-        return true;
-    }
-    public static boolean isFloat(String strNum) {
-        if (strNum == null) {
-            return false;
-        }
-        try {
-            double d = Float.parseFloat(strNum);
-        } catch (NumberFormatException nfe) {
-            return false;
-        }
-        return true;
-    }
 }
-
