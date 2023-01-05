@@ -23,6 +23,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -48,10 +49,10 @@ public class HallMovieController
     private TextField idTextField;
 
     @FXML
-    private ComboBox<String> hallComboBox;
+    private ComboBox<Hall> hallComboBox;
 
     @FXML
-    private ComboBox<String> movieComboBox;
+    private ComboBox<Movie> movieComboBox;
 
     @FXML
     private DatePicker datePicker;
@@ -70,12 +71,10 @@ public class HallMovieController
     @FXML
     public void initialize() {
 
-        List<String> halls = hallService.getAllHalls().stream().map(key -> key.getId() + " (" + key.getSeatsNumber()+")").collect(Collectors.toList())
-                .stream().map(Object::toString).collect(Collectors.toList());;
-        hallComboBox.getItems().setAll(halls);
+        hallMovieListView.setItems(FXCollections.observableArrayList(hallMovieService.getAllHallMovies()));
+        hallComboBox.setItems(FXCollections.observableArrayList(hallService.getAllHalls()));
+        movieComboBox.setItems(FXCollections.observableArrayList(movieService.getAllMovies()));
 
-        List<String> movies = movieService.getAllMovies().stream().map(key -> key.getName()).collect(Collectors.toList());
-        movieComboBox.getItems().setAll(movies);
 
         hallMovieListView.setCellFactory(param -> new ListCell<>() {
             @Override
@@ -84,8 +83,8 @@ public class HallMovieController
                 if (empty || item == null ) {
                     setText(null);
                 } else {
-                    Hall hall =hallService.getHallById((item.getHallId()));
-                    Movie movie =movieService.getMovieById((item.getMovieId()));
+                    Hall hall = hallService.getHallById(item.getHallId());
+                    Movie movie = movieService.getMovieById(item.getMovieId());
                     setText(item.getId()+", "+movie.getName()+", "+hall.getId()+", "+item.getDate());
                 }
             }
@@ -114,19 +113,20 @@ public class HallMovieController
     private void addHallMovie(ActionEvent actionEvent) {
         if(checkInputs())
         {
-            //System.out.println(hallComboBox.getValue().toString()+" "+movieComboBox.getValue().toString()+" "+datePicker.getValue().toString());
 
-            int hallindex = hallComboBox.getSelectionModel().getSelectedIndex();
-            Hall hall = hallService.getAllHalls().get(hallindex);
 
-            int movieindex = movieComboBox.getSelectionModel().getSelectedIndex();
-            Movie movie = movieService.getAllMovies().get(movieindex);
+                Hall hall = hallComboBox.getValue();
+                Movie movie = movieComboBox.getValue();
 
-            LocalDateTime date = LocalDateTime.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+                LocalDate localDate = datePicker.getValue();
+                LocalDateTime localDateTime = LocalDateTime.of(localDate.getYear(),localDate.getMonth(),localDate.getDayOfMonth(),0,0);
 
-            HallMovie hallMovie = new HallMovie(hall,movie,date);
-            hallMovieService.addHallMovie(hallMovie);
-            updateView();
+
+                HallMovie hallMovie = new HallMovie(hall,movie,localDateTime);
+                hallMovieService.addHallMovie(hallMovie);
+                updateView();
+
+
         }
     }
 
