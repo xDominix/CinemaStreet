@@ -35,8 +35,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-//import static jdk.internal.org.jline.utils.Colors.h;
-
 @Controller
 public class TicketController {
     @FXML
@@ -57,12 +55,10 @@ public class TicketController {
     private MovieService movieService;
 
     private HallMovieService hallMovieService;
-    private HallService hallService;
 
-    public TicketController(MovieService movieService, HallMovieService hallMovieService,HallService hallService) {
+    public TicketController(MovieService movieService, HallMovieService hallMovieService) {
         this.movieService = movieService;
         this.hallMovieService = hallMovieService;
-        this.hallService=hallService;
     }
 
 
@@ -103,9 +99,7 @@ public class TicketController {
             if (newValue != null) {
                 List<HallMovie> hallMovies = hallMovieService.getHallMoviesByMovie(newValue);
 
-                hallComboBox.setItems(FXCollections.observableArrayList(hallMovies.stream().map((hallMovie) ->{
-                          return hallService.getHallById(hallMovie.getHallId());
-                        }).collect(Collectors.toList())));
+                hallComboBox.setItems(FXCollections.observableArrayList(hallMovies.stream().map(HallMovie::getHall).collect(Collectors.toList())));
             }
         });
 //        set a listener to hallComboBox that sets dates in dateComboBox
@@ -129,8 +123,7 @@ public class TicketController {
 //                HallMovie hallMovie = hallMovieService.getHallMovieByHallAndMovieAndDate(hall, movie, Timestamp.valueOf(newValue));//przepraszam
                 List<HallMovie> hallMovies = hallMovieService.getHallMoviesByHallAndMovie(hall, movie);
                 hallMovies = hallMovies.stream().filter(hallMovie -> hallMovie.getDate().equals(newValue)).collect(Collectors.toList());
-                int howManySeatsLeft = hallMovieService.howManySeatsLeft(hallMovies.get(0).getId());
-                currentSeatsLabel.setText(String.valueOf(howManySeatsLeft));
+                currentSeatsLabel.setText(String.valueOf(hallMovies.get(0).howManySeatsLeft()));
             }
         });
     }
@@ -142,8 +135,7 @@ public class TicketController {
         int seats = Integer.parseInt(seatTextField.getText());
         HallMovie hallMovie = hallMovieService.getHallMovieByHallAndMovieAndDate(hall, movie,date);
 //        validate if there are enough seats
-        int howManySeatsLeft = hallMovieService.howManySeatsLeft(hallMovie.getId());
-        if (howManySeatsLeft >= seats) {
+        if (hallMovie.howManySeatsLeft() >= seats) {
             hallMovie.setSeatsTaken(hallMovie.getSeatsTaken() + seats);
             hallMovieService.updateHallMovie(hallMovie);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -156,10 +148,10 @@ public class TicketController {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Błąd");
             alert.setHeaderText("Nie ma tylu wolnych miejsc");
-            alert.setContentText("Zostało tylko " + howManySeatsLeft + " miejsc");
+            alert.setContentText("Zostało tylko " + hallMovie.howManySeatsLeft() + " miejsc");
             alert.showAndWait();
         }
 
-        currentSeatsLabel.setText(String.valueOf(howManySeatsLeft));
+        currentSeatsLabel.setText(String.valueOf(hallMovie.howManySeatsLeft()));
     }
 }

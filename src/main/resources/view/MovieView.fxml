@@ -14,7 +14,7 @@
             minHeight="10" minWidth="10"
 >
     <top>
-        <Label text="Movie List (id, title, length, release date, ticket cost)" prefWidth="300"/>
+        <Label text="Movie List (id, title, length, release date, ticket cost)" prefWidth="120"/>
     </top>
     <left>
         <HBox styleClass="image-box">

@@ -20,8 +20,6 @@
             <ComboBox fx:id="hallComboBox" prefWidth="180"/>
             <Label text="Wybierz datę:"/>
             <ComboBox fx:id="dateComboBox" prefWidth="180"/>
-            <Label text="Wybierz gatunek: (SOON)"/>
-            <ComboBox prefWidth="180"/>
 <!--            <Label text="Wybierz godzinę:"/>-->
 <!--            <ComboBox fx:id="hourComboBox" prefWidth="120"/>-->
             <HBox spacing="20">

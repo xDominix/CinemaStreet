@@ -10,20 +10,13 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class HallMovieService
 {
     private final HallMovieRepository hallMovieRepository;
-    private final HallService hallService;
-    public HallMovieService(HallMovieRepository hallMovieRepository,HallService hallService) {
+    public HallMovieService(HallMovieRepository hallMovieRepository) {
         this.hallMovieRepository = hallMovieRepository;
-        this.hallService = hallService;
-    }
-    public HallMovie getHallMovieById(int id){
-        Optional<HallMovie> hallMovie = hallMovieRepository.findById(id);
-        return hallMovie.orElse(null);
     }
     public List<HallMovie> getAllHallMovies()
     {
@@ -82,7 +75,7 @@ public class HallMovieService
 
 //        check if hall exists
         for (HallMovie hallMovie : hallMovies) {
-            if (hallService.getHallById(hallMovie.getHallId()) == null) {
+            if (hallMovie.getHall() == null) {
                 hallMoviesToRemove.add(hallMovie);
             }
         }
@@ -103,7 +96,7 @@ public class HallMovieService
         hallMoviesToRemove = new ArrayList<>();
 
         for (HallMovie hallMovie : hallMovies) {
-            if (hallMovie.getSeatsTaken() > hallService.getHallById(hallMovie.getHallId()).getSeatsNumber()) {
+            if (hallMovie.getSeatsTaken() > hallMovie.getHall().getSeatsNumber()) {
                 hallMoviesToRemove.add(hallMovie);
                 System.out.println("usuń"+hallMovie);
             }
@@ -118,10 +111,4 @@ public class HallMovieService
             hallMovieRepository.save(hallMovie);
         }
     }
-
-    public int howManySeatsLeft(Integer id) {
-        HallMovie hallMovie = getHallMovieById(id);
-        return hallService.getHallById(hallMovie.getHallId()).getSeatsNumber() - hallMovie.getSeatsTaken();
-    }
-
 }
