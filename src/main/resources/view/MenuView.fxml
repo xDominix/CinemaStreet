@@ -20,7 +20,7 @@
             <Label text="Welcome to CinemaStreet!" prefWidth="300"/>
             <Label text="------------------------" prefWidth="300"/>
             <Button text="Konfiguracja użytkowników" onAction="#openUsers" prefWidth="300"/>
-            <Button text="Sprzedaj bilety" onAction="#sellTickets" prefWidth="300"/>
+            <Button text="Sprzedaj bilety (DO WYPIERDZIELENIA)" onAction="#sellTickets" prefWidth="300"/>
             <Button text="Konfiguracja filmów" onAction="#openMovies" prefWidth="300"/>
             <Button text="Zarzadzanie seansami" onAction="#openHallMovies" prefWidth="300"/>
             <Button text="Zaktualizuj sale" onAction="#updateHalls" prefWidth="300"/>
