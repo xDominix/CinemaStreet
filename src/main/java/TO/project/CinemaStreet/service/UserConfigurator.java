@@ -19,6 +19,7 @@ public class UserConfigurator {
         return args -> {
             if (userRepository.count() == 0) {
                 User admin = new User("admin", "123qwe", "Admin", "Adminowy", "admin@citystreet.com", Roles.ADMIN);
+                System.out.println("dodaje admina");
                 userRepository.save(admin);
             }
 //            else if (userRepository.count() >= 1) {
