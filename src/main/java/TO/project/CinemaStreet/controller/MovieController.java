@@ -6,6 +6,7 @@ import TO.project.CinemaStreet.model.Movie;
 import TO.project.CinemaStreet.service.MovieService;
 import TO.project.CinemaStreet.service.UserService;
 import TO.project.CinemaStreet.utils.FxUtils;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -82,7 +83,6 @@ public class MovieController {
             setMoviesToPane(moviesByCategory);
 
         });
-
     }
 
 
@@ -114,14 +114,14 @@ public class MovieController {
         movieCard.setPadding(new Insets(10,10,10,10));
         movieCard.setSpacing(0);
         movieCard.setAlignment(javafx.geometry.Pos.CENTER);
-        movieCard.setStyle("-fx-background-color: #4e4e4e;-fx-border-radius: 5px; -fx-border-color: #AFB1B3; -fx-border-width: 2px; -fx-cursor: hand;");
+        movieCard.setStyle("-fx-background-color: #4e4e4e;-fx-border-radius: 5px; -fx-border-color: #2D2D30n; -fx-border-width: 2px; -fx-cursor: hand;");
 
 //        set on hover
         movieCard.setOnMouseEntered(event -> {
-            movieCard.setStyle("-fx-background-color: #4e4e4e;-fx-border-radius: 5px; -fx-border-color: #AFB1B3; -fx-border-width: 2px; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, #ffffff, 10, 0, 0, 0);");
+            movieCard.setStyle("-fx-background-color: #4e4e4e;-fx-border-radius: 5px; -fx-border-color: #2D2D30n; -fx-border-width: 2px; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, #ffffff, 10, 0, 0, 0);");
         });
         movieCard.setOnMouseExited(event -> {
-            movieCard.setStyle("-fx-background-color: #4e4e4e;-fx-border-radius: 5px; -fx-border-color: #AFB1B3; -fx-border-width: 2px; -fx-cursor: hand;");
+            movieCard.setStyle("-fx-background-color: #4e4e4e;-fx-border-radius: 5px; -fx-border-color: #2D2D30n; -fx-border-width: 2px; -fx-cursor: hand;");
         });
 //        set on click event
         movieCard.setOnMouseClicked(event -> {
