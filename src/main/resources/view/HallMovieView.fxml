@@ -17,9 +17,10 @@
         <Label text="Current Shows (id, title, hall id, date)" prefWidth="120"/>
     </top>
     <left>
-        <HBox styleClass="image-box">
+        <VBox styleClass="image-box">
+            <TextField  fx:id="searchTextField" promptText="search title" prefWidth="300"/>
             <ListView fx:id="hallMovieListView" prefWidth="300"/>
-        </HBox>
+        </VBox>
     </left>
     <center>
         <VBox>

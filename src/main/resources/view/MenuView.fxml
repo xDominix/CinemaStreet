@@ -27,6 +27,7 @@
             <Button text="Konfiguracja filmów" onAction="#openEditMovies" prefWidth="300"/>
             <Button text="Zarzadzanie seansami" onAction="#openHallMovies" prefWidth="300"/>
             <Button text="Zaktualizuj sale" onAction="#updateHalls" prefWidth="300"/>
+            <Button text="Statystyki" onAction="#openStats" prefWidth="300"/>
             <Button  fx:id="signOutButton"  text="Wyloguj" onAction="#signOut" prefWidth="300"/>
         </VBox>
     </center>

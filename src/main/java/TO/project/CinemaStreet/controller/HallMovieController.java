@@ -57,10 +57,13 @@ public class HallMovieController
     @FXML
     private DatePicker datePicker;
 
+    @FXML
+    private TextField searchTextField;
+
+
     private HallMovieService hallMovieService;
     private HallService hallService;
     private MovieService movieService;
-
 
     public HallMovieController(HallMovieService hallMovieService,HallService hallService,MovieService movieService) {
         this.hallMovieService = hallMovieService;
@@ -83,11 +86,18 @@ public class HallMovieController
                 if (empty || item == null ) {
                     setText(null);
                 } else {
-                    Hall hall = hallService.getHallById(item.getHallId());
-                    Movie movie = movieService.getMovieById(item.getMovieId());
-                    setText(item.getId()+", "+movie.getName()+", "+hall.getId()+", "+item.getDate());
+                    if(item.getMovie().getName().contains(""))
+                        setText(item.getId()+", "+item.getMovie().getName()+", "+item.getHall().getId()+", "+item.getDate());
+                    else
+                        setText(null);
                 }
             }
+        });
+
+        searchTextField.textProperty().addListener((observable, oldValue, newValue)->{
+            hallMovieListView.setItems(FXCollections.observableArrayList
+                    (hallMovieService.getAllHallMovies().stream()
+                            .filter(el->el.getMovie().getName().toLowerCase().contains(newValue.toLowerCase())).toList()));
         });
 
         updateView();

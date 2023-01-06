@@ -53,6 +53,21 @@ public class MenuController {
     }
 
     @FXML
+    public void openStats(ActionEvent actionEvent){
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/view/StatisticsView.fxml"));
+            loader.setControllerFactory(springContext::getBean);
+            Scene scene = new Scene(loader.load(), 600, 400);
+            Stage stage = new Stage();
+            stage.setTitle("Statystyki");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
     public void openUsers(ActionEvent actionEvent) {
         // open users view
         try {

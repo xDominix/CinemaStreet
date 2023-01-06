@@ -1,6 +1,8 @@
 package TO.project.CinemaStreet.controller;
 
 import TO.project.CinemaStreet.model.Movie;
+import TO.project.CinemaStreet.service.HallMovieService;
+import TO.project.CinemaStreet.service.HallService;
 import TO.project.CinemaStreet.service.MovieService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -39,6 +41,9 @@ public class MovieEditController
     }
 
     @FXML
+    private TextField searchTextField;
+
+    @FXML
     public void initialize() {
         movieListView.setCellFactory(param -> new ListCell<>() {
             @Override
@@ -51,6 +56,13 @@ public class MovieEditController
                 }
             }
         });
+
+        searchTextField.textProperty().addListener((observable, oldValue, newValue)->{
+            movieListView.setItems(FXCollections.observableArrayList
+                    (FXCollections.observableArrayList(movieService.getAllMovies()).stream()
+                            .filter(el->el.getName().toLowerCase().contains(newValue.toLowerCase())).toList()));
+        });
+
 
         updateView();
     }
