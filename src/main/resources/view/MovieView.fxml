@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import java.net.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import java.net.URL?>
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            prefHeight="400.0" prefWidth="600.0"
-            fx:controller="TO.project.CinemaStreet.controller.MovieController"
-            minHeight="10" minWidth="10"
->
+
+<BorderPane minHeight="10" minWidth="10" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TO.project.CinemaStreet.controller.MovieController">
+    <!--           search bar-->
+    <top>
+        <HBox>
+<!--            TODO normal search bar-->
+            <VBox fx:id="movieVBox" ></VBox>
+            <ComboBox fx:id="searchByCategoryComboBox" prefWidth="200.0" promptText="Wyszukaj po kategorii">
+            <HBox.margin>
+               <Insets bottom="10.0" />
+            </HBox.margin></ComboBox>
+        </HBox>
+    </top>
 <!--    FlowPane of movieCards-->
     <center>
         <FlowPane fx:id="movieFlowPane" prefHeight="400.0" prefWidth="600.0" />

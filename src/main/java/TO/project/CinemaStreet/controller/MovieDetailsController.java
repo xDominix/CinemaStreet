@@ -18,15 +18,26 @@ public class MovieDetailsController {
     @FXML
     private Label idLabel;
     @FXML
+    private Label categoryLabel;
+    @FXML
     public void initialize() {
-        imageView.setImage(new javafx.scene.image.Image("https://cdn.shopify.com/s/files/1/0057/3728/3618/products/interstellar5_480x.progressive.jpg?v=1585846879"));
+//        placeholder image in case of no image
+        imageView.setImage(new javafx.scene.image.Image("https://posters.movieposterdb.com/20_01/2017/7131440/l_7131440_be0c6b24.jpg"));
     }
     public void setMovie(Movie movie) {
         currentMovie = movie;
         updateView();
     }
     private void updateView() {
+        imageView.setImage(new javafx.scene.image.Image(currentMovie.getImageUrl()));
         titleLabel.setText(currentMovie.getName());
         idLabel.setText(String.valueOf(currentMovie.getId()));
+        categoryLabel.setText(currentMovie.getCategory());
+//        if category empty then set NIE USTAWIONO
+        if(currentMovie.getCategory() == ""){
+            categoryLabel.setText("NIE USTAWIONO");
+        }
+//        TODO: rest of the fields
+//        TODO: make it look good
     }
 }

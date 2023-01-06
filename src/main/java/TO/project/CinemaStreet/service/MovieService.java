@@ -1,5 +1,6 @@
 package TO.project.CinemaStreet.service;
 
+import TO.project.CinemaStreet.Categories;
 import TO.project.CinemaStreet.model.Hall;
 import TO.project.CinemaStreet.model.Movie;
 import org.springframework.stereotype.Service;
@@ -47,5 +48,16 @@ public class MovieService {
         for (Movie movie : newMovies) {
             addMovie(movie);
         }
+    }
+
+    public List<Movie> getMoviesByCategory(Categories selectedCategory) {
+        List<Movie> movies = movieRepository.findAll();
+        List<Movie> moviesByCategory = new LinkedList<>();
+        for (Movie movie : movies) {
+            if (movie.getCategory().equals(selectedCategory.name())) {
+                moviesByCategory.add(movie);
+            }
+        }
+        return moviesByCategory;
     }
 }

@@ -8,43 +8,39 @@
 <?import javafx.scene.layout.*?>
 
 <BorderPane minHeight="10" minWidth="10" prefHeight="700.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TO.project.CinemaStreet.controller.MovieDetailsController">
-
-
-
     <stylesheets>
         <URL value="@style.css" />
     </stylesheets>
    <center>
-      <Group BorderPane.alignment="TOP_CENTER">
-         <children>
-            <VBox prefHeight="200.0" prefWidth="100.0">
-               <children>
-                  <ImageView fx:id="imageView" fitHeight="450.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
-                  </ImageView>
-                  <GridPane>
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <Label text="Tytuł"  GridPane.rowIndex="1" />
-                        <Label fx:id="titleLabel" text="Interstellar" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Label text="ID" GridPane.rowIndex="2" />
-                         <Label fx:id="idLabel" text="42" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                     </children>
-                  </GridPane>
-               </children>
-            </VBox>
-         </children>
-         <BorderPane.margin>
-            <Insets top="15.0" />
-         </BorderPane.margin>
-      </Group>
+       <Group BorderPane.alignment="TOP_CENTER">
+           <BorderPane.margin>
+               <Insets top="15.0"/>
+           </BorderPane.margin>
+           <VBox prefHeight="200.0" prefWidth="100.0">
+               <ImageView fx:id="imageView" fitHeight="450.0" fitWidth="300.0" pickOnBounds="true"
+                          preserveRatio="true">
+               </ImageView>
+               <GridPane>
+                   <columnConstraints>
+                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                   </columnConstraints>
+                   <rowConstraints>
+                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                   </rowConstraints>
+                   <Label text="Tytuł" GridPane.rowIndex="1"/>
+                   <Label fx:id="titleLabel" text="Interstellar" GridPane.columnIndex="1"
+                          GridPane.rowIndex="1"/>
+                   <Label text="ID" GridPane.rowIndex="2"/>
+                   <Label fx:id="idLabel" text="42" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                   <Label text="Gatunek" GridPane.rowIndex="3"/>
+                   <Label fx:id="categoryLabel" text="SCIFI" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+               </GridPane>
+           </VBox>
+       </Group>
    </center>
 
 </BorderPane>

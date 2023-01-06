@@ -15,6 +15,7 @@ public enum Categories {
     ROMANS,
     THRILLER,
     WOJENNY,
-    WESTERN
+    WESTERN,
+    SCIFI,
 
 }

@@ -1,5 +1,6 @@
 package TO.project.CinemaStreet.model;
 
+import TO.project.CinemaStreet.Categories;
 import jakarta.persistence.*;
 import javafx.beans.property.*;
 
@@ -23,14 +24,38 @@ public class Movie implements Externalizable {
 
     public Movie() {
     }
-
+    //probably should be replaced by builder pattern
     public Movie(String name, Integer length, LocalDateTime releaseDate, Float ticketCost) {
         this.name.set(name);
         this.length.set(length);
         this.releaseDate.set(releaseDate);
         this.ticketCost.set(ticketCost);
         this.category.set("");
-        this.imageUrl.set("https://cdn.shopify.com/s/files/1/0057/3728/3618/products/interstellar5_480x.progressive.jpg?v=1585846879");
+        this.imageUrl.set("https://posters.movieposterdb.com/20_01/2017/7131440/l_7131440_be0c6b24.jpg");
+    }
+    public Movie(String name, Integer length, LocalDateTime releaseDate, Float ticketCost, Categories category) {
+        this.name.set(name);
+        this.length.set(length);
+        this.releaseDate.set(releaseDate);
+        this.ticketCost.set(ticketCost);
+        this.category.set(category.name());
+        this.imageUrl.set("https://posters.movieposterdb.com/20_01/2017/7131440/l_7131440_be0c6b24.jpg");
+    }
+    public Movie(String name, Integer length, LocalDateTime releaseDate, Float ticketCost, String imageUrl) {
+        this.name.set(name);
+        this.length.set(length);
+        this.releaseDate.set(releaseDate);
+        this.ticketCost.set(ticketCost);
+        this.category.set("");
+        this.imageUrl.set(imageUrl);
+    }
+    public Movie(String name, Integer length, LocalDateTime releaseDate, Float ticketCost, Categories category, String imageUrl) {
+        this.name.set(name);
+        this.length.set(length);
+        this.releaseDate.set(releaseDate);
+        this.ticketCost.set(ticketCost);
+        this.category.set(category.name());
+        this.imageUrl.set(imageUrl);
     }
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
