@@ -20,6 +20,7 @@
     <center>
         <VBox>
             <Label text="Witaj w CinemaStreet!" prefWidth="300"/>
+            <Label text="------------------------" prefWidth="300"/>
             <Label text="Jesteś zalogowany jako:" prefWidth="300"/>
             <Label fx:id="userInfo" text=""/>
             <Label text="------------------------" prefWidth="300"/>

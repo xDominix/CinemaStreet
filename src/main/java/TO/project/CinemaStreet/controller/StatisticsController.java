@@ -4,20 +4,27 @@ import TO.project.CinemaStreet.service.HallMovieService;
 import TO.project.CinemaStreet.service.HallService;
 import TO.project.CinemaStreet.service.MovieService;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.stage.Stage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
 @Controller
 public class StatisticsController
 {
-
+    @Autowired
+    private ConfigurableApplicationContext springContext;
     @FXML
     private CategoryAxis xAxis ;
     @FXML private NumberAxis yAxis ;
@@ -60,5 +67,20 @@ public class StatisticsController
             }
             lineChart.getData().add(series);
         });
+    }
+
+    public void throwError() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/view/NoPermissionView.fxml"));
+            loader.setControllerFactory(springContext::getBean);
+            Scene scene = new Scene(loader.load(), 300, 100);
+            Stage stage = new Stage();
+            stage.setTitle("Błąd!");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
