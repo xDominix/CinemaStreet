@@ -1,5 +1,7 @@
 package TO.project.CinemaStreet.controller;
 
+import TO.project.CinemaStreet.Categories;
+import TO.project.CinemaStreet.model.Category;
 import TO.project.CinemaStreet.model.Hall;
 import TO.project.CinemaStreet.model.HallMovie;
 import TO.project.CinemaStreet.model.Movie;
@@ -143,8 +145,9 @@ public class MenuController {
 
         movieService.removeAllMovies();
         hallMovieService.removeAllHallMovies();
-        Movie movie = new Movie("Avatar", 135, avatarDate, 25.0f);
-        Movie movie2 = new Movie("Godfather", 90, godfatherDate, 10.0f);
+        Movie movie = new Movie("Avatar", 135, avatarDate, 25.0f, Categories.FANTASY,"https://posters.movieposterdb.com/13_01/2009/499549/l_499549_8fac1d11.jpg");
+//        Movie movie2 = new Movie("Interstellar", 90, godfatherDate, 10.0f);
+        Movie movie2 = new Movie("Interstellar", 90, godfatherDate, 10.0f,"https://cdn.shopify.com/s/files/1/0057/3728/3618/products/interstellar5_480x.progressive.jpg?v=1585846879");
 
         movieService.addMovie(movie);
         movieService.addMovie(movie2);

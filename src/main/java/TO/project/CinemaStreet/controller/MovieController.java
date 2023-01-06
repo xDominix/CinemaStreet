@@ -1,18 +1,21 @@
 package TO.project.CinemaStreet.controller;
 
+import TO.project.CinemaStreet.Categories;
 import TO.project.CinemaStreet.model.Movie;
 import TO.project.CinemaStreet.service.MovieService;
+import TO.project.CinemaStreet.utils.FxUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -28,6 +31,8 @@ public class MovieController {
     private ConfigurableApplicationContext springContext;
     @FXML
     FlowPane movieFlowPane;
+    @FXML
+    ComboBox<Categories> searchByCategoryComboBox;
 
     MovieService movieService;
     public MovieController(MovieService movieService) {
@@ -36,10 +41,55 @@ public class MovieController {
 
     @FXML
     public void initialize() {
-//        set space between each children element in flow pane
         movieFlowPane.setHgap(20);
-//        insert movies into gridpane
+//        insert movies into flowpane
         List<Movie> movies = movieService.getAllMovies();
+        setMoviesToPane(movies);
+
+//        initialize category combobox
+        searchByCategoryComboBox.getItems().addAll(Categories.values());
+        FxUtils.autoCompleteComboBoxPlus(searchByCategoryComboBox, (typedText, itemToCompare) -> itemToCompare.name().toLowerCase().contains(typedText.toLowerCase()));
+        searchByCategoryComboBox.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(Categories object) {
+                if(object == null) return "";
+                return object.name();
+            }
+
+            @Override
+            public Categories fromString(String string) {
+                if(string == null) return null;
+//                check if string is in enum
+                for(Categories category : Categories.values()){
+                    if(category.name().equals(string)){
+                        return category;
+                    }
+                }
+                return null;
+            }
+        });
+//        set on action for category combobox
+        searchByCategoryComboBox.setOnAction(event -> {
+            Categories selectedCategory = FxUtils.getComboBoxValue(searchByCategoryComboBox);
+            System.out.println(selectedCategory);
+            if(selectedCategory == null){
+                setMoviesToPane(movies);
+                return;
+            }
+            List<Movie> moviesByCategory = movieService.getMoviesByCategory(selectedCategory);
+            setMoviesToPane(moviesByCategory);
+
+        });
+
+    }
+
+
+    private void setMoviesToPane(List<Movie> movies){
+        if(movieFlowPane == null){
+            System.out.println("movieFlowPane is null");
+            return;
+        }
+        movieFlowPane.getChildren().clear();
         for (Movie movie :
                 movies) {
             VBox movieCard = createMovieCard(movie);
@@ -81,6 +131,7 @@ public class MovieController {
                 MovieDetailsController movieDetailsController = loader.getController();
                 movieDetailsController.setMovie(movie);
                 Stage stage = new Stage();
+                stage.setTitle(movie.getName());
                 stage.setScene(scene);
                 stage.show();
             } catch (IOException e) {
