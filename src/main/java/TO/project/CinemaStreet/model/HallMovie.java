@@ -75,14 +75,8 @@ public class HallMovie implements Externalizable {
         this.hall.get().setId(id);
     }
 
-    public final Movie getMovie() {
-        return movie.get();
-    }
     public ObjectProperty<Movie> movieProperty() {
         return movie;
-    }
-    public void setMovie(Movie movie) {
-        this.movie.set(movie);
     }
     public LocalDateTime getDate() {
         return date.get();
