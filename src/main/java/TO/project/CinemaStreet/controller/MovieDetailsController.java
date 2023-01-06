@@ -1,6 +1,8 @@
 package TO.project.CinemaStreet.controller;
 
 import TO.project.CinemaStreet.model.Movie;
+import TO.project.CinemaStreet.service.MovieService;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -42,6 +44,14 @@ public class MovieDetailsController {
     private Label ticketCostLabel;
     @FXML
     private Label idLabel;
+
+    private MovieService movieService;
+    private FilteredList<Movie> referncedFilteredList;
+
+    public MovieDetailsController(MovieService movieService) {
+        this.movieService = movieService;
+    }
+
     @FXML
     public void initialize() {
 //        placeholder image in case of no image
@@ -103,5 +113,41 @@ public class MovieDetailsController {
         javafx.scene.input.ClipboardContent content = new javafx.scene.input.ClipboardContent();
         content.putString(currentMovie.getImageUrl());
         clipboard.setContent(content);
+    }
+
+    public void deleteMovieAction(ActionEvent actionEvent) {
+//        show confirmation dialogue
+        javafx.scene.control.Alert confirmationAlert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle("Potwierdzenie");
+        confirmationAlert.setHeaderText("Czy na pewno chcesz usunąć ten film?");
+        confirmationAlert.setContentText("Nie będzie można tego cofnąć!");
+        confirmationAlert.showAndWait().ifPresent(response -> {
+            if (response == javafx.scene.control.ButtonType.OK) {
+                //        safely remove the movie from the database and close the window
+                boolean successful =  movieService.deleteMovieById(currentMovie.getId());
+//        show error if unsuccessful and successful if successful and close the window (javafx Alert)
+                if(successful){
+                    referncedFilteredList.getSource().remove(currentMovie);
+                    javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
+                    alert.setTitle("Sukces!");
+                    alert.setHeaderText("Usunięto film!");
+                    alert.setContentText("Usunięto film z bazy danych!");
+                    alert.showAndWait();
+                    Stage stage = (Stage) titleLabel.getScene().getWindow();
+                    stage.close();
+                }else{
+                    javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
+                    alert.setTitle("Błąd!");
+                    alert.setHeaderText("Nie udało się usunąć filmu!");
+                    alert.setContentText("Nie udało się usunąć filmu z bazy danych!");
+                    alert.showAndWait();
+                }
+            }
+        });
+
+    }
+
+    public void setListReference(FilteredList<Movie> filteredList) {
+        this.referncedFilteredList = filteredList;
     }
 }

@@ -13,9 +13,13 @@ import java.util.Optional;
 @Service
 public class MovieService {
     private final MovieRepository movieRepository;
+    private final HallService hallService;
+    private final HallMovieService hallMovieService;
 
-    public MovieService(MovieRepository movieRepository) {
+    public MovieService(MovieRepository movieRepository, HallService hallService, HallMovieService hallMovieService) {
         this.movieRepository = movieRepository;
+        this.hallService = hallService;
+        this.hallMovieService = hallMovieService;
     }
 
     public List<Movie> getAllMovies() {
@@ -32,8 +36,11 @@ public class MovieService {
     }
 
     public boolean deleteMovieById(Integer id) {
+//        remove all hall-movie relations
+        if(!hallMovieService.removeAllHallMovieRelationsByMovieId(id)){
+            return false;
+        }
         if (movieRepository.existsById(id)) {
-
             movieRepository.deleteById(id);
             return true;
         }

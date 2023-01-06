@@ -111,4 +111,14 @@ public class HallMovieService
             hallMovieRepository.save(hallMovie);
         }
     }
+
+    public boolean removeAllHallMovieRelationsByMovieId(Integer id) {
+        List<HallMovie> hallMovies = hallMovieRepository.findAllByMovieId(id);
+        if (hallMovies.size() > 0) {
+            hallMovieRepository.deleteAll(hallMovies);
+            hallMovieRepository.flush();
+            return true;
+        }
+        return false;
+    }
 }

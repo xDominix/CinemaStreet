@@ -145,6 +145,7 @@ public class MovieController {
                 Scene scene = new Scene(loader.load(), 500, 700);
                 MovieDetailsController movieDetailsController = loader.getController();
                 movieDetailsController.setMovie(movie);
+                movieDetailsController.setListReference(filteredList);
                 Stage stage = new Stage();
                 stage.setTitle(movie.getName());
                 stage.setScene(scene);
