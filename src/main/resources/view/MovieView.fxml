@@ -9,12 +9,13 @@
     <!--           search bar-->
     <top>
         <HBox>
-<!--            TODO normal search bar-->
-            <VBox fx:id="movieVBox" ></VBox>
-            <ComboBox fx:id="searchByCategoryComboBox" prefWidth="200.0" promptText="Wyszukaj po kategorii">
+            <HBox fx:id="movieHBox" >
+                <TextField fx:id="searchTextField" promptText="Szukaj po tytule" prefWidth="300"/>
+                <ComboBox fx:id="searchByCategoryComboBox" prefWidth="200.0" promptText="Wyszukaj po kategorii"></ComboBox>
+            </HBox>
             <HBox.margin>
                <Insets bottom="10.0" />
-            </HBox.margin></ComboBox>
+            </HBox.margin>
         </HBox>
     </top>
 <!--    FlowPane of movieCards-->

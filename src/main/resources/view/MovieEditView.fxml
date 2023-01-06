@@ -18,7 +18,7 @@
     </top>
     <left>
         <VBox styleClass="image-box">
-            <TextField  fx:id="searchTextField" promptText="search title" prefWidth="300"/>
+            <TextField  fx:id="searchTextField" promptText="szukaj po tytule" prefWidth="300"/>
             <ListView fx:id="movieListView" prefWidth="300"/>
         </VBox>
     </left>

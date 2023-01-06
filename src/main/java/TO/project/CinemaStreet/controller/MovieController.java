@@ -1,18 +1,22 @@
 package TO.project.CinemaStreet.controller;
 
 import TO.project.CinemaStreet.Categories;
-import TO.project.CinemaStreet.CurrentUserContext;
 import TO.project.CinemaStreet.model.Movie;
+import TO.project.CinemaStreet.service.FilterMovieService;
 import TO.project.CinemaStreet.service.MovieService;
-import TO.project.CinemaStreet.service.UserService;
 import TO.project.CinemaStreet.utils.FxUtils;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
@@ -25,6 +29,7 @@ import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.function.Predicate;
 
 
 @Controller
@@ -36,18 +41,29 @@ public class MovieController {
     FlowPane movieFlowPane;
     @FXML
     ComboBox<Categories> searchByCategoryComboBox;
+    @FXML
+    private TextField searchTextField;
 
     MovieService movieService;
-    public MovieController(MovieService movieService) {
+    private FilterMovieService filterMovieService;
+    public MovieController(MovieService movieService, FilterMovieService filterMovieService) {
         this.movieService = movieService;
+        this.filterMovieService = filterMovieService;
     }
-
+    ObservableList<Predicate<Movie>> predicates = FXCollections.observableArrayList();
+    private FilteredList<Movie> filteredList;
     @FXML
     public void initialize() {
+        //unfocus pathField
+        Platform.runLater( () -> searchTextField.getParent().requestFocus() );
+
+        filteredList = filterMovieService.getFilteredList();
+        searchTextField.textProperty().addListener(filterMovieService.getNameInputListener());
+
         movieFlowPane.setHgap(20);
 //        insert movies into flowpane
-        List<Movie> movies = movieService.getAllMovies();
-        setMoviesToPane(movies);
+        initializeMoviePane(filteredList);
+        setMoviesToPane(filteredList);
 
 //        initialize category combobox
         searchByCategoryComboBox.getItems().addAll(Categories.values());
@@ -71,18 +87,8 @@ public class MovieController {
                 return null;
             }
         });
-//        set on action for category combobox
-        searchByCategoryComboBox.setOnAction(event -> {
-            Categories selectedCategory = FxUtils.getComboBoxValue(searchByCategoryComboBox);
-            System.out.println(selectedCategory);
-            if(selectedCategory == null){
-                setMoviesToPane(movies);
-                return;
-            }
-            List<Movie> moviesByCategory = movieService.getMoviesByCategory(selectedCategory);
-            setMoviesToPane(moviesByCategory);
 
-        });
+        searchByCategoryComboBox.valueProperty().addListener(filterMovieService.getCategoryInputListener());
     }
 
 
@@ -97,6 +103,13 @@ public class MovieController {
             VBox movieCard = createMovieCard(movie);
             movieFlowPane.getChildren().add(movieCard);
         }
+    }
+
+    private void initializeMoviePane(FilteredList<Movie> movies){
+        movies.addListener((ListChangeListener<Movie>) c -> {
+//            TODO: should be optimized
+            setMoviesToPane(movies);
+        });
     }
 
     private VBox createMovieCard(Movie movie){
