@@ -32,12 +32,14 @@ public enum Roles {
     }
 
     public boolean authorize(Permissions permission) {
-        return switch (role) {
-            case "EMPLOYEE" -> Arrays.asList(employee).contains(permission);
-            case "MODERATOR" -> Arrays.asList(moderator).contains(permission);
-            case "ADMIN" -> Arrays.asList(admin).contains(permission);
-            default -> false;
-        };
+//        temporary solution
+        return true;
+//        return switch (role) {
+//            case "EMPLOYEE" -> Arrays.asList(employee).contains(permission);
+//            case "MODERATOR" -> Arrays.asList(moderator).contains(permission);
+//            case "ADMIN" -> Arrays.asList(admin).contains(permission);
+//            default -> false;
+//        };
 
     }
 
