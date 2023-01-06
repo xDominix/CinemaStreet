@@ -6,10 +6,7 @@ import TO.project.CinemaStreet.Permissions;
 import TO.project.CinemaStreet.model.Hall;
 import TO.project.CinemaStreet.model.HallMovie;
 import TO.project.CinemaStreet.model.Movie;
-import TO.project.CinemaStreet.service.HallMovieService;
-import TO.project.CinemaStreet.service.HallService;
-import TO.project.CinemaStreet.service.MovieService;
-import TO.project.CinemaStreet.service.UserService;
+import TO.project.CinemaStreet.service.*;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -203,6 +200,26 @@ public class MenuController {
                 Scene scene = new Scene(loader.load(), 600, 400);
                 Stage stage = new Stage();
                 stage.setTitle("Sprzedaż biletów");
+                stage.setScene(scene);
+                stage.show();
+            } else {
+                this.throwError();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void openRecommendedMovies(ActionEvent actionEvent) {
+        try {
+            if (currentUserContext.getRole().authorize(Permissions.VIEW_RECOMMENDED_MOVIES)) {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("/view/RecommendedMovieView.fxml"));
+                loader.setControllerFactory(springContext::getBean);
+                Scene scene = new Scene(loader.load(), 600, 600);
+                Stage stage = new Stage();
+                stage.setTitle("Rekomendowane filmy");
                 stage.setScene(scene);
                 stage.show();
             } else {

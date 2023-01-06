@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import java.net.URL?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="TO.project.CinemaStreet.controller.NoPermissionController"
+            prefHeight="400.0" prefWidth="600.0"
+            minHeight="10" minWidth="10">
+
+    <center>
+        <VBox>
+            <Label prefWidth="300"/>
+            <Label prefWidth="300"/>
+            <Label text="Udało się!" prefWidth="300"/>
+            <HBox>
+                <Button fx:id="closeButton" text="OK" onAction="#close" prefWidth="300"/>
+            </HBox>
+        </VBox>
+    </center>
+
+    <stylesheets>
+        <URL value="@style.css" />
+    </stylesheets>
+</BorderPane>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            prefHeight="400.0" prefWidth="600.0"
+            fx:controller="TO.project.CinemaStreet.controller.RecommendedMovieController"
+            minHeight="10" minWidth="10"
+            styleClass="linear-grad-to-bottom-right"
+>
+    <center>
+        <VBox>
+            <Button text="Wyślij maile" onAction="#sendMails" prefWidth="300"/>
+        </VBox>
+    </center>
+
+    <stylesheets>
+        <URL value="@style.css"/>
+    </stylesheets>
+</BorderPane>

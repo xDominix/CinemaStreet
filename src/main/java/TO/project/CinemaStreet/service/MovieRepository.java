@@ -1,6 +1,5 @@
 package TO.project.CinemaStreet.service;
 
-import TO.project.CinemaStreet.model.Hall;
 import TO.project.CinemaStreet.model.Movie;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

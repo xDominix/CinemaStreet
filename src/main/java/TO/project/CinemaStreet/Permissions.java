@@ -12,5 +12,7 @@ public enum Permissions {
     VIEW_EDIT_MOVIES,
     VIEW_HALLMOVIES,
     UPDATE_HALLS,
+    SEND_MAILS,
+    VIEW_RECOMMENDED_MOVIES,
     SELL_TICKETS;
 }

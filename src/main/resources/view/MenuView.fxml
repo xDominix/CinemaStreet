@@ -19,7 +19,7 @@
     <!--    buttons opening each application component-->
     <center>
         <VBox>
-            <Label text="Welcome to CinemaStreet!" prefWidth="300"/>
+            <Label text="Witaj w CinemaStreet!" prefWidth="300"/>
             <Label text="Jesteś zalogowany jako:" prefWidth="300"/>
             <Label fx:id="userInfo" text=""/>
             <Label text="------------------------" prefWidth="300"/>
@@ -28,6 +28,7 @@
             <Button text="Filmy" onAction="#openMovies" prefWidth="300"/>
             <Button text="Konfiguracja filmów" onAction="#openEditMovies" prefWidth="300"/>
             <Button text="Zarzadzanie seansami" onAction="#openHallMovies" prefWidth="300"/>
+            <Button text="Rekomendowane filmy" onAction="#openRecommendedMovies" prefWidth="300"/>
             <Button text="Zaktualizuj sale" onAction="#updateHalls" prefWidth="300"/>
             <Button  fx:id="signOutButton"  text="Wyloguj" onAction="#signOut" prefWidth="300"/>
         </VBox>

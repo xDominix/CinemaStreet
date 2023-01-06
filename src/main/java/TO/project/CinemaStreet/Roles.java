@@ -15,12 +15,16 @@ public enum Roles {
     final Permissions[] moderator = {
             Permissions.VIEW_USERS,
             Permissions.ADD_USER,
+            Permissions.SEND_MAILS,
+            Permissions.VIEW_RECOMMENDED_MOVIES,
     };
     final Permissions[] admin = {
             Permissions.VIEW_USERS,
             Permissions.ADD_USER,
             Permissions.EDIT_USER,
             Permissions.REMOVE_USER,
+            Permissions.SEND_MAILS,
+            Permissions.VIEW_RECOMMENDED_MOVIES,
     };
 
     Roles(String role) {
