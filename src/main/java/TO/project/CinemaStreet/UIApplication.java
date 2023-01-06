@@ -31,7 +31,7 @@ public class UIApplication extends javafx.application.Application{
 
         var loader = new FXMLLoader();
 //        TODO changed to MenuView for testing -> change back to LoginView
-        loader.setLocation(UIApplication.class.getResource("/view/LoginView.fxml"));
+        loader.setLocation(UIApplication.class.getResource("/view/MenuView.fxml"));
 
         loader.setControllerFactory(springContext::getBean);
         BorderPane rootLayout = loader.load();

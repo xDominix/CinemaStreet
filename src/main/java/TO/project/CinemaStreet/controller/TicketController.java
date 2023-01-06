@@ -9,6 +9,7 @@ import TO.project.CinemaStreet.service.HallMovieService;
 import TO.project.CinemaStreet.service.HallService;
 import TO.project.CinemaStreet.service.MovieService;
 import TO.project.CinemaStreet.service.UserService;
+import TO.project.CinemaStreet.utils.FxUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,6 +21,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.StringConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -87,8 +89,6 @@ public class TicketController {
         };
         dateComboBox.setButtonCell(cellFactory.call(null));
         dateComboBox.setCellFactory(cellFactory);
-        //        put 5 example dates in combobox
-//        dateComboBox.setItems(FXCollections.observableArrayList(LocalDateTime.now(), LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(2).plusHours(5), LocalDateTime.now().plusDays(3), LocalDateTime.now().plusDays(4)));
         seatTextField.setText("1");
 //        make sure seatTextField is always integer
         seatTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -96,6 +96,28 @@ public class TicketController {
                 seatTextField.setText(newValue.replaceAll("[^\\d]", ""));
             }
         });
+        List<Movie> allMovies = movieService.getAllMovies();
+        movieComboBox.setItems(FXCollections.observableArrayList(allMovies));
+        FxUtils.autoCompleteComboBoxPlus(movieComboBox, (typedText, movie) -> movie.getName().toLowerCase().contains(typedText.toLowerCase()));
+        movieComboBox.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(Movie movie) {
+                if (movie == null) {
+                    return null;
+                } else {
+                    return movie.getName();
+                }
+            }
+
+            @Override
+            public Movie fromString(String movieString) {
+                System.out.println("fromString "+movieString);
+                System.out.println(allMovies.stream().filter(movie -> movie.getName().equals(movieString)).findFirst().orElse(null));
+//                return movie from allMovies
+                return allMovies.stream().filter(movie -> movie.getName().equals(movieString)).findFirst().orElse(null);
+            }
+        });
+        ///
 //        set a listener to movieComboBox that sets halls in hallComboBox
         movieComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
@@ -107,22 +129,20 @@ public class TicketController {
 //        set a listener to hallComboBox that sets dates in dateComboBox
         hallComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                Movie movie = movieComboBox.getSelectionModel().getSelectedItem();
+                Movie movie = FxUtils.getComboBoxValue(movieComboBox);
                 List<HallMovie> hallMovies = hallMovieService.getHallMoviesByHallAndMovie(newValue, movie);
                 List<LocalDateTime> dates = hallMovies.stream().map(HallMovie::getDate).collect(Collectors.toList());
                 dateComboBox.setItems(FXCollections.observableArrayList(dates));
             }
         });
-        movieComboBox.setItems(FXCollections.observableArrayList(movieService.getAllMovies()));
 
         dateComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 Hall hall = hallComboBox.getSelectionModel().getSelectedItem();
-                Movie movie = movieComboBox.getSelectionModel().getSelectedItem();
+                Movie movie = FxUtils.getComboBoxValue(movieComboBox);
                 System.out.println(hall);
                 System.out.println(movie);
 
-//                HallMovie hallMovie = hallMovieService.getHallMovieByHallAndMovieAndDate(hall, movie, Timestamp.valueOf(newValue));//przepraszam
                 List<HallMovie> hallMovies = hallMovieService.getHallMoviesByHallAndMovie(hall, movie);
                 hallMovies = hallMovies.stream().filter(hallMovie -> hallMovie.getDate().equals(newValue)).collect(Collectors.toList());
                 currentSeatsLabel.setText(String.valueOf(hallMovies.get(0).howManySeatsLeft()));
@@ -132,7 +152,7 @@ public class TicketController {
     @FXML
     public void buyTicket(ActionEvent actionEvent) {
         Hall hall = hallComboBox.getSelectionModel().getSelectedItem();
-        Movie movie = movieComboBox.getSelectionModel().getSelectedItem();
+        Movie movie = FxUtils.getComboBoxValue(movieComboBox);
         LocalDateTime date = dateComboBox.getSelectionModel().getSelectedItem();
         int seats = Integer.parseInt(seatTextField.getText());
         HallMovie hallMovie = hallMovieService.getHallMovieByHallAndMovieAndDate(hall, movie,date);

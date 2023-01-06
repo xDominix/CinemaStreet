@@ -1,6 +1,10 @@
 .error {
-    -fx-border-color: red ;
+    -fx-border-color: #AFB1B3 ;
     -fx-border-width: 2px ;
+}
+.radio-button {
+    -fx-text-fill:#AFB1B3;
+    -fx-font-size: 9px;
 }
 /*.root{*/
 /*    -fx-background-color: linear-gradient(to bottom right, #0f2027, #203a43, #2c5364);*/
