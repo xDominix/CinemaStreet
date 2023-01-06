@@ -8,6 +8,9 @@ public enum Permissions {
     ADD_USER,
     EDIT_USER,
     REMOVE_USER,
-    MODIFY_HALL,
-    SELL_TICKET;
+    VIEW_MOVIES,
+    VIEW_EDIT_MOVIES,
+    VIEW_HALLMOVIES,
+    UPDATE_HALLS,
+    SELL_TICKETS;
 }

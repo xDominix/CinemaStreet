@@ -13,6 +13,4 @@ public class CinemaStreetApplication {
     public static void main(String[] args) {
         Application.launch(UIApplication.class, args);
     }
-
-
 }

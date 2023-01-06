@@ -37,6 +37,8 @@ import java.util.stream.Collectors;
 
 @Controller
 public class TicketController {
+    @Autowired
+    private ConfigurableApplicationContext springContext;
     @FXML
     ComboBox<Hall> hallComboBox;
 
@@ -153,5 +155,20 @@ public class TicketController {
         }
 
         currentSeatsLabel.setText(String.valueOf(hallMovie.howManySeatsLeft()));
+    }
+
+    public void throwError() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/view/NoPermissionView.fxml"));
+            loader.setControllerFactory(springContext::getBean);
+            Scene scene = new Scene(loader.load(), 300, 100);
+            Stage stage = new Stage();
+            stage.setTitle("Błąd!");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

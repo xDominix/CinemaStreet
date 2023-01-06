@@ -6,14 +6,22 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
+import java.io.IOException;
 import java.time.LocalDate;
 
 @Controller
 public class MovieEditController
 {
+    @Autowired
+    private ConfigurableApplicationContext springContext;
     @FXML
     ListView<Movie> movieListView = new ListView<Movie>();
 
@@ -161,6 +169,21 @@ public class MovieEditController
             return false;
         }
         return true;
+    }
+
+    public void throwError() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/view/NoPermissionView.fxml"));
+            loader.setControllerFactory(springContext::getBean);
+            Scene scene = new Scene(loader.load(), 300, 100);
+            Stage stage = new Stage();
+            stage.setTitle("Błąd!");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 

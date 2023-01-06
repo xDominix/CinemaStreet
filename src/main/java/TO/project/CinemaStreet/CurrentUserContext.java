@@ -4,20 +4,29 @@ import TO.project.CinemaStreet.service.UserService;
 import TO.project.CinemaStreet.utils.AuthenticationResponse;
 
 public class CurrentUserContext {
-    private Integer userId = null;
-    private Roles role = null;
-    private final UserService userService;
+    private static Integer userId = null;
+    private static Roles role = null;
 
-    CurrentUserContext(UserService userService) {
+    private static String username = null;
+    private static String firstname = null;
+    private static String lastname = null;
+    private UserService userService = null;
+
+    public CurrentUserContext() {}
+
+    public CurrentUserContext(UserService userService) {
         this.userService = userService;
         this.signOut();
     }
 
-    public void signIn(String username, String password) {
-        AuthenticationResponse data = userService.authenticate(username, password);
+    public void signIn(String login, String password) {
+        AuthenticationResponse data = userService.authenticate(login, password);
         if (data.getIsAuthenticated()) {
-            this.userId = data.getUserId();
-            this.role = data.getRole();
+            userId = data.getUserId();
+            username = data.getUsername();
+            firstname = data.getFirstname();
+            lastname = data.getLastname();
+            role = data.getRole();
         }
         else {
             this.signOut();
@@ -25,11 +34,23 @@ public class CurrentUserContext {
     }
 
     public void signOut() {
-        this.userId = null;
-        this. role = null;
+        userId = null;
+         role = null;
     }
 
     public Roles getRole() {
-        return this.role;
+        return role;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
     }
 }

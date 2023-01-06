@@ -1,8 +1,10 @@
 package TO.project.CinemaStreet.controller;
 
 import TO.project.CinemaStreet.Categories;
+import TO.project.CinemaStreet.CurrentUserContext;
 import TO.project.CinemaStreet.model.Movie;
 import TO.project.CinemaStreet.service.MovieService;
+import TO.project.CinemaStreet.service.UserService;
 import TO.project.CinemaStreet.utils.FxUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -143,5 +145,18 @@ public class MovieController {
         return movieCard;
     }
 
-
+    public void throwError() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/view/NoPermissionView.fxml"));
+            loader.setControllerFactory(springContext::getBean);
+            Scene scene = new Scene(loader.load(), 300, 100);
+            Stage stage = new Stage();
+            stage.setTitle("Błąd!");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

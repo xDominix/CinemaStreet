@@ -20,6 +20,8 @@
     <center>
         <VBox>
             <Label text="Welcome to CinemaStreet!" prefWidth="300"/>
+            <Label text="Jesteś zalogowany jako:" prefWidth="300"/>
+            <Label fx:id="userInfo" text=""/>
             <Label text="------------------------" prefWidth="300"/>
             <Button text="Konfiguracja użytkowników" onAction="#openUsers" prefWidth="300"/>
             <Button text="Sprzedaj bilety" onAction="#sellTickets" prefWidth="300"/>

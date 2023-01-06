@@ -25,12 +25,20 @@
         <VBox>
             <Label text="Add user" prefWidth="120"/>
             <HBox>
-                <Label text="Name:" prefWidth="120"/>
-                <TextField fx:id="nameTextField" prefWidth="120"/>
+                <Label text="Username:" prefWidth="120"/>
+                <TextField fx:id="usernameTextField" prefWidth="120"/>
+            </HBox>
+            <HBox>
+                <Label text="Password:" prefWidth="120"/>
+                <PasswordField fx:id="passwordPasswordField" prefWidth="120"/>
+            </HBox>
+            <HBox>
+                <Label text="Firstname:" prefWidth="120"/>
+                <TextField fx:id="firstnameTextField" prefWidth="120"/>
             </HBox>
             <HBox>
                 <Label text="LastName:" prefWidth="120"/>
-                <TextField fx:id="LastNameTextField" prefWidth="120"/>
+                <TextField fx:id="lastNameTextField" prefWidth="120"/>
             </HBox>
             <HBox>
                 <Label text="Email:" prefWidth="120"/>
@@ -40,8 +48,8 @@
             <HBox>
                 <Label text="Role:" prefWidth="120"/>
                 <RadioButton text="EMPLOYEE"  fx:id="userRadioButton" prefWidth="120"/>
-                <RadioButton text="ADMIN" fx:id="adminRadioButton" prefWidth="120"/>
                 <RadioButton text="MODERATOR" fx:id="moderatorRadioButton" prefWidth="120"/>
+                <RadioButton text="ADMIN" fx:id="adminRadioButton" prefWidth="120"/>
             </HBox>
             <HBox>
                 <Button text="Add User" onAction="#addNewUser" prefWidth="120"/>
