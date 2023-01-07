@@ -1,17 +1,22 @@
 package TO.project.CinemaStreet.controller;
 
+import TO.project.CinemaStreet.Categories;
 import TO.project.CinemaStreet.model.Movie;
+import TO.project.CinemaStreet.service.FilterMovieService;
 import TO.project.CinemaStreet.service.MovieService;
+import TO.project.CinemaStreet.utils.FxUtils;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import javafx.scene.layout.GridPane;
@@ -20,6 +25,11 @@ import javafx.scene.layout.VBox;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.Objects;
 
 
 @Controller
@@ -46,7 +56,7 @@ public class MovieDetailsController {
     private Label idLabel;
 
     private MovieService movieService;
-    private FilteredList<Movie> referncedFilteredList;
+    private FilterMovieService filterMovieService;
 
     public MovieDetailsController(MovieService movieService) {
         this.movieService = movieService;
@@ -127,7 +137,8 @@ public class MovieDetailsController {
                 boolean successful =  movieService.deleteMovieById(currentMovie.getId());
 //        show error if unsuccessful and successful if successful and close the window (javafx Alert)
                 if(successful){
-                    referncedFilteredList.getSource().remove(currentMovie);
+//                    referncedFilteredList.getSource().remove(currentMovie);
+                    filterMovieService.removeMovieFromFilteredList(currentMovie);
                     javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
                     alert.setTitle("Sukces!");
                     alert.setHeaderText("Usunięto film!");
@@ -147,11 +158,164 @@ public class MovieDetailsController {
 
     }
 
-    public void setListReference(FilteredList<Movie> filteredList) {
-        this.referncedFilteredList = filteredList;
+    public void setListReference(FilterMovieService filterMovieService) {
+        this.filterMovieService = filterMovieService;
     }
 
     public void editMovieAction(ActionEvent actionEvent) {
-        //TODO: implement edit movie
+//        open new dialog
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.initOwner(titleLabel.getScene().getWindow());
+        dialog.setTitle("Edytuj film");
+
+        ButtonType saveButtonType = new ButtonType("Zapisz", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+
+        TextField titleField = new TextField();
+        titleField.setPromptText(currentMovie.getName());
+        titleField.setText(currentMovie.getName());
+
+        TextField priceField = new TextField();
+        priceField.setPromptText(currentMovie.getTicketCost().toString());
+        priceField.setText(currentMovie.getTicketCost().toString());
+//        make sure that only numbers and dot are allowed and only one dot or comma is allowed
+        priceField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*([\\.,]\\d*)?")) {
+                priceField.setText(oldValue);
+            }
+        });
+
+        DatePicker releaseDateField = new DatePicker();
+        releaseDateField.setPromptText(currentMovie.getReleaseDate().toString());
+        releaseDateField.setValue(currentMovie.getReleaseDate().toLocalDate());
+
+        TextField durationField = new TextField();
+        durationField.setPromptText(currentMovie.getLength().toString());
+        durationField.setText(currentMovie.getLength().toString());
+//        make sure that only numbers are allowed
+        durationField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                durationField.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
+
+        ComboBox<Categories> categoryComboBox = new ComboBox<>();
+        categoryComboBox.getItems().addAll(Categories.values());
+        FxUtils.autoCompleteComboBoxPlus(categoryComboBox, (typedText, itemToCompare) -> itemToCompare.name().toLowerCase().contains(typedText.toLowerCase()));
+        categoryComboBox.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(Categories object) {
+                if(object == null) return "";
+                return object.name();
+            }
+            @Override
+            public Categories fromString(String string) {
+                if(string == null) return null;
+//                check if string is in enum
+                for(Categories category : Categories.values()){
+                    if(category.name().equals(string)){
+                        return category;
+                    }
+                }
+                return null;
+            }
+        });
+//        check if category is set
+        if(!Objects.equals(currentMovie.getCategory(), "")){
+            categoryComboBox.setValue(Categories.valueOf(currentMovie.getCategory()));
+        }
+
+        TextField imageUrlField = new TextField();
+        imageUrlField.setPromptText(currentMovie.getImageUrl());
+        imageUrlField.setText(currentMovie.getImageUrl());
+
+
+        grid.add(new Label("Nazwa:"), 0, 0);
+        grid.add(titleField, 1, 0);
+
+        grid.add(new Label("Data premiery:"), 0, 1);
+        grid.add(releaseDateField, 1, 1);
+
+        grid.add(new Label("Długość:"), 0, 2);
+        grid.add(durationField, 1, 2);
+
+        grid.add(new Label("Cena $:"), 0, 3);
+        grid.add(priceField, 1, 3);
+
+        grid.add(new Label("URL obrazka:"), 0, 4);
+        grid.add(imageUrlField, 1, 4);
+
+        grid.add(new Label("Kategoria:"), 0, 5);
+        grid.add(categoryComboBox, 1, 5);
+
+
+        dialog.getDialogPane().setContent(grid);
+        dialog.getDialogPane().lookupButton(saveButtonType).addEventFilter(ActionEvent.ACTION, event -> {
+                    boolean valid = true;
+                    if (!imageUrlField.getText().isEmpty()) {
+                        try {
+                            URL url = new URL(imageUrlField.getText());
+                            url.toURI();
+                        } catch (MalformedURLException | URISyntaxException e) {
+                            valid = false;
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Błąd!");
+                            alert.setHeaderText("Niepoprawny URL!");
+                            alert.showAndWait();
+                            event.consume();
+                        }
+                    }
+                    if (titleField.getText().isEmpty() || releaseDateField.getValue() == null || durationField.getText().isEmpty() || priceField.getText().isEmpty()) {
+                        valid = false;
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Błąd!");
+                        alert.setHeaderText("Wypełnij wszystkie pola!");
+                        alert.showAndWait();
+                        event.consume();
+                    }
+                    if(valid)
+                    {
+                        currentMovie.setName(titleField.getText());
+                        System.out.println("Set name to: "+titleField.getText());
+                        currentMovie.setReleaseDate(releaseDateField.getValue().atStartOfDay());
+                        currentMovie.setLength(Integer.parseInt(durationField.getText()));
+                        currentMovie.setTicketCost(Float.parseFloat(priceField.getText()));
+                        Categories resultCategory = FxUtils.getComboBoxValue(categoryComboBox);
+                        if(resultCategory == null){
+                            currentMovie.setCategory("");
+                        } else {
+                            currentMovie.setCategory(resultCategory.name());
+                        }
+                        if(imageUrlField.getText().isEmpty()){
+                            currentMovie.applyDefaultUrl();
+                        }
+                        else{
+                            currentMovie.setImageUrl(imageUrlField.getText());
+                        }
+                        try {
+                            movieService.updateMovie(currentMovie);
+                            filterMovieService.removeMovieFromFilteredList(currentMovie);
+                            filterMovieService.addMovieToFilteredList(currentMovie);
+                            updateView();
+                        } catch (SQLException e) {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Błąd!");
+                            alert.setHeaderText("Nie udało się zaktualizować filmu!");
+                            alert.showAndWait();
+                        }
+//                        edit movie via MovieService
+//                        movieService.editMovie(currentMovie.getId(), titleField.getText(),Integer.parseInt(durationField.getText()), releaseDateField.getValue().atStartOfDay(), Float.parseFloat(priceField.getText()), categoryComboBox.getValue(),imageUrlField.getText());
+
+                    }
+                });
+
+
+        dialog.showAndWait();
     }
 }

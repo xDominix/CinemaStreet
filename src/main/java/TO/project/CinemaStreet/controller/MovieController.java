@@ -28,7 +28,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
+import javax.imageio.ImageIO;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -148,7 +152,7 @@ public class MovieController {
                 Scene scene = new Scene(loader.load(), 500, 700);
                 MovieDetailsController movieDetailsController = loader.getController();
                 movieDetailsController.setMovie(movie);
-                movieDetailsController.setListReference(filteredList);
+                movieDetailsController.setListReference(filterMovieService);
                 Stage stage = new Stage();
                 stage.setTitle(movie.getName());
                 stage.setScene(scene);
@@ -263,29 +267,48 @@ public class MovieController {
 
         dialog.getDialogPane().setContent(grid);
         dialog.getDialogPane().lookupButton(okButtonType).addEventFilter(ActionEvent.ACTION, event -> {
+            boolean valid = true;
+            if (!imageUrlField.getText().isEmpty()) {
+                try {
+                    URL url = new URL(imageUrlField.getText());
+                    url.toURI();
+                } catch (MalformedURLException | URISyntaxException e) {
+                    valid = false;
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Błąd!");
+                    alert.setHeaderText("Niepoprawny URL!");
+                    alert.showAndWait();
+                    event.consume();
+                }
+            }
             if (titleField.getText().isEmpty() || releaseDateField.getValue() == null || durationField.getText().isEmpty() || priceField.getText().isEmpty()) {
+                valid = false;
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Błąd!");
                 alert.setHeaderText("Wypełnij wszystkie pola!");
                 alert.showAndWait();
                 event.consume();
-            } else {
+
+            }
+            if(valid){
                 Movie movie;
+                Categories resultCategory = FxUtils.getComboBoxValue(categoryComboBox);
 //                cover the case where url is empty and/or category is null (lol, gdzie builder)
-                if (imageUrlField.getText().isEmpty() && categoryComboBox.getValue() == null) {
+                if (imageUrlField.getText().isEmpty() && resultCategory == null) {
                     movie = new Movie(titleField.getText(),Integer.parseInt(durationField.getText()), releaseDateField.getValue().atStartOfDay(), Float.parseFloat(priceField.getText()));
                 }
                 else if (imageUrlField.getText().isEmpty()) {
-                    movie = new Movie(titleField.getText(),Integer.parseInt(durationField.getText()), releaseDateField.getValue().atStartOfDay(), Float.parseFloat(priceField.getText()), categoryComboBox.getValue());
+                    movie = new Movie(titleField.getText(),Integer.parseInt(durationField.getText()), releaseDateField.getValue().atStartOfDay(), Float.parseFloat(priceField.getText()), resultCategory);
                 }
-                else if (categoryComboBox.getValue() == null) {
+                else if (resultCategory == null) {
                     movie = new Movie(titleField.getText(),Integer.parseInt(durationField.getText()), releaseDateField.getValue().atStartOfDay(), Float.parseFloat(priceField.getText()), imageUrlField.getText());
                 }
                 else {
-                    movie = new Movie(titleField.getText(),Integer.parseInt(durationField.getText()), releaseDateField.getValue().atStartOfDay(), Float.parseFloat(priceField.getText()), categoryComboBox.getValue(),imageUrlField.getText());
+                    movie = new Movie(titleField.getText(),Integer.parseInt(durationField.getText()), releaseDateField.getValue().atStartOfDay(), Float.parseFloat(priceField.getText()), resultCategory,imageUrlField.getText());
                 }
 
                 filterMovieService.addMovieToFilteredList(movie);
+                movieService.addMovie(movie);
             }
         });
         dialog.showAndWait();

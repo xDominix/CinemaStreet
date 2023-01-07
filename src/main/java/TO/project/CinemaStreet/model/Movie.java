@@ -162,4 +162,8 @@ public class Movie implements Externalizable {
         Movie movie = (Movie) obj;
         return movie.getId() == this.getId();
     }
+
+    public void applyDefaultUrl() {
+        this.imageUrl.set("https://posters.movieposterdb.com/20_01/2017/7131440/l_7131440_be0c6b24.jpg");
+    }
 }

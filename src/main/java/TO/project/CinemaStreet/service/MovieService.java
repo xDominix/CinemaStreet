@@ -5,6 +5,7 @@ import TO.project.CinemaStreet.model.Hall;
 import TO.project.CinemaStreet.model.Movie;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
@@ -66,5 +67,20 @@ public class MovieService {
             }
         }
         return moviesByCategory;
+    }
+
+    public void editMovie(int id, String text, int parseInt, LocalDateTime releaseDate, float price, Categories category, String imageUrl) {
+        Movie movie = getMovieById(id);
+        movie.setName(text);
+        movie.setLength(parseInt);
+        movie.setReleaseDate(releaseDate);
+        movie.setTicketCost(price);
+        movie.setCategory(category.name());
+        movie.setImageUrl(imageUrl);
+        movieRepository.save(movie);
+    }
+
+    public void updateMovie(Movie currentMovie)throws SQLException {
+        movieRepository.save(currentMovie);
     }
 }
