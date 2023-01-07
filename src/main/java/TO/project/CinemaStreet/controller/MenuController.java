@@ -69,7 +69,7 @@ public class MenuController {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/view/StatisticsView.fxml"));
             loader.setControllerFactory(springContext::getBean);
-            Scene scene = new Scene(loader.load(), 600, 400);
+            Scene scene = new Scene(loader.load(), 1000, 350);
             Stage stage = new Stage();
             stage.setTitle("Statystyki");
             stage.setScene(scene);
@@ -147,7 +147,7 @@ public class MenuController {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("/view/HallMovieView.fxml"));
                 loader.setControllerFactory(springContext::getBean);
-                Scene scene = new Scene(loader.load(), 600, 400);
+                Scene scene = new Scene(loader.load(), 1000, 400);
                 Stage stage = new Stage();
                 stage.setTitle("Zarzadzanie seansami");
                 stage.setScene(scene);
