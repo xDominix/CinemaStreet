@@ -150,4 +150,8 @@ public class MovieDetailsController {
     public void setListReference(FilteredList<Movie> filteredList) {
         this.referncedFilteredList = filteredList;
     }
+
+    public void editMovieAction(ActionEvent actionEvent) {
+        //TODO: implement edit movie
+    }
 }

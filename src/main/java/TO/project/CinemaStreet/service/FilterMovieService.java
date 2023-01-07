@@ -17,11 +17,13 @@ public class FilterMovieService {
     private ObservableList<Predicate<Movie>> predicates = FXCollections.observableArrayList();
 
     private FilteredList<Movie> filteredList;
+    private ObservableList<Movie>movies ;
 
     private MovieService movieService;
     public FilterMovieService(MovieService movieService) {
         this.movieService = movieService;
-        filteredList = new FilteredList<>(FXCollections.observableList(movieService.getAllMovies()), p -> true);
+        movies = FXCollections.observableList(movieService.getAllMovies());
+        filteredList = new FilteredList<>(movies, p -> true);
         filteredList.predicateProperty().bind(Bindings.createObjectBinding(() -> predicates.isEmpty() ? null : new Predicate<Movie>() {
             @Override
             public boolean test(Movie item) {
@@ -34,12 +36,19 @@ public class FilterMovieService {
             }
         }, predicates));
     }
+    public void addMovieToFilteredList(Movie movie){
+        movies.add(movie);
+    }
+    public void removeMovieFromFilteredList(Movie movie){
+        movies.remove(movie);
+    }
 
 //    returns FilteredList<Movie> with all movies and predicates set (make sure to call in initialize method)
     public FilteredList<Movie> getFilteredList(){
 //        need to reset, alternative is to make sure new service is created every time view is loaded
         predicates = FXCollections.observableArrayList();
-        filteredList = new FilteredList<>(FXCollections.observableList(movieService.getAllMovies()), p -> true);
+        movies = FXCollections.observableList(movieService.getAllMovies());
+        filteredList = new FilteredList<>(movies, p -> true);
         filteredList.predicateProperty().bind(Bindings.createObjectBinding(() -> predicates.isEmpty() ? null : new Predicate<Movie>() {
             @Override
             public boolean test(Movie item) {

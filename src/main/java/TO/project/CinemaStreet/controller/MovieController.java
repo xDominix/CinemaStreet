@@ -1,6 +1,7 @@
 package TO.project.CinemaStreet.controller;
 
 import TO.project.CinemaStreet.Categories;
+import TO.project.CinemaStreet.model.Category;
 import TO.project.CinemaStreet.model.Movie;
 import TO.project.CinemaStreet.service.FilterMovieService;
 import TO.project.CinemaStreet.service.MovieService;
@@ -10,16 +11,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
@@ -28,7 +29,10 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 
@@ -74,7 +78,6 @@ public class MovieController {
                 if(object == null) return "";
                 return object.name();
             }
-
             @Override
             public Categories fromString(String string) {
                 if(string == null) return null;
@@ -172,5 +175,119 @@ public class MovieController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void addNewMovieAction(ActionEvent actionEvent) {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Dodaj film");
+
+        ButtonType okButtonType = new ButtonType("Dodaj", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancelButtonType = new ButtonType("Anuluj", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().addAll(okButtonType, cancelButtonType);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+
+        TextField titleField = new TextField();
+        titleField.setPromptText("Nazwa");
+
+        TextField priceField = new TextField();
+        priceField.setPromptText("0");
+//        make sure that only numbers and dot are allowed and only one dot or comma is allowed
+        priceField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*([\\.,]\\d*)?")) {
+                priceField.setText(oldValue);
+            }
+        });
+
+        DatePicker releaseDateField = new DatePicker();
+        releaseDateField.setPromptText("Wybierz datę premiery");
+
+        TextField durationField = new TextField();
+        durationField.setPromptText("0");
+//        make sure that only numbers are allowed
+        durationField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                durationField.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
+
+        ComboBox<Categories> categoryComboBox = new ComboBox<>();
+        categoryComboBox.getItems().addAll(Categories.values());
+        FxUtils.autoCompleteComboBoxPlus(categoryComboBox, (typedText, itemToCompare) -> itemToCompare.name().toLowerCase().contains(typedText.toLowerCase()));
+        categoryComboBox.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(Categories object) {
+                if(object == null) return "";
+                return object.name();
+            }
+            @Override
+            public Categories fromString(String string) {
+                if(string == null) return null;
+//                check if string is in enum
+                for(Categories category : Categories.values()){
+                    if(category.name().equals(string)){
+                        return category;
+                    }
+                }
+                return null;
+            }
+        });
+
+
+        TextField imageUrlField = new TextField();
+        imageUrlField.setPromptText("URL obrazka");
+
+
+        grid.add(new Label("Nazwa:"), 0, 0);
+        grid.add(titleField, 1, 0);
+
+        grid.add(new Label("Data premiery:"), 0, 1);
+        grid.add(releaseDateField, 1, 1);
+
+        grid.add(new Label("Długość:"), 0, 2);
+        grid.add(durationField, 1, 2);
+
+        grid.add(new Label("Cena $:"), 0, 3);
+        grid.add(priceField, 1, 3);
+
+        grid.add(new Label("URL obrazka:"), 0, 4);
+        grid.add(imageUrlField, 1, 4);
+
+        grid.add(new Label("Kategoria:"), 0, 5);
+        grid.add(categoryComboBox, 1, 5);
+
+
+        dialog.getDialogPane().setContent(grid);
+        dialog.getDialogPane().lookupButton(okButtonType).addEventFilter(ActionEvent.ACTION, event -> {
+            if (titleField.getText().isEmpty() || releaseDateField.getValue() == null || durationField.getText().isEmpty() || priceField.getText().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Błąd!");
+                alert.setHeaderText("Wypełnij wszystkie pola!");
+                alert.showAndWait();
+                event.consume();
+            } else {
+                Movie movie;
+//                cover the case where url is empty and/or category is null (lol, gdzie builder)
+                if (imageUrlField.getText().isEmpty() && categoryComboBox.getValue() == null) {
+                    movie = new Movie(titleField.getText(),Integer.parseInt(durationField.getText()), releaseDateField.getValue().atStartOfDay(), Float.parseFloat(priceField.getText()));
+                }
+                else if (imageUrlField.getText().isEmpty()) {
+                    movie = new Movie(titleField.getText(),Integer.parseInt(durationField.getText()), releaseDateField.getValue().atStartOfDay(), Float.parseFloat(priceField.getText()), categoryComboBox.getValue());
+                }
+                else if (categoryComboBox.getValue() == null) {
+                    movie = new Movie(titleField.getText(),Integer.parseInt(durationField.getText()), releaseDateField.getValue().atStartOfDay(), Float.parseFloat(priceField.getText()), imageUrlField.getText());
+                }
+                else {
+                    movie = new Movie(titleField.getText(),Integer.parseInt(durationField.getText()), releaseDateField.getValue().atStartOfDay(), Float.parseFloat(priceField.getText()), categoryComboBox.getValue(),imageUrlField.getText());
+                }
+
+                filterMovieService.addMovieToFilteredList(movie);
+            }
+        });
+        dialog.showAndWait();
     }
 }

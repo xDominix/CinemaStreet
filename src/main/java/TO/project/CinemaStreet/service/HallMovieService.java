@@ -119,6 +119,6 @@ public class HallMovieService
             hallMovieRepository.flush();
             return true;
         }
-        return false;
+        return true;
     }
 }
