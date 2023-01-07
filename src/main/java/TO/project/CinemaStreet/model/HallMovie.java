@@ -43,37 +43,34 @@ public class HallMovie implements Externalizable {
         this.id.set(id);
     }
 
-    @Column(name ="movie")
+    @ManyToOne
+    @JoinColumn(name = "movieId")
     public final Movie getMovie() {
         return movie.get();
     }
-    @Column(name ="movie")
     public final void setMovie(Movie movie) {
         this.movie.set(movie);
     }
-    @Column(name ="hall")
+    @ManyToOne
+    @JoinColumn(name = "hallId")
     public final Hall getHall() { return hall.get();  }
+    public final void setHall(Hall hall) { this.hall.set(hall); }
 
-    @Column(name ="hall")
-    public final void setHall(Hall hall) {
-        this.hall.set(hall);
-    }
-
-    @Column(name ="movieId")
-    public final int getMovieId() {
-        return movie.get().getId();
-    }
-    @Column(name ="movieId")
-    public final void setMovieId(int id) {
-        this.movie.get().setId(id);
-    }
-    @Column(name ="hallId")
-    public final int getHallId() { return hall.get().getId();  }
-
-    @Column(name ="hallId")
-    public final void setHallId(int id) {
-        this.hall.get().setId(id);
-    }
+//    @Column(name ="movieId")
+//    public final int getMovieId() {
+//        return movie.get().getId();
+//    }
+//    @Column(name ="movieId")
+//    public final void setMovieId(int id) {
+//        this.movie.get().setId(id);
+//    }
+//    @Column(name ="hallId")
+//    public final int getHallId() { return hall.get().getId();  }
+//
+//    @Column(name ="hallId")
+//    public final void setHallId(int id) {
+//        this.hall.get().setId(id);
+//    }
 
     public ObjectProperty<Movie> movieProperty() {
         return movie;
@@ -106,9 +103,9 @@ public class HallMovie implements Externalizable {
     @Override
     public String toString() {
         return "HallMovie{" +
-                "id=" + id +
-                ", seatsTaken=" + seatsTaken+
-                ", date=" + date
+                "id=" + id.get() +
+                ", seatsTaken=" + seatsTaken.get()+
+                ", date=" + date.get()
                 +'}';
     }
 

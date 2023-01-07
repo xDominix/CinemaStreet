@@ -58,7 +58,6 @@ public class MovieController {
         this.movieService = movieService;
         this.filterMovieService = filterMovieService;
     }
-    ObservableList<Predicate<Movie>> predicates = FXCollections.observableArrayList();
     private FilteredList<Movie> filteredList;
     @FXML
     public void initialize() {

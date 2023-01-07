@@ -1,43 +1,30 @@
 package TO.project.CinemaStreet.controller;
 
-import TO.project.CinemaStreet.Roles;
+import TO.project.CinemaStreet.Categories;
 import TO.project.CinemaStreet.model.Hall;
 import TO.project.CinemaStreet.model.HallMovie;
 import TO.project.CinemaStreet.model.Movie;
-import TO.project.CinemaStreet.service.HallMovieService;
-import TO.project.CinemaStreet.service.HallService;
-import TO.project.CinemaStreet.service.MovieService;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import TO.project.CinemaStreet.service.*;
+import TO.project.CinemaStreet.utils.FxUtils;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import javafx.util.Callback;
+import javafx.util.StringConverter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Controller
 public class HallMovieController
@@ -46,37 +33,68 @@ public class HallMovieController
     private ConfigurableApplicationContext springContext;
     @FXML
     ListView<HallMovie> hallMovieListView = new ListView<HallMovie>();
-
     @FXML
     private TextField idTextField;
-
     @FXML
     private ComboBox<Hall> hallComboBox;
-
     @FXML
     private ComboBox<Movie> movieComboBox;
-
     @FXML
     private DatePicker datePicker;
-
     @FXML
     private TextField searchTextField;
+    @FXML
+    private ComboBox<Categories> searchByCategoryComboBox;
 
 
     private HallMovieService hallMovieService;
     private HallService hallService;
     private MovieService movieService;
+    private FilterHallMovieService filterHallMovieService;
+    private FilteredList<HallMovie> filteredList;
 
-    public HallMovieController(HallMovieService hallMovieService,HallService hallService,MovieService movieService) {
+    public HallMovieController(HallMovieService hallMovieService,HallService hallService,MovieService movieService,FilterHallMovieService filterHallMovieService)
+    {
         this.hallMovieService = hallMovieService;
         this.hallService = hallService;
-        this.movieService=movieService;
+        this.movieService = movieService;
+        this.filterHallMovieService = filterHallMovieService;
     }
 
     @FXML
     public void initialize() {
+        //initialize filteredList with all movies, so that it can be filtered later, set up handlers in searchBars
+        filteredList = filterHallMovieService.getFilteredList();
+        searchTextField.textProperty().addListener(filterHallMovieService.getNameInputListener());
+        searchByCategoryComboBox.getItems().addAll(Categories.values());
+        FxUtils.autoCompleteComboBoxPlus(searchByCategoryComboBox, (typedText, itemToCompare) -> itemToCompare.name().toLowerCase().contains(typedText.toLowerCase()));
+        searchByCategoryComboBox.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(Categories object) {
+                if(object == null) return "";
+                return object.name();
+            }
+            @Override
+            public Categories fromString(String string) {
+                if(string == null) return null;
+//                check if string is in enum
+                for(Categories category : Categories.values()){
+                    if(category.name().equals(string)){
+                        return category;
+                    }
+                }
+                return null;
+            }
+        });
+        searchByCategoryComboBox.valueProperty().addListener(filterHallMovieService.getCategoryInputListener());
 
-        hallMovieListView.setItems(FXCollections.observableArrayList(hallMovieService.getAllHallMovies()));
+
+
+
+        hallMovieListView.setItems(filteredList);
+        filteredList.addListener((ListChangeListener<HallMovie>) c -> {
+                   hallMovieListView.setItems(filteredList);
+        });
         hallComboBox.setItems(FXCollections.observableArrayList(hallService.getAllHalls()));
         movieComboBox.setItems(FXCollections.observableArrayList(movieService.getAllMovies()));
 
@@ -96,11 +114,11 @@ public class HallMovieController
             }
         });
 
-        searchTextField.textProperty().addListener((observable, oldValue, newValue)->{
-            hallMovieListView.setItems(FXCollections.observableArrayList
-                    (hallMovieService.getAllHallMovies().stream()
-                            .filter(el->el.getMovie().getName().toLowerCase().contains(newValue.toLowerCase())).toList()));
-        });
+//        searchTextField.textProperty().addListener((observable, oldValue, newValue)->{
+//            hallMovieListView.setItems(FXCollections.observableArrayList
+//                    (hallMovieService.getAllHallMovies().stream()
+//                            .filter(el->el.getMovie().getName().toLowerCase().contains(newValue.toLowerCase())).toList()));
+//        });
 
         updateView();
     }
@@ -120,25 +138,20 @@ public class HallMovieController
     public HallMovie getHallMovie(int id)
     {
         return null;
-    }
+    }//?
     @FXML
     private void addHallMovie(ActionEvent actionEvent) {
         if(checkInputs())
         {
-
-
                 Hall hall = hallComboBox.getValue();
                 Movie movie = movieComboBox.getValue();
 
                 LocalDate localDate = datePicker.getValue();
                 LocalDateTime localDateTime = LocalDateTime.of(localDate.getYear(),localDate.getMonth(),localDate.getDayOfMonth(),0,0);
 
-
                 HallMovie hallMovie = new HallMovie(hall,movie,localDateTime);
                 hallMovieService.addHallMovie(hallMovie);
                 updateView();
-
-
         }
     }
 

@@ -121,4 +121,8 @@ public class HallMovieService
         }
         return true;
     }
+
+    public HallMovie getHallMovie(int id) {
+        return hallMovieRepository.findById(id).get();
+    }
 }

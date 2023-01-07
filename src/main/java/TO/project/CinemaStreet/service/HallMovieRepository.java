@@ -12,15 +12,16 @@ import java.util.List;
 @Repository
 public interface HallMovieRepository extends JpaRepository<HallMovie, Integer>{
 
-    @Query ("SELECT h FROM HallMovie h WHERE h.movieId = ?1")
+    @Query ("SELECT h FROM HallMovie h WHERE h.movie.id = ?1")
     List<HallMovie> findAllByMovieId(int movieId);
 
 //    @Query ("SELECT h FROM HallMovie h WHERE h.hallId = ?1")
+    @Query ("SELECT h FROM HallMovie h WHERE h.hall.id = ?1")
     List<HallMovie> findAllByHallId(int hallId);
-
-    @Query ("SELECT h FROM HallMovie h WHERE h.hallId = ?1 AND h.movieId = ?2 AND h.date = ?3")
+    @Query ("SELECT h FROM HallMovie h WHERE h.hall.id = ?1 AND h.movie.id = ?2 AND h.date = ?3")
     HallMovie findByHallIdAndMovieIdAndDate(int hallId, int movieId, LocalDateTime date);
 
+    @Query ("SELECT h FROM HallMovie h WHERE h.hall.id = ?1 AND h.movie.id = ?2")
     List<HallMovie> findAllByHallIdAndMovieId(int hallId, int movieId);
 
 }

@@ -18,7 +18,10 @@
     </top>
     <left>
         <VBox styleClass="image-box">
-            <TextField  fx:id="searchTextField" promptText="search title" prefWidth="300"/>
+            <HBox>
+                <TextField  fx:id="searchTextField" promptText="search title" prefWidth="300"/>
+                <ComboBox fx:id="searchByCategoryComboBox" prefWidth="200.0" promptText="Wyszukaj po kategorii"></ComboBox>
+            </HBox>
             <ListView fx:id="hallMovieListView" prefWidth="300"/>
         </VBox>
     </left>
