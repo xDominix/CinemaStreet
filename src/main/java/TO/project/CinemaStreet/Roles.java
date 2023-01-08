@@ -13,6 +13,8 @@ public enum Roles {
             Permissions.VIEW_USERS,
             Permissions.VIEW_RECOMMENDED_MOVIES,
             Permissions.VIEW_MOVIES,
+            Permissions.UPDATE_HALLS,
+            Permissions.VIEW_HALLMOVIES,
     };
     final Permissions[] moderator = {
             Permissions.VIEW_USERS,
@@ -25,6 +27,7 @@ public enum Roles {
             Permissions.ADD_MOVIES,
             Permissions.EDIT_RECOMMENDATIONS,
             Permissions.REMOVE_RECOMMENDATIONS,
+            Permissions.VIEW_HALLMOVIES,
     };
     final Permissions[] admin = {
             Permissions.VIEW_USERS,
@@ -39,6 +42,10 @@ public enum Roles {
             Permissions.ADD_MOVIES,
             Permissions.EDIT_RECOMMENDATIONS,
             Permissions.REMOVE_RECOMMENDATIONS,
+            Permissions.SELL_TICKETS,
+            Permissions.UPDATE_HALLS,
+            Permissions.VIEW_HALLMOVIES,
+
     };
 
     Roles(String role) {

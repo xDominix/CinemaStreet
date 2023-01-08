@@ -77,7 +77,7 @@ public class HallMovieController
         filteredList = filterMovieService.getFilteredList();
         movieComboBox.setItems(filteredList);
 //        if movie combo box selection changes reset all other combo boxes
-        movieComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> updateView());
+//        movieComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> updateView());
         FxUtils.autoCompleteComboBoxPlus(movieComboBox, (typedText, movie) -> movie.getName().toLowerCase().contains(typedText.toLowerCase()));
         movieComboBox.setConverter(new StringConverter<>() {
             @Override
