@@ -1,34 +1,37 @@
 package TO.project.CinemaStreet.controller;
 
+import TO.project.CinemaStreet.Categories;
 import TO.project.CinemaStreet.service.HallMovieService;
-import TO.project.CinemaStreet.service.HallService;
 import TO.project.CinemaStreet.service.MovieService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.*;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Controller
 public class StatisticsController
 {
     @Autowired
     private ConfigurableApplicationContext springContext;
-    @FXML
-    private CategoryAxis xAxis ;
-    @FXML private NumberAxis yAxis ;
-    @FXML private LineChart<String, Number> lineChart ;
+    @FXML private CategoryAxis xYearAxis ;
+    @FXML private NumberAxis yYearAxis ;
+    @FXML private LineChart<String, Number> yearChart ;
+
+    @FXML private CategoryAxis xMovieAxis ;
+    @FXML private NumberAxis yMovieAxis ;
+    @FXML private BarChart<String, Number> movieChart ;
+
+    @FXML private CategoryAxis xCategoryAxis ;
+    @FXML private NumberAxis yCategoryAxis ;
+    @FXML private BarChart<String, Number> categoryChart ;
 
     private HallMovieService hallMovieService;
     private MovieService movieService;
@@ -40,35 +43,69 @@ public class StatisticsController
 
     @FXML
     public void initialize() {
-        generateLineChart();
+        generateYearChart();
+        generateCategoryChart();
+        generateMovieChart();
     }
 
-    void generateLineChart()
+    void generateYearChart()
     {
-        lineChart.setTitle("Sprzedanych biletow");
-        yAxis.setLabel("Ilosc");
-        xAxis.setLabel("Rok");
+        yearChart.setTitle("Roczna Sprzedaz Biletow");
+        yYearAxis.setLabel("Ilosc sprzedanych biletow");
+        xYearAxis.setLabel("Rok");
 
         Integer[] years = {2019,2020,2021,2022,2023};
 
-        movieService.getAllMovies().forEach(m->{
-            XYChart.Series series = new XYChart.Series();
-            series.setName(m.getName());
-            Map<Integer,Integer> map = new HashMap<>();  for (Integer year :  years) { map.put(year,0);  }
-            hallMovieService.getHallMoviesByMovie(m).forEach(hm->{
-                Integer year = hm.getDate().getYear();
-                if(map.containsKey(year)){
-                    Integer temp = map.get(year);
-                    map.put(year,temp+hm.getSeatsTaken());
-                }
-            });
-            for (Integer key : map.keySet()) {
-                series.getData().add(new XYChart.Data(key.toString(), map.get(key)));
+        XYChart.Series series = new XYChart.Series();
+        Map<Integer,Integer> map = new HashMap<>();  for (Integer year :  years) { map.put(year,0);  }
+        hallMovieService.getAllHallMovies().forEach(hm->{
+            Integer year = hm.getDate().getYear();
+            if(map.containsKey(year)){
+                Integer temp = map.get(year);
+                map.put(year,temp+hm.getSeatsTaken());
             }
-            lineChart.getData().add(series);
         });
+        for (Integer key : map.keySet()) {
+            series.getData().add(new XYChart.Data(key.toString(), map.get(key)));
+        }
+        yearChart.getData().add(series);
     }
+    void generateCategoryChart()
+    {
+        categoryChart.setTitle("Popularnosc Kategorii");
+        yCategoryAxis.setLabel("Ilosc filmow");
+        xCategoryAxis.setLabel("Nazwa kategorii");
 
+        XYChart.Series series = new XYChart.Series();
+        Map<String,Integer> map = new HashMap<>(); //category,amount
+        movieService.getAllMovies().forEach(m->{
+            if(map.containsKey(m.getCategory()))
+                map.put(m.getCategory(),map.get(m.getCategory())+1);
+            else
+                map.put(m.getCategory(),1);
+        });
+        for (String key : map.keySet()) {
+            series.getData().add(new XYChart.Data(key,map.get(key)));
+        }
+        categoryChart.getData().add(series);
+    }
+    void generateMovieChart()
+    {
+        movieChart.setTitle("Popularnosc Filmow");
+        yMovieAxis.setLabel("Ilosc sprzedanych biletow");
+        xMovieAxis.setLabel("Tytul filmu");
+
+        XYChart.Series series = new XYChart.Series();
+        movieService.getAllMovies().forEach(m->{
+            AtomicInteger counter = new AtomicInteger();
+            counter.set(0);
+            hallMovieService.getHallMoviesByMovie(m).forEach(hm->{
+                counter.addAndGet(hm.getSeatsTaken());
+            });
+            series.getData().add(new XYChart.Data(m.getName(),counter.intValue()));
+        });
+        movieChart.getData().add(series);
+    }
     public void throwError() {
         try {
             FXMLLoader loader = new FXMLLoader();

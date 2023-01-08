@@ -14,22 +14,44 @@
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import java.net.URL?>
+<?import javafx.scene.chart.BarChart?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            prefHeight="400.0" prefWidth="600.0"
+            prefHeight="350.0" prefWidth="1000.0"
             minHeight="100" minWidth="100"
             fx:controller="TO.project.CinemaStreet.controller.StatisticsController">
+    <top>
+     <Label text="STATYSTYKI" ></Label>
+    </top>
+    <center>
+    <HBox>
+        <LineChart fx:id="yearChart" layoutX="10.0" layoutY="10.0" maxHeight="300.0" maxWidth="300.0" legendVisible="false" >
+            <xAxis>
+                <CategoryAxis fx:id="xYearAxis" side="BOTTOM" />
+            </xAxis>
+            <yAxis>
+                <NumberAxis fx:id="yYearAxis" side="LEFT" />
+            </yAxis>
+        </LineChart>
+        <BarChart fx:id="movieChart" layoutX="10.0" layoutY="10.0" maxHeight="300.0" maxWidth="300.0" legendVisible="false" >
+            <xAxis>
+                <CategoryAxis fx:id="xMovieAxis" side="BOTTOM" />
+            </xAxis>
+            <yAxis>
+                <NumberAxis fx:id="yMovieAxis" side="LEFT" />
+            </yAxis>
+        </BarChart>
+        <BarChart fx:id="categoryChart" layoutX="10.0" layoutY="10.0" maxHeight="300.0" maxWidth="300.0" legendVisible="false" >
+            <xAxis>
+                <CategoryAxis fx:id="xCategoryAxis" side="BOTTOM" />
+            </xAxis>
+            <yAxis>
+                <NumberAxis fx:id="yCategoryAxis" side="LEFT" />
+            </yAxis>
+        </BarChart>
+    </HBox>
+    </center>
 
-<center>
-    <LineChart fx:id="lineChart" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" >
-        <xAxis>
-            <CategoryAxis fx:id="xAxis" side="BOTTOM" />
-        </xAxis>
-        <yAxis>
-            <NumberAxis fx:id="yAxis" side="LEFT" />
-        </yAxis>
-    </LineChart>
-</center>
 <stylesheets>
     <URL value="@style.css" />
 </stylesheets>

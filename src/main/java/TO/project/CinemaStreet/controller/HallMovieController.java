@@ -107,7 +107,8 @@ public class HallMovieController
                     setText(null);
                 } else {
                     if(item.getMovie().getName().contains(""))
-                        setText(item.getId()+", "+item.getMovie().getName()+", "+item.getHall().getId()+", "+item.getDate());
+                        setText(item.getId()+", "+item.getMovie().getName()+", "+item.getHall().getId()+", "+item.getDate().toLocalDate()+
+                                " "+item.getDate().toLocalTime().toString().substring(0,5));
                     else
                         setText(null);
                 }
