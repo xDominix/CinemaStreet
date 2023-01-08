@@ -14,13 +14,14 @@
             fx:controller="TO.project.CinemaStreet.controller.HallMovieController"
             minHeight="10" minWidth="10">
     <top>
-        <Label text="Current Shows (id, title, hall id, date)" prefWidth="120"/>
+        <Label text="Current Shows (id, title, hall id, date)" prefWidth="300"/>
     </top>
     <left>
         <VBox styleClass="image-box">
             <HBox>
+
                 <TextField  fx:id="searchTextField" promptText="search title" prefWidth="300"/>
-                <ComboBox fx:id="searchByCategoryComboBox" prefWidth="200.0" promptText="Wyszukaj po kategorii"></ComboBox>
+                <ComboBox fx:id="searchByCategoryComboBox" prefWidth="200.0" promptText="Filtruj po kategorii"></ComboBox>
             </HBox>
             <ListView fx:id="hallMovieListView" prefWidth="300"/>
         </VBox>
@@ -38,7 +39,13 @@
             </HBox>
             <HBox>
                 <Label text="Date:" prefWidth="120"/>
-                <DatePicker fx:id="datePicker" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <HBox>
+                    <DatePicker fx:id="datePicker" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                    <TextField  fx:id="hourPicker" prefWidth="30"/>
+                    <Label text=":"></Label>
+                    <TextField  fx:id="minutePicker" prefWidth="30"/>
+                </HBox>
+
             </HBox>
             <HBox>
                 <Button text="Add show" onAction="#addHallMovie" prefWidth="120"/>

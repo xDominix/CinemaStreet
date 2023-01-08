@@ -21,6 +21,7 @@ import javafx.util.StringConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -41,6 +42,10 @@ public class HallMovieController
     private ComboBox<Movie> movieComboBox;
     @FXML
     private DatePicker datePicker;
+    @FXML
+    private TextField hourPicker;
+    @FXML
+    private TextField minutePicker;
     @FXML
     private TextField searchTextField;
     @FXML
@@ -127,6 +132,8 @@ public class HallMovieController
         //reset inputs
         idTextField.setText("");
 
+        hourPicker.setText(null);
+        minutePicker.setText(null);
         datePicker.setValue(null);
         movieComboBox.valueProperty().set(null);
         hallComboBox.valueProperty().set(null);
@@ -148,7 +155,10 @@ public class HallMovieController
                 Movie movie = movieComboBox.getValue();
 
                 LocalDate localDate = datePicker.getValue();
-                LocalDateTime localDateTime = LocalDateTime.of(localDate.getYear(),localDate.getMonth(),localDate.getDayOfMonth(),0,0);
+                int hour = Integer.parseInt(hourPicker.getText());
+                int minute = Integer.parseInt(minutePicker.getText());
+
+                LocalDateTime localDateTime = LocalDateTime.of(localDate.getYear(),localDate.getMonth(),localDate.getDayOfMonth(),hour,minute);
 
                 HallMovie hallMovie = new HallMovie(hall,movie,localDateTime);
                 hallMovieService.addHallMovie(hallMovie);
@@ -192,10 +202,29 @@ public class HallMovieController
         {
             datePicker.getStyleClass().add("error");
             return false;
+        }else if(hourPicker.getText()==null || !isNumeric(hourPicker.getText()))
+        {
+            hourPicker.getStyleClass().add("error");
+            return false;
+        }  else if(minutePicker.getText()==null ||  !isNumeric(minutePicker.getText()))
+        {
+            minutePicker.getStyleClass().add("error");
+            return false;
         }
        return true;
     }
 
+    public static boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            double d = Integer.parseInt(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
     private void removeInputsErrors(){
         idTextField.getStyleClass().remove("error");
         datePicker.getStyleClass().remove("error");

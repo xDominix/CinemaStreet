@@ -25,22 +25,31 @@
     </top>
     <center>
     <HBox>
-        <LineChart fx:id="yearChart" layoutX="10.0" layoutY="10.0" maxHeight="300.0" maxWidth="300.0" legendVisible="false" >
-            <xAxis>
-                <CategoryAxis fx:id="xYearAxis" side="BOTTOM" />
-            </xAxis>
-            <yAxis>
-                <NumberAxis fx:id="yYearAxis" side="LEFT" />
-            </yAxis>
-        </LineChart>
-        <BarChart fx:id="movieChart" layoutX="10.0" layoutY="10.0" maxHeight="300.0" maxWidth="300.0" legendVisible="false" >
-            <xAxis>
-                <CategoryAxis fx:id="xMovieAxis" side="BOTTOM" />
-            </xAxis>
-            <yAxis>
-                <NumberAxis fx:id="yMovieAxis" side="LEFT" />
-            </yAxis>
-        </BarChart>
+        <VBox>
+            <LineChart fx:id="yearChart" layoutX="10.0" layoutY="10.0" maxHeight="300.0" maxWidth="300.0" legendVisible="false" >
+                <xAxis>
+                    <CategoryAxis fx:id="xYearAxis" side="BOTTOM" />
+                </xAxis>
+                <yAxis>
+                    <NumberAxis fx:id="yYearAxis" side="LEFT" />
+                </yAxis>
+            </LineChart>
+            <Button text="EXPORT TO CSV" onAction="#exportYear" prefWidth="120"/>
+        </VBox>
+        <VBox>
+            <BarChart fx:id="movieChart" layoutX="10.0" layoutY="10.0" maxHeight="300.0" maxWidth="300.0" legendVisible="false" >
+                <xAxis>
+                    <CategoryAxis fx:id="xMovieAxis" side="BOTTOM" />
+                </xAxis>
+                <yAxis>
+                    <NumberAxis fx:id="yMovieAxis" side="LEFT" />
+                </yAxis>
+            </BarChart>
+            <Button text="EXPORT TO CSV" onAction="#exportMovie" prefWidth="120"/>
+        </VBox>
+        <VBox>
+
+
         <BarChart fx:id="categoryChart" layoutX="10.0" layoutY="10.0" maxHeight="300.0" maxWidth="300.0" legendVisible="false" >
             <xAxis>
                 <CategoryAxis fx:id="xCategoryAxis" side="BOTTOM" />
@@ -49,9 +58,13 @@
                 <NumberAxis fx:id="yCategoryAxis" side="LEFT" />
             </yAxis>
         </BarChart>
+            <Button text="EXPORT TO CSV" onAction="#exportCategory" prefWidth="120"/>
+        </VBox>
     </HBox>
     </center>
+    <bottom>
 
+    </bottom>
 <stylesheets>
     <URL value="@style.css" />
 </stylesheets>

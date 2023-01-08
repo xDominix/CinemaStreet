@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -24,14 +26,17 @@ public class StatisticsController
     @FXML private CategoryAxis xYearAxis ;
     @FXML private NumberAxis yYearAxis ;
     @FXML private LineChart<String, Number> yearChart ;
+    List<String[]> yearRes= new ArrayList<>();
 
     @FXML private CategoryAxis xMovieAxis ;
     @FXML private NumberAxis yMovieAxis ;
     @FXML private BarChart<String, Number> movieChart ;
+    List<String[]> movieRes= new ArrayList<>();
 
     @FXML private CategoryAxis xCategoryAxis ;
     @FXML private NumberAxis yCategoryAxis ;
     @FXML private BarChart<String, Number> categoryChart ;
+    List<String[]> categoryRes = new ArrayList<>();
 
     private HallMovieService hallMovieService;
     private MovieService movieService;
@@ -42,10 +47,74 @@ public class StatisticsController
     }
 
     @FXML
-    public void initialize() {
+    public void initialize()
+    {
         generateYearChart();
         generateCategoryChart();
         generateMovieChart();
+    }
+
+    @FXML
+    public void exportYear() throws IOException
+    {
+        File csvFile = new File("yearStats.csv");
+        FileWriter fileWriter = new FileWriter(csvFile);
+
+        fileWriter.write("Year, Sold tickets\n");
+        for (String[] data : yearRes) {
+            StringBuilder line = new StringBuilder();
+            for (int i = 0; i < data.length; i++) {
+                line.append(data[i]);
+                if (i != data.length - 1) {
+                    line.append(',');
+                }
+            }
+            line.append("\n");
+            fileWriter.write(line.toString());
+        }
+        fileWriter.close();
+    }
+    @FXML
+    public void exportCategory() throws IOException
+    {
+        File csvFile = new File("categoryStats.csv");
+        FileWriter fileWriter = new FileWriter(csvFile);
+
+        fileWriter.write("Category, Number of movies\n");
+        for (String[] data : categoryRes) {
+            StringBuilder line = new StringBuilder();
+            for (int i = 0; i < data.length; i++) {
+                line.append(data[i]);
+                if (i != data.length - 1) {
+                    line.append(',');
+                }
+            }
+            line.append("\n");
+            fileWriter.write(line.toString());
+        }
+        fileWriter.close();
+
+
+    }
+    @FXML
+    public void exportMovie() throws IOException
+    {
+        File csvFile = new File("movieStats.csv");
+        FileWriter fileWriter = new FileWriter(csvFile);
+
+        fileWriter.write("Movie title, Sold tickets\n");
+        for (String[] data : movieRes) {
+            StringBuilder line = new StringBuilder();
+            for (int i = 0; i < data.length; i++) {
+                line.append(data[i]);
+                if (i != data.length - 1) {
+                    line.append(',');
+                }
+            }
+            line.append("\n");
+            fileWriter.write(line.toString());
+        }
+        fileWriter.close();
     }
 
     void generateYearChart()
@@ -67,6 +136,7 @@ public class StatisticsController
         });
         for (Integer key : map.keySet()) {
             series.getData().add(new XYChart.Data(key.toString(), map.get(key)));
+            yearRes.add(new String[]{key.toString(),map.get(key).toString()});
         }
         yearChart.getData().add(series);
     }
@@ -86,6 +156,7 @@ public class StatisticsController
         });
         for (String key : map.keySet()) {
             series.getData().add(new XYChart.Data(key,map.get(key)));
+            categoryRes.add(new String[]{key,map.get(key).toString()});
         }
         categoryChart.getData().add(series);
     }
@@ -103,6 +174,7 @@ public class StatisticsController
                 counter.addAndGet(hm.getSeatsTaken());
             });
             series.getData().add(new XYChart.Data(m.getName(),counter.intValue()));
+            movieRes.add(new String[]{m.getName(),counter.toString()});
         });
         movieChart.getData().add(series);
     }
@@ -121,3 +193,4 @@ public class StatisticsController
         }
     }
 }
+
