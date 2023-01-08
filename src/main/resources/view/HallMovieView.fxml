@@ -34,8 +34,15 @@
                 <ComboBox fx:id="hallComboBox" layoutX="15.0" layoutY="33.0" prefWidth="90.0" promptText="choose"/>
             </HBox>
             <HBox>
-                <Label text="Movie:" prefWidth="120"/>
-                <ComboBox fx:id="movieComboBox" layoutX="15.0" layoutY="33.0" prefWidth="90.0" promptText="choose"/>
+                <VBox>
+                    <Label text="Wybierz film:" />
+                    <ComboBox fx:id="movieComboBox" prefWidth="180" />
+                </VBox>
+                <VBox>
+                    <Label text="Wybierz gatunek:" />
+                    <ComboBox fx:id="categoryComboBox" prefWidth="180" />
+                </VBox>
+
             </HBox>
             <HBox>
                 <Label text="Date:" prefWidth="120"/>

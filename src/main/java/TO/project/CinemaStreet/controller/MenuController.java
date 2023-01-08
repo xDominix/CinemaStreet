@@ -224,6 +224,12 @@ public class MenuController {
         HallMovie avatarHallMovie = new HallMovie(hallService.getHallById(1), movie, LocalDateTime.now().plus(3, ChronoUnit.DAYS).plus(12, ChronoUnit.HOURS));
         hallMovieService.addHallMovie(avatarHallMovie);
 
+        HallMovie avatarHallMovie2 = new HallMovie(hallService.getHallById(2), movie, LocalDateTime.now().plus(3, ChronoUnit.DAYS).plus(12, ChronoUnit.HOURS));
+        hallMovieService.addHallMovie(avatarHallMovie2);
+
+        HallMovie avatarHallMovie3 = new HallMovie(hallService.getHallById(2), movie, LocalDateTime.now().plus(3, ChronoUnit.DAYS).plus(12, ChronoUnit.HOURS));
+        hallMovieService.addHallMovie(avatarHallMovie3);
+
         HallMovie godfatherHallMovie3 = new HallMovie(hallService.getHallById(2), movie3, LocalDateTime.now().plus(2, ChronoUnit.DAYS));
         hallMovieService.addHallMovie(godfatherHallMovie3);
 

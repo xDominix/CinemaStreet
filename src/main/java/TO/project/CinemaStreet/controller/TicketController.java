@@ -8,6 +8,7 @@ import TO.project.CinemaStreet.service.FilterMovieService;
 import TO.project.CinemaStreet.service.HallMovieService;
 import TO.project.CinemaStreet.utils.FxUtils;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -129,7 +130,8 @@ public class TicketController {
             if (newValue != null) {
                 List<HallMovie> hallMovies = hallMovieService.getHallMoviesByMovie(newValue);
 
-                hallComboBox.setItems(FXCollections.observableArrayList(hallMovies.stream().map(HallMovie::getHall).collect(Collectors.toList())));
+//                dont set duplicate halls
+                hallComboBox.setItems(FXCollections.observableArrayList(hallMovies.stream().map(HallMovie::getHall).collect(Collectors.toSet())));
             }
         });
 //        set a listener to hallComboBox that sets dates in dateComboBox
@@ -157,6 +159,9 @@ public class TicketController {
                 hallMovies = hallMovies.stream().filter(hallMovie -> hallMovie.getDate().equals(newValue)).collect(Collectors.toList());
                 currentSeatsLabel.setText(String.valueOf(hallMovies.get(0).howManySeatsLeft()));
             }
+        });
+        filteredList.addListener((ListChangeListener<Movie>) c -> {
+            movieComboBox.setItems(filteredList);
         });
     }
     private void clearAll() {

@@ -21,7 +21,6 @@ import javafx.util.StringConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -41,6 +40,8 @@ public class HallMovieController
     @FXML
     private ComboBox<Movie> movieComboBox;
     @FXML
+    private ComboBox<Categories> categoryComboBox;
+    @FXML
     private DatePicker datePicker;
     @FXML
     private TextField hourPicker;
@@ -56,20 +57,66 @@ public class HallMovieController
     private HallService hallService;
     private MovieService movieService;
     private FilterHallMovieService filterHallMovieService;
-    private FilteredList<HallMovie> filteredList;
+    private FilterMovieService filterMovieService;
 
-    public HallMovieController(HallMovieService hallMovieService,HallService hallService,MovieService movieService,FilterHallMovieService filterHallMovieService)
+    private FilteredList<HallMovie> searchFilteredList;
+    private FilteredList<Movie> filteredList;
+
+
+    public HallMovieController(HallMovieService hallMovieService,HallService hallService, MovieService movieService, FilterHallMovieService filterHallMovieService, FilterMovieService filterMovieService)
     {
         this.hallMovieService = hallMovieService;
         this.hallService = hallService;
         this.movieService = movieService;
         this.filterHallMovieService = filterHallMovieService;
+        this.filterMovieService = filterMovieService;
     }
 
     @FXML
     public void initialize() {
+        filteredList = filterMovieService.getFilteredList();
+        movieComboBox.setItems(filteredList);
+//        if movie combo box selection changes reset all other combo boxes
+        movieComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> updateView());
+        FxUtils.autoCompleteComboBoxPlus(movieComboBox, (typedText, movie) -> movie.getName().toLowerCase().contains(typedText.toLowerCase()));
+        movieComboBox.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(Movie movie) {
+                if (movie == null) {
+                    return null;
+                } else {
+                    return movie.getName();
+                }
+            }
+            @Override
+            public Movie fromString(String string) {
+                return filteredList.stream().filter(movie -> movie.getName().equals(string)).findFirst().orElse(null);
+            }
+        });
+//        movieComboBox.valueProperty().addListener(filterMovieService.getNameInputListener());
+        categoryComboBox.getItems().addAll(Categories.values());
+        FxUtils.autoCompleteComboBoxPlus(categoryComboBox, (typedText, itemToCompare) -> itemToCompare.name().toLowerCase().contains(typedText.toLowerCase()));
+        categoryComboBox.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(Categories object) {
+                if(object == null) return "";
+                return object.name();
+            }
+            @Override
+            public Categories fromString(String string) {
+                if(string == null) return null;
+//                check if string is in enum
+                for(Categories category : Categories.values()){
+                    if(category.name().equals(string)){
+                        return category;
+                    }
+                }
+                return null;
+            }
+        });
+        categoryComboBox.valueProperty().addListener(filterMovieService.getCategoryInputListener());
         //initialize filteredList with all movies, so that it can be filtered later, set up handlers in searchBars
-        filteredList = filterHallMovieService.getFilteredList();
+        searchFilteredList = filterHallMovieService.getFilteredList();
         searchTextField.textProperty().addListener(filterHallMovieService.getNameInputListener());
         searchByCategoryComboBox.getItems().addAll(Categories.values());
         FxUtils.autoCompleteComboBoxPlus(searchByCategoryComboBox, (typedText, itemToCompare) -> itemToCompare.name().toLowerCase().contains(typedText.toLowerCase()));
@@ -96,12 +143,12 @@ public class HallMovieController
 
 
 
-        hallMovieListView.setItems(filteredList);
-        filteredList.addListener((ListChangeListener<HallMovie>) c -> {
-                   hallMovieListView.setItems(filteredList);
+        hallMovieListView.setItems(searchFilteredList);
+        searchFilteredList.addListener((ListChangeListener<HallMovie>) c -> {
+                   hallMovieListView.setItems(searchFilteredList);
         });
         hallComboBox.setItems(FXCollections.observableArrayList(hallService.getAllHalls()));
-        movieComboBox.setItems(FXCollections.observableArrayList(movieService.getAllMovies()));
+//        movieComboBox.setItems(FXCollections.observableArrayList(movieService.getAllMovies()));
 
 
         hallMovieListView.setCellFactory(param -> new ListCell<>() {
@@ -125,6 +172,10 @@ public class HallMovieController
 //                    (hallMovieService.getAllHallMovies().stream()
 //                            .filter(el->el.getMovie().getName().toLowerCase().contains(newValue.toLowerCase())).toList()));
 //        });
+
+        filteredList.addListener((ListChangeListener<Movie>) c -> {
+            movieComboBox.setItems(filteredList);
+        });
 
         updateView();
     }
