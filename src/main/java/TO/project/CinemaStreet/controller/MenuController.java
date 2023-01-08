@@ -130,7 +130,7 @@ public class MenuController {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("/view/MovieView.fxml"));
                 loader.setControllerFactory(springContext::getBean);
-                Scene scene = new Scene(loader.load(), 1200, 800);
+                Scene scene = new Scene(loader.load(), 1200, 900);
                 Stage stage = new Stage();
                 stage.setTitle("Filmy");
                 stage.setScene(scene);
@@ -198,15 +198,22 @@ public class MenuController {
         List<Hall> newHalls = hallService.getHallsFromJson("src/main/resources/halls.json");
         hallService.addHalls(newHalls);
         System.out.println(hallService.getAllHalls());
-        LocalDateTime avatarDate = LocalDateTime.of(2009, 12, 10, 0, 0);
+        LocalDateTime avatarDate = LocalDateTime.of(2009, 12, 12, 12, 12);
+        LocalDateTime interstellarDate = LocalDateTime.of(2014, 11, 7, 0, 0);
         LocalDateTime godfatherDate = LocalDateTime.of(1972, 3, 15, 0, 0);
         movieService.removeAllMovies();
         hallMovieService.removeAllHallMovies();
         Movie movie = new Movie("Avatar", 135, avatarDate, 25.0f, Categories.FANTASY, "https://posters.movieposterdb.com/13_01/2009/499549/l_499549_8fac1d11.jpg");
-        Movie movie2 = new Movie("Interstellar", 90, godfatherDate, 10.0f, "https://cdn.shopify.com/s/files/1/0057/3728/3618/products/interstellar5_480x.progressive.jpg?v=1585846879");
+        Movie movie2 = new Movie("Interstellar", 90, interstellarDate, 10.0f, "https://cdn.shopify.com/s/files/1/0057/3728/3618/products/interstellar5_480x.progressive.jpg?v=1585846879");
+        Movie movie3 = new Movie("The Godfather", 175, godfatherDate, 15.0f,Categories.THRILLER, "https://posters.movieposterdb.com/22_12/2006/442674/l_the-godfather-movie-poster_51f17e6f.jpg");
+        Movie movie4 = new Movie("Szczęki", 175, godfatherDate.plusMonths(80), 15.0f,Categories.HORROR, "https://posters.movieposterdb.com/08_06/1975/73195/l_73195_a4183f3d.jpg");
+        Movie movie5 = new Movie("Smile", 175, godfatherDate.plusMonths(80), 15.0f,Categories.HORROR, "https://posters.movieposterdb.com/22_10/2022/15474916/l_smile-movie-poster_f010c336.jpg");
 
         movieService.addMovie(movie);
         movieService.addMovie(movie2);
+        movieService.addMovie(movie3);
+        movieService.addMovie(movie4);
+        movieService.addMovie(movie5);
 
         HallMovie godfatherHallMovie = new HallMovie(hallService.getHallById(1), movie2, LocalDateTime.now().plus(2, ChronoUnit.DAYS));
         hallMovieService.addHallMovie(godfatherHallMovie);
@@ -216,6 +223,13 @@ public class MenuController {
 
         HallMovie avatarHallMovie = new HallMovie(hallService.getHallById(1), movie, LocalDateTime.now().plus(3, ChronoUnit.DAYS).plus(12, ChronoUnit.HOURS));
         hallMovieService.addHallMovie(avatarHallMovie);
+
+        HallMovie godfatherHallMovie3 = new HallMovie(hallService.getHallById(2), movie3, LocalDateTime.now().plus(2, ChronoUnit.DAYS));
+        hallMovieService.addHallMovie(godfatherHallMovie3);
+
+        HallMovie godfatherHallMovie4 = new HallMovie(hallService.getHallById(1), movie3, LocalDateTime.now().plus(2, ChronoUnit.DAYS));
+        hallMovieService.addHallMovie(godfatherHallMovie4);
+
     }
 
     @FXML
