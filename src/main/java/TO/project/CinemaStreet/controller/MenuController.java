@@ -212,7 +212,7 @@ public class MenuController {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("/view/TicketView.fxml"));
                 loader.setControllerFactory(springContext::getBean);
-                Scene scene = new Scene(loader.load(), 600, 400);
+                Scene scene = new Scene(loader.load(), 367, 250);
                 Stage stage = new Stage();
                 stage.setTitle("Sprzedaż biletów");
                 stage.setScene(scene);

@@ -1,35 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import java.net.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import java.net.URL?>
 
 <!--            fx:controller="TO.project.CinemaStreet.controller.UserController"-->
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            prefHeight="400.0" prefWidth="600.0"
-            fx:controller="TO.project.CinemaStreet.controller.TicketController"
-            minHeight="10" minWidth="10"
->
+
+<BorderPane minHeight="10" minWidth="10" prefHeight="250.0" prefWidth="367.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TO.project.CinemaStreet.controller.TicketController">
     <center>
-        <VBox>
-            <Label text="Wybierz film:"/>
-            <ComboBox fx:id="movieComboBox" prefWidth="180"/>
-            <Label text="Wybierz salę:"/>
-            <ComboBox fx:id="hallComboBox" prefWidth="180"/>
-            <Label text="Wybierz datę:"/>
-            <ComboBox fx:id="dateComboBox" prefWidth="180"/>
+        <VBox fillWidth="false" prefHeight="332.0" prefWidth="322.0">
+            <HBox>
+                <VBox>
+                    <Label text="Wybierz film:" />
+                    <ComboBox fx:id="movieComboBox" prefWidth="180" />
+                </VBox>
+                <VBox>
+                    <Label text="Wybierz gatunek:" />
+                    <ComboBox fx:id="categoryComboBox" prefWidth="180" />
+                </VBox>
+
+            </HBox>
+            <Label text="Wybierz salę:" />
+            <ComboBox fx:id="hallComboBox" prefWidth="180" />
+            <Label text="Wybierz datę:" />
+            <ComboBox fx:id="dateComboBox" prefWidth="180" />
 <!--            <Label text="Wybierz godzinę:"/>-->
 <!--            <ComboBox fx:id="hourComboBox" prefWidth="120"/>-->
             <HBox spacing="20">
-                <Label text="Wybierz ilość biletów"/>
-                <Label fx:id="currentSeatsLabel" text="0"/>
+                <Label text="Wybierz ilość biletów" />
+                <Label fx:id="currentSeatsLabel" text="0" />
             </HBox>
-            <TextField fx:id="seatTextField" prefWidth="180"/>
-            <Button text="Sprzedaj bilety" onAction="#buyTicket" prefWidth="120"/>
+            <TextField fx:id="seatTextField" prefHeight="180.0" prefWidth="180.0" />
+            <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" minHeight="35.0" onAction="#buyTicket" prefHeight="34.0" prefWidth="372.0" text="Sprzedaj bilety" textAlignment="CENTER">
+            <VBox.margin>
+               <Insets top="5.0" />
+            </VBox.margin></Button>
         </VBox>
     </center>
 

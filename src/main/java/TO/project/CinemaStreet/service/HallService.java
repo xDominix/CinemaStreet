@@ -1,6 +1,7 @@
 package TO.project.CinemaStreet.service;
 import TO.project.CinemaStreet.Roles;
 import TO.project.CinemaStreet.model.Hall;
+import TO.project.CinemaStreet.model.HallMovie;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,9 +14,11 @@ import java.util.Optional;
 @Service
 public class HallService {
     private final HallRepository hallRepository;
+    private final HallMovieRepository hallMovieRepository;
 
-    public HallService(HallRepository hallRepository) {
+    public HallService(HallRepository hallRepository,HallMovieRepository hallMovieRepository) {
         this.hallRepository = hallRepository;
+        this.hallMovieRepository = hallMovieRepository;
     }
 
     public List<Hall> getAllHalls() {
@@ -40,6 +43,7 @@ public class HallService {
     }
 
     public void removeAllHalls() {
+        hallMovieRepository.deleteAll();
         hallRepository.deleteAll();
         hallRepository.flush();
     }
