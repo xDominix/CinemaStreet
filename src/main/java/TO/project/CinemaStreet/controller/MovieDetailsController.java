@@ -1,8 +1,10 @@
 package TO.project.CinemaStreet.controller;
 
 import TO.project.CinemaStreet.Categories;
+import TO.project.CinemaStreet.Permissions;
 import TO.project.CinemaStreet.model.Movie;
 import TO.project.CinemaStreet.model.RecommendedMovie;
+import TO.project.CinemaStreet.service.AuthorizationService;
 import TO.project.CinemaStreet.service.FilterMovieService;
 import TO.project.CinemaStreet.service.MovieService;
 import TO.project.CinemaStreet.service.RecommendedMovieService;
@@ -65,10 +67,13 @@ public class MovieDetailsController {
     private MovieService movieService;
     private RecommendedMovieService recommendedMovieService;
     private FilterMovieService filterMovieService;
+    private AuthorizationService authorizationService;
 
-    public MovieDetailsController(MovieService movieService, RecommendedMovieService recommendedMovieService) {
+    public MovieDetailsController(MovieService movieService, RecommendedMovieService recommendedMovieService, FilterMovieService filterMovieService, AuthorizationService authorizationService) {
         this.movieService = movieService;
         this.recommendedMovieService = recommendedMovieService;
+        this.filterMovieService = filterMovieService;
+        this.authorizationService = authorizationService;
     }
 
     @FXML
@@ -116,21 +121,6 @@ public class MovieDetailsController {
         idLabel.setTooltip(new javafx.scene.control.Tooltip("ID"));
 
     }
-
-    public void throwError() {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/view/NoPermissionView.fxml"));
-            loader.setControllerFactory(springContext::getBean);
-            Scene scene = new Scene(loader.load(), 300, 100);
-            Stage stage = new Stage();
-            stage.setTitle("Błąd!");
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
     public void copyUrlAction(ActionEvent actionEvent){
 //        copy url of the movie to the system clipboard
         javafx.scene.input.Clipboard clipboard = javafx.scene.input.Clipboard.getSystemClipboard();
@@ -140,6 +130,10 @@ public class MovieDetailsController {
     }
 
     public void addToRecommendedAction(ActionEvent actionEvent) throws SQLException {
+        if(!authorizationService.isAuthorized(Permissions.EDIT_RECOMMENDATIONS)){
+            authorizationService.notAuthorizedAlert();
+            return;
+        }
 //        add movie to recommended
         if (recommendedMovieService.getRecommendedMovieByMovie(currentMovie) == null) {
             recommendedMovieService.addRecommendedMovie(currentMovie);
@@ -153,6 +147,10 @@ public class MovieDetailsController {
     }
 
     public void deleteMovieAction(ActionEvent actionEvent) {
+        if(!authorizationService.isAuthorized(Permissions.REMOVE_MOVIES)){
+            authorizationService.notAuthorizedAlert();
+            return;
+        }
 //        show confirmation dialogue
         javafx.scene.control.Alert confirmationAlert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.CONFIRMATION);
         confirmationAlert.setTitle("Potwierdzenie");
@@ -190,6 +188,10 @@ public class MovieDetailsController {
     }
 
     public void editMovieAction(ActionEvent actionEvent) {
+        if(!authorizationService.isAuthorized(Permissions.EDIT_MOVIES)){
+            authorizationService.notAuthorizedAlert();
+            return;
+        }
 //        open new dialog
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.initOwner(titleLabel.getScene().getWindow());
