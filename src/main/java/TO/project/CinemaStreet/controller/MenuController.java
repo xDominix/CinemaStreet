@@ -62,6 +62,7 @@ public class MenuController {
 
     @FXML
     public void initialize() {
+//        createExampleData();
         setupMenuPane();
     }
 
@@ -182,29 +183,39 @@ public class MenuController {
             alert.setContentText("Pomyslnie Zaktualizowano sale");
             alert.showAndWait();
 
-            LocalDateTime avatarDate = LocalDateTime.of(2009, 12, 10, 0, 0);
-            LocalDateTime godfatherDate = LocalDateTime.of(1972, 3, 15, 0, 0);
 
-            movieService.removeAllMovies();
-            hallMovieService.removeAllHallMovies();
-            Movie movie = new Movie("Avatar", 135, avatarDate, 25.0f, Categories.FANTASY, "https://posters.movieposterdb.com/13_01/2009/499549/l_499549_8fac1d11.jpg");
-//        Movie movie2 = new Movie("Interstellar", 90, godfatherDate, 10.0f);
-            Movie movie2 = new Movie("Interstellar", 90, godfatherDate, 10.0f, "https://cdn.shopify.com/s/files/1/0057/3728/3618/products/interstellar5_480x.progressive.jpg?v=1585846879");
 
-            movieService.addMovie(movie);
-            movieService.addMovie(movie2);
-
-            HallMovie godfatherHallMovie = new HallMovie(hallService.getHallById(1), movie2, LocalDateTime.now().plus(2, ChronoUnit.DAYS));
-            hallMovieService.addHallMovie(godfatherHallMovie);
-
-            HallMovie godfatherHallMovie2 = new HallMovie(hallService.getHallById(2), movie2, LocalDateTime.now().plus(1, ChronoUnit.DAYS));
-            hallMovieService.addHallMovie(godfatherHallMovie2);
-
-            HallMovie avatarHallMovie = new HallMovie(hallService.getHallById(1), movie, LocalDateTime.now().plus(3, ChronoUnit.DAYS).plus(12, ChronoUnit.HOURS));
-            hallMovieService.addHallMovie(avatarHallMovie);
+            createExampleData();
         } else {
             this.throwError();
         }
+    }
+    private void createExampleData(){
+        addDataButton.setStyle("-fx-background-color: #555555; -fx-text-fill: #1A1A1A; -fx-font-size: 20px; -fx-font-weight: bold;");
+        addDataButton.setOnMouseExited(e -> addDataButton.setStyle("-fx-background-color: #555555; -fx-text-fill: #1A1A1A; -fx-font-size: 20px; -fx-font-weight: bold;"));
+        hallService.removeAllHalls();
+
+        List<Hall> newHalls = hallService.getHallsFromJson("src/main/resources/halls.json");
+        hallService.addHalls(newHalls);
+        System.out.println(hallService.getAllHalls());
+        LocalDateTime avatarDate = LocalDateTime.of(2009, 12, 10, 0, 0);
+        LocalDateTime godfatherDate = LocalDateTime.of(1972, 3, 15, 0, 0);
+        movieService.removeAllMovies();
+        hallMovieService.removeAllHallMovies();
+        Movie movie = new Movie("Avatar", 135, avatarDate, 25.0f, Categories.FANTASY, "https://posters.movieposterdb.com/13_01/2009/499549/l_499549_8fac1d11.jpg");
+        Movie movie2 = new Movie("Interstellar", 90, godfatherDate, 10.0f, "https://cdn.shopify.com/s/files/1/0057/3728/3618/products/interstellar5_480x.progressive.jpg?v=1585846879");
+
+        movieService.addMovie(movie);
+        movieService.addMovie(movie2);
+
+        HallMovie godfatherHallMovie = new HallMovie(hallService.getHallById(1), movie2, LocalDateTime.now().plus(2, ChronoUnit.DAYS));
+        hallMovieService.addHallMovie(godfatherHallMovie);
+
+        HallMovie godfatherHallMovie2 = new HallMovie(hallService.getHallById(2), movie2, LocalDateTime.now().plus(1, ChronoUnit.DAYS));
+        hallMovieService.addHallMovie(godfatherHallMovie2);
+
+        HallMovie avatarHallMovie = new HallMovie(hallService.getHallById(1), movie, LocalDateTime.now().plus(3, ChronoUnit.DAYS).plus(12, ChronoUnit.HOURS));
+        hallMovieService.addHallMovie(avatarHallMovie);
     }
 
     @FXML
@@ -276,7 +287,7 @@ public class MenuController {
             e.printStackTrace();
         }
     }
-
+private Button addDataButton;
     private void setupMenuPane() {
 //        clear menu pane
         menuPane.getChildren().clear();
@@ -288,9 +299,23 @@ public class MenuController {
         setupMenuButton("Rekomendacje","https://cdn-icons-png.flaticon.com/512/61/61012.png", this::openRecommendedMovies);
         setupMenuButton("Statystyki","https://cdn-icons-png.flaticon.com/512/61/61054.png", this::openStats);
         setupMenuButton("Zalogowany","https://cdn-icons-png.flaticon.com/512/61/61135.png", null);
+        addDataButton = setupMenuButton("Stwórz dane","https://cdn-icons-png.flaticon.com/512/60/60745.png", this::createExampleDataAction);
         setupMenuButton("Wyloguj","https://cdn-icons-png.flaticon.com/512/60/60821.png", this::signOut);
+
+//        check if movies are empty
+        if (movieService.getAllMovies().isEmpty()) {
+//            change its color to green
+            addDataButton.setStyle("-fx-background-color: #00ff00; -fx-text-fill: #1A1A1A; -fx-font-size: 20px; -fx-font-weight: bold;");
+//            on hover exit
+            addDataButton.setOnMouseExited(event -> addDataButton.setStyle("-fx-background-color: #00ff00; -fx-text-fill: #1A1A1A; -fx-font-size: 20px; -fx-font-weight: bold;"));
+        }
     }
-    private void setupMenuButton(String text, String iconPath, EventHandler<ActionEvent> actionEventEventHandler) {
+
+    private void createExampleDataAction(ActionEvent actionEvent) {
+        createExampleData();
+    }
+
+    private Button setupMenuButton(String text, String iconPath, EventHandler<ActionEvent> actionEventEventHandler) {
         Button button = new Button(text);
         double buttonHeight = 140;
         button.setPrefSize(Region.USE_COMPUTED_SIZE, buttonHeight);
@@ -324,6 +349,7 @@ public class MenuController {
         }
 
         menuPane.getChildren().add(button);
+        return button;
     }
 
     public void throwError() {

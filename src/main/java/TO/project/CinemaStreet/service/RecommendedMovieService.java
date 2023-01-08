@@ -62,4 +62,7 @@ public class RecommendedMovieService {
         recommendedMovieRepository.save(recommendedMovie);
     }
 
+    public void removeAllRecommendedMovies() {
+        recommendedMovieRepository.deleteAll();
+    }
 }

@@ -16,11 +16,13 @@ public class MovieService {
     private final MovieRepository movieRepository;
     private final HallService hallService;
     private final HallMovieService hallMovieService;
+    private final RecommendedMovieService recommendedMovieService;
 
-    public MovieService(MovieRepository movieRepository, HallService hallService, HallMovieService hallMovieService) {
+    public MovieService(MovieRepository movieRepository, HallService hallService, HallMovieService hallMovieService, RecommendedMovieService recommendedMovieService) {
         this.movieRepository = movieRepository;
         this.hallService = hallService;
         this.hallMovieService = hallMovieService;
+        this.recommendedMovieService = recommendedMovieService;
     }
 
     public List<Movie> getAllMovies() {
@@ -49,6 +51,8 @@ public class MovieService {
     }
 
     public void removeAllMovies() {
+//        remove all recommended movies relations
+        recommendedMovieService.removeAllRecommendedMovies();
         movieRepository.deleteAll();
     }
 

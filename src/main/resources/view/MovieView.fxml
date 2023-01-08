@@ -27,8 +27,19 @@
         </HBox>
     </top>
 <!--    FlowPane of movieCards-->
+<!--    add scroll-->
     <center>
-        <FlowPane fx:id="movieFlowPane" prefHeight="400.0" prefWidth="600.0" />
+        <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="400.0" prefWidth="600.0">
+            <content>
+                <FlowPane fx:id="movieFlowPane" prefHeight="400.0" prefWidth="600.0">
+                    <BorderPane.margin>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                    </BorderPane.margin>
+                </FlowPane>
+            </content>
+        </ScrollPane>
+<!--    <center>-->
+<!--        <FlowPane fx:id="movieFlowPane" prefHeight="400.0" prefWidth="600.0" />-->
     </center>
 
 
