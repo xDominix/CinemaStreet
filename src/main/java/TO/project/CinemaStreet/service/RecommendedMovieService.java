@@ -65,4 +65,12 @@ public class RecommendedMovieService {
     public void removeAllRecommendedMovies() {
         recommendedMovieRepository.deleteAll();
     }
+
+    public boolean removeAllRecommendedMovieRelationsByMovieId(Integer id) {
+        if (recommendedMovieRepository.existsByMovieId(id)) {
+            recommendedMovieRepository.deleteByMovieId(id);
+            return true;
+        }
+        return false;
+    }
 }

@@ -43,6 +43,10 @@ public class MovieService {
         if(!hallMovieService.removeAllHallMovieRelationsByMovieId(id)){
             return false;
         }
+//        remove all recommended-movie relations
+        if(!recommendedMovieService.removeAllRecommendedMovieRelationsByMovieId(id)){
+            return false;
+        }
         if (movieRepository.existsById(id)) {
             movieRepository.deleteById(id);
             return true;
