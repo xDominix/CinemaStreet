@@ -2,8 +2,10 @@ package TO.project.CinemaStreet.controller;
 
 import TO.project.CinemaStreet.Categories;
 import TO.project.CinemaStreet.model.Movie;
+import TO.project.CinemaStreet.model.RecommendedMovie;
 import TO.project.CinemaStreet.service.FilterMovieService;
 import TO.project.CinemaStreet.service.MovieService;
+import TO.project.CinemaStreet.service.RecommendedMovieService;
 import TO.project.CinemaStreet.utils.FxUtils;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
@@ -57,11 +59,16 @@ public class MovieDetailsController {
     @FXML
     private Button deleteButton;
 
+    @FXML
+    private Button recommendationButton;
+
     private MovieService movieService;
+    private RecommendedMovieService recommendedMovieService;
     private FilterMovieService filterMovieService;
 
-    public MovieDetailsController(MovieService movieService) {
+    public MovieDetailsController(MovieService movieService, RecommendedMovieService recommendedMovieService) {
         this.movieService = movieService;
+        this.recommendedMovieService = recommendedMovieService;
     }
 
     @FXML
@@ -73,6 +80,9 @@ public class MovieDetailsController {
     }
     public void setMovie(Movie movie) {
         currentMovie = movie;
+        if (recommendedMovieService.getRecommendedMovieByMovie(movie) != null) {
+            recommendationButton.setText("Nie rekomenduj");
+        }
         updateView();
     }
     private void updateView() {
@@ -127,6 +137,19 @@ public class MovieDetailsController {
         javafx.scene.input.ClipboardContent content = new javafx.scene.input.ClipboardContent();
         content.putString(currentMovie.getImageUrl());
         clipboard.setContent(content);
+    }
+
+    public void addToRecommendedAction(ActionEvent actionEvent) throws SQLException {
+//        add movie to recommended
+        if (recommendedMovieService.getRecommendedMovieByMovie(currentMovie) == null) {
+            recommendedMovieService.addRecommendedMovie(currentMovie);
+            recommendationButton.setText("Nie rekomenduj");
+        } else {
+            recommendedMovieService.deleteRecommendedMovie(currentMovie);
+            recommendationButton.setText("Rekomenduj");
+        }
+        filterMovieService.removeMovieFromFilteredList(currentMovie);
+        filterMovieService.addMovieToFilteredList(currentMovie);
     }
 
     public void deleteMovieAction(ActionEvent actionEvent) {

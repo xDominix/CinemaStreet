@@ -9,9 +9,10 @@
     <!--           search bar-->
     <top>
         <HBox>
-            <HBox fx:id="movieHBox">
+            <HBox fx:id="movieHBox" spacing="10.0">
                 <TextField fx:id="searchTextField" prefHeight="37.0" prefWidth="300" promptText="Szukaj po tytule" />
                 <ComboBox fx:id="searchByCategoryComboBox" prefWidth="200.0" promptText="Wyszukaj po kategorii" />
+                <CheckBox fx:id="searchByRecommmendedCheckBox" mnemonicParsing="false" text="Rekomendowane" />
                 <Button onAction="#addNewMovieAction" prefHeight="0.0" prefWidth="201.0" text="Dodaj nowy film">
                <HBox.margin>
                   <Insets left="5.0" />

@@ -36,14 +36,23 @@ public class RecommendedMovie implements Externalizable {
         this.id.set(id);
     }
 
-    @Column(name ="movieId")
-    public final int getMovieId() {
-        return movie.get().getId();
+    @OneToOne
+    @JoinColumn(name = "movieId")
+    public final Movie getMovie() {
+        return movie.get();
     }
-    @Column(name ="movieId")
-    public final void setMovieId(int movieId) {
-        this.movie.get().setId(movieId);
+    public final void setMovie(Movie movie) {
+        this.movie.set(movie);
     }
+
+//    @Column(name ="movieId")
+//    public final int getMovieId() {
+//        return movie.get().getId();
+//    }
+//    @Column(name ="movieId")
+//    public final void setMovieId(int movieId) {
+//        this.movie.get().setId(movieId);
+//    }
 
     public final Integer getPosition() {
         return position.get();
@@ -58,8 +67,8 @@ public class RecommendedMovie implements Externalizable {
     @Override
     public String toString() {
         return "RecommendedMovie{" +
-                "id=" + id +
-                ", position=" + position+
+                "id=" + id.get() +
+                ", position=" + position.get()+
                 +'}';
     }
 

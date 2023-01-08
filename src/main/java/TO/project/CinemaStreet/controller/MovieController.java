@@ -5,6 +5,7 @@ import TO.project.CinemaStreet.model.Category;
 import TO.project.CinemaStreet.model.Movie;
 import TO.project.CinemaStreet.service.FilterMovieService;
 import TO.project.CinemaStreet.service.MovieService;
+import TO.project.CinemaStreet.service.RecommendedMovieService;
 import TO.project.CinemaStreet.utils.FxUtils;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -52,11 +53,16 @@ public class MovieController {
     @FXML
     private TextField searchTextField;
 
+    @FXML CheckBox searchByRecommmendedCheckBox;
+
     MovieService movieService;
     private FilterMovieService filterMovieService;
-    public MovieController(MovieService movieService, FilterMovieService filterMovieService) {
+
+    private RecommendedMovieService recommendedMovieService;
+    public MovieController(MovieService movieService, FilterMovieService filterMovieService, RecommendedMovieService recommendedMovieService) {
         this.movieService = movieService;
         this.filterMovieService = filterMovieService;
+        this.recommendedMovieService = recommendedMovieService;
     }
     private FilteredList<Movie> filteredList;
     @FXML
@@ -66,8 +72,10 @@ public class MovieController {
 
         filteredList = filterMovieService.getFilteredList();
         searchTextField.textProperty().addListener(filterMovieService.getNameInputListener());
+        searchByRecommmendedCheckBox.selectedProperty().addListener(filterMovieService.getCheckBoxListener());
 
         movieFlowPane.setHgap(20);
+        movieFlowPane.setVgap(20);
 //        insert movies into flowpane
         initializeMoviePane(filteredList);
         setMoviesToPane(filteredList);
@@ -133,14 +141,28 @@ public class MovieController {
         movieCard.setPadding(new Insets(10,10,10,10));
         movieCard.setSpacing(0);
         movieCard.setAlignment(javafx.geometry.Pos.CENTER);
-        movieCard.setStyle("-fx-background-color: #4e4e4e;-fx-border-radius: 5px; -fx-border-color: #2D2D30n; -fx-border-width: 2px; -fx-cursor: hand;");
+        if(recommendedMovieService.isRecommended(movie)){
+            movieCard.setStyle("-fx-background-color: #6a7d63;-fx-border-radius: 5px; -fx-border-color: #2D2D30n; -fx-border-width: 2px; -fx-cursor: hand;");
+        }else{
+            movieCard.setStyle("-fx-background-color: #4e4e4e;-fx-border-radius: 5px; -fx-border-color: #2D2D30n; -fx-border-width: 2px; -fx-cursor: hand;");
+        }
+
 
 //        set on hover
         movieCard.setOnMouseEntered(event -> {
-            movieCard.setStyle("-fx-background-color: #4e4e4e;-fx-border-radius: 5px; -fx-border-color: #2D2D30n; -fx-border-width: 2px; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, #ffffff, 10, 0, 0, 0);");
+            if(recommendedMovieService.isRecommended(movie)){
+                movieCard.setStyle("-fx-background-color: #6a7d63;-fx-border-radius: 5px; -fx-border-color: #2D2D30n; -fx-border-width: 2px; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, #ffffff, 10, 0, 0, 0);");
+            }else{
+                movieCard.setStyle("-fx-background-color: #4e4e4e;-fx-border-radius: 5px; -fx-border-color: #2D2D30n; -fx-border-width: 2px; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, #ffffff, 10, 0, 0, 0);");
+            }
+
         });
         movieCard.setOnMouseExited(event -> {
-            movieCard.setStyle("-fx-background-color: #4e4e4e;-fx-border-radius: 5px; -fx-border-color: #2D2D30n; -fx-border-width: 2px; -fx-cursor: hand;");
+            if(recommendedMovieService.isRecommended(movie)){
+                movieCard.setStyle("-fx-background-color: #6a7d63;-fx-border-radius: 5px; -fx-border-color: #2D2D30n; -fx-border-width: 2px; -fx-cursor: hand;");
+            }else{
+                movieCard.setStyle("-fx-background-color: #4e4e4e;-fx-border-radius: 5px; -fx-border-color: #2D2D30n; -fx-border-width: 2px; -fx-cursor: hand;");
+            }
         });
 //        set on click event
         movieCard.setOnMouseClicked(event -> {

@@ -22,6 +22,19 @@ public class RecommendedMovieService {
         recommendedMovieRepository.save(recommendedMovie);
     }
 
+    // TODO Check what position is?
+    public void addRecommendedMovie(Movie movie) {
+        recommendedMovieRepository.save(new RecommendedMovie(movie, 10));
+    }
+
+    public void deleteRecommendedMovie(Movie movie) {
+        recommendedMovieRepository.deleteByMovieId(movie.getId());
+    }
+
+    public boolean isRecommended(Movie movie) {
+        return recommendedMovieRepository.existsByMovieId(movie.getId());
+    }
+
     public boolean deleteRecommendedMovieById(Integer id) {
         if (recommendedMovieRepository.existsById(id)) {
             recommendedMovieRepository.deleteById(id);
