@@ -14,7 +14,6 @@ import java.io.ObjectOutput;
 public class User implements Externalizable {
     private static final long serialVersionUID = 1L;
     private final IntegerProperty id = new SimpleIntegerProperty(this, "id");
-    @Column(unique=true)
     private final StringProperty username = new SimpleStringProperty(this, "username");
     private final StringProperty password = new SimpleStringProperty(this, "password");
     private final StringProperty firstName = new SimpleStringProperty(this, "firstName");
@@ -45,7 +44,7 @@ public class User implements Externalizable {
     public final void setId(Integer id) {
         this.id.set(id);
     }
-
+    @Column(unique=true)
     public final String getUsername() {
         return username.get();
     }
@@ -109,11 +108,11 @@ public class User implements Externalizable {
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
-                ", firstName=" + firstName +
-                ", lastName=" + lastName +
-                ", email=" + email +
-//                ", role=" + role +
+                "id=" + id.get() +
+                ", firstName=" + firstName.get() +
+                ", lastName=" + lastName.get() +
+                ", email=" + email.get() +
+                ", role=" + role.get() +
                 '}';
     }
 

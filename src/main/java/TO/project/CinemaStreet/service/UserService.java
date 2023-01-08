@@ -24,6 +24,7 @@ public class UserService{
     public AuthenticationResponse authenticate(String username, String password){
         if (userRepository.existsByUsernameAndPassword(username, password)) {
             User user = userRepository.getReferenceByUsernameAndPassword(username, password);
+            System.out.println("User: " + user.getRole());
             return new AuthenticationResponse(user.getId(), user.getRole(), true, user.getUsername(), user.getFirstName(), user.getLastName());
         }
         return new AuthenticationResponse(0, Roles.EMPLOYEE, false, "", "", "");

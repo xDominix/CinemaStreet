@@ -26,7 +26,8 @@ public class CurrentUserContext {
             username = data.getUsername();
             firstname = data.getFirstname();
             lastname = data.getLastname();
-            role = data.getRole();
+            System.out.println("ej:"+data.getRole());
+            this.role = data.getRole();
         }
         else {
             this.signOut();
@@ -39,8 +40,7 @@ public class CurrentUserContext {
     }
 
     public Roles getRole() {
-        return Roles.ADMIN;
-//        return role;
+        return role;
     }
 
     public String getUsername() {

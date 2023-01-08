@@ -57,7 +57,7 @@ public class MenuController {
         this.movieService = movieService;
         this.hallMovieService = hallMovieService;
         this.userService = userService;
-        this.currentUserContext = new CurrentUserContext(userService);
+        this.currentUserContext = new CurrentUserContext();
     }
 
     @FXML

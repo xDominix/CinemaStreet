@@ -1,8 +1,10 @@
 package TO.project.CinemaStreet.controller;
 
 import TO.project.CinemaStreet.Categories;
+import TO.project.CinemaStreet.Permissions;
 import TO.project.CinemaStreet.model.Category;
 import TO.project.CinemaStreet.model.Movie;
+import TO.project.CinemaStreet.service.AuthorizationService;
 import TO.project.CinemaStreet.service.FilterMovieService;
 import TO.project.CinemaStreet.service.MovieService;
 import TO.project.CinemaStreet.service.RecommendedMovieService;
@@ -59,10 +61,12 @@ public class MovieController {
     private FilterMovieService filterMovieService;
 
     private RecommendedMovieService recommendedMovieService;
-    public MovieController(MovieService movieService, FilterMovieService filterMovieService, RecommendedMovieService recommendedMovieService) {
+    private AuthorizationService authorizationService;
+    public MovieController(MovieService movieService, FilterMovieService filterMovieService, RecommendedMovieService recommendedMovieService, AuthorizationService authorizationService) {
         this.movieService = movieService;
         this.filterMovieService = filterMovieService;
         this.recommendedMovieService = recommendedMovieService;
+        this.authorizationService = authorizationService;
     }
     private FilteredList<Movie> filteredList;
     @FXML
@@ -203,6 +207,10 @@ public class MovieController {
     }
 
     public void addNewMovieAction(ActionEvent actionEvent) {
+        if(!authorizationService.isAuthorized(Permissions.ADD_MOVIES)){
+            authorizationService.notAuthorizedAlert();
+            return;
+        }
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Dodaj film");
 

@@ -30,13 +30,12 @@ public class UIApplication extends javafx.application.Application{
         primaryStage.setScene(scene);
 
         var loader = new FXMLLoader();
-//        TODO changed to MenuView for testing -> change back to LoginView
-        loader.setLocation(UIApplication.class.getResource("/view/MenuView.fxml"));
+        loader.setLocation(UIApplication.class.getResource("/view/LoginView.fxml"));
 
         loader.setControllerFactory(springContext::getBean);
         BorderPane rootLayout = loader.load();
-        rootLayout.setPrefSize(755, 640);
-
+//        rootLayout.setPrefSize(755, 640);600, 400
+        rootLayout.setPrefSize(600, 400);
         configureStage(primaryStage, rootLayout);
         primaryStage.show();
     }
