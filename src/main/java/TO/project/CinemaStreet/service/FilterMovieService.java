@@ -20,8 +20,10 @@ public class FilterMovieService {
     private ObservableList<Movie>movies ;
 
     private MovieService movieService;
-    public FilterMovieService(MovieService movieService) {
+    private RecommendedMovieService recommendedMovieService;
+    public FilterMovieService(MovieService movieService, RecommendedMovieService recommendedMovieService) {
         this.movieService = movieService;
+        this.recommendedMovieService = recommendedMovieService;
         movies = FXCollections.observableList(movieService.getAllMovies());
         filteredList = new FilteredList<>(movies, p -> true);
         filteredList.predicateProperty().bind(Bindings.createObjectBinding(() -> predicates.isEmpty() ? null : new Predicate<Movie>() {
@@ -61,6 +63,25 @@ public class FilterMovieService {
             }
         }, predicates));
         return filteredList;
+    }
+
+    public ChangeListener<Boolean> getCheckBoxListener()
+    {
+        return new ChangeListener<Boolean>() {
+            private  Predicate<Movie> predicate;
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                Predicate<Movie> oldPredicate = predicate;
+                if (newValue)
+                {
+                    predicate = movie -> recommendedMovieService.isRecommended(movie);
+                }
+                else {
+                    predicate = movie -> true;
+                }
+                replace(predicates,oldPredicate, predicate);
+            }
+        };
     }
 
 
