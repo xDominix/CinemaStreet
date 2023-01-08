@@ -6,15 +6,23 @@ import TO.project.CinemaStreet.Permissions;
 import TO.project.CinemaStreet.model.Hall;
 import TO.project.CinemaStreet.model.HallMovie;
 import TO.project.CinemaStreet.model.Movie;
-import TO.project.CinemaStreet.service.*;
+import TO.project.CinemaStreet.service.HallMovieService;
+import TO.project.CinemaStreet.service.HallService;
+import TO.project.CinemaStreet.service.MovieService;
+import TO.project.CinemaStreet.service.UserService;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,14 +42,12 @@ public class MenuController {
     @Autowired
     private ConfigurableApplicationContext springContext;
 
-    private HallService hallService;
-    private MovieService movieService;
-    private HallMovieService hallMovieService;
+    private final HallService hallService;
+    private final MovieService movieService;
+    private final HallMovieService hallMovieService;
 
     @FXML
-    private Button signOutButton;
-    @FXML
-    private Label userInfo;
+    private FlowPane menuPane;
 
     private CurrentUserContext currentUserContext;
     private UserService userService;
@@ -56,11 +62,7 @@ public class MenuController {
 
     @FXML
     public void initialize() {
-        // TODO additional FX controls initialization
-        userInfo.setText("Username: " + currentUserContext.getUsername()
-                + "\nImię: " + currentUserContext.getFirstname()
-                + "\nNazwisko: " + currentUserContext.getLastname()
-                + "\nRola: " + currentUserContext.getRole());
+        setupMenuPane();
     }
 
     @FXML
@@ -212,7 +214,7 @@ public class MenuController {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("/view/TicketView.fxml"));
                 loader.setControllerFactory(springContext::getBean);
-                Scene scene = new Scene(loader.load(), 367, 250);
+                Scene scene = new Scene(loader.load(), 367, 215);
                 Stage stage = new Stage();
                 stage.setTitle("Sprzedaż biletów");
                 stage.setScene(scene);
@@ -266,13 +268,62 @@ public class MenuController {
             stage.show();
 
             // get a handle to the stage
-            Stage currentStage = (Stage) signOutButton.getScene().getWindow();
+            Stage currentStage = (Stage) menuPane.getScene().getWindow();
             // do what you have to do
             currentStage.hide();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void setupMenuPane() {
+//        clear menu pane
+        menuPane.getChildren().clear();
+        setupMenuButton("Użytkownicy","https://cdn-icons-png.flaticon.com/512/60/60692.png", this::openUsers);
+        setupMenuButton("Sprzedaj bilety","https://cdn-icons-png.flaticon.com/512/61/61113.png", this::sellTickets);
+        setupMenuButton("Filmy","https://cdn-icons-png.flaticon.com/512/61/61139.png", this::openMovies);
+        setupMenuButton("Seanse","https://cdn-icons-png.flaticon.com/512/61/61128.png", this::openHallMovies);
+        setupMenuButton("Odśwież sale","https://cdn-icons-png.flaticon.com/512/61/61076.png", this::updateHalls);
+        setupMenuButton("Rekomendacje","https://cdn-icons-png.flaticon.com/512/61/61012.png", this::openRecommendedMovies);
+        setupMenuButton("Statystyki","https://cdn-icons-png.flaticon.com/512/61/61054.png", this::openStats);
+        setupMenuButton("Zalogowany","https://cdn-icons-png.flaticon.com/512/61/61135.png", null);
+        setupMenuButton("Wyloguj","https://cdn-icons-png.flaticon.com/512/60/60821.png", this::signOut);
+    }
+    private void setupMenuButton(String text, String iconPath, EventHandler<ActionEvent> actionEventEventHandler) {
+        Button button = new Button(text);
+        double buttonHeight = 140;
+        button.setPrefSize(Region.USE_COMPUTED_SIZE, buttonHeight);
+        //Create imageview with background image
+        ImageView view = new ImageView(iconPath);
+//        set its text to black and make it bigger and bold
+        String basicStyle = "-fx-background-color: #555555; -fx-text-fill: #1A1A1A; -fx-font-size: 20px; -fx-font-weight: bold;";
+        button.setStyle(basicStyle);
+//        set on hover
+        if(actionEventEventHandler != null) {
+            button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: #AFB1B3; -fx-text-fill: #1A1A1A; -fx-font-size: 20px; -fx-font-weight: bold;"));
+        }
+        button.setOnMouseExited(e -> button.setStyle(basicStyle));
+
+        view.setFitHeight(buttonHeight);
+        view.setPreserveRatio(true);
+
+        button.setGraphic(view);
+        button.setContentDisplay(ContentDisplay.TOP);
+
+//        set button on click action
+        button.setOnAction(actionEventEventHandler);
+        if(actionEventEventHandler == null) {
+//            add tooltip
+            Tooltip tooltip = new Tooltip();
+            tooltip.setText("Username: " + currentUserContext.getUsername()
+                    + "\nImię: " + currentUserContext.getFirstname()
+                    + "\nNazwisko: " + currentUserContext.getLastname()
+                    + "\nRola: " + currentUserContext.getRole());
+            button.setTooltip(tooltip);
+        }
+
+        menuPane.getChildren().add(button);
     }
 
     public void throwError() {

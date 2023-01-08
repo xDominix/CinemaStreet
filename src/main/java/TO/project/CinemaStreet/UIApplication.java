@@ -35,7 +35,7 @@ public class UIApplication extends javafx.application.Application{
 
         loader.setControllerFactory(springContext::getBean);
         BorderPane rootLayout = loader.load();
-        rootLayout.setPrefSize(800, 600);
+        rootLayout.setPrefSize(755, 640);
 
         configureStage(primaryStage, rootLayout);
         primaryStage.show();

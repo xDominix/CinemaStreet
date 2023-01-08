@@ -54,6 +54,8 @@ public class MovieDetailsController {
     private Label ticketCostLabel;
     @FXML
     private Label idLabel;
+    @FXML
+    private Button deleteButton;
 
     private MovieService movieService;
     private FilterMovieService filterMovieService;
@@ -64,6 +66,8 @@ public class MovieDetailsController {
 
     @FXML
     public void initialize() {
+//        set color of text to red of deleteButton
+        deleteButton.setStyle("-fx-text-fill: red");
 //        placeholder image in case of no image
         imageView.setImage(new javafx.scene.image.Image("https://posters.movieposterdb.com/20_01/2017/7131440/l_7131440_be0c6b24.jpg"));
     }

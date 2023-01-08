@@ -62,7 +62,7 @@ public class LoginController {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("/view/MenuView.fxml"));
                 loader.setControllerFactory(springContext::getBean);
-                Scene scene = new Scene(loader.load(), 600, 400);
+                Scene scene = new Scene(loader.load(), 755, 640);
                 Stage stage = new Stage();
                 stage.setTitle("Menu");
                 stage.setScene(scene);

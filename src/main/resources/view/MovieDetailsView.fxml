@@ -44,7 +44,7 @@
                         </font>
                      </Label>
 <!--                         set tooltips-->
-                         <Label fx:id="categoryLabel" text="SCIFI" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                         <Label fx:id="categoryLabel" text="SCIFI" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                          <Label fx:id="releaseDateLabel" text="rel" GridPane.rowIndex="2" />
                          <Label fx:id="durationLabel" text="1h69min" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                          <Label fx:id="ticketCostLabel" text="1h69min" GridPane.rowIndex="3" />
@@ -54,9 +54,9 @@
                  </VBox>
                <GridPane alignment="CENTER">
                   <columnConstraints>
-                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" halignment="CENTER"/>
-                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" halignment="CENTER"/>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" halignment="CENTER"/>
+                     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
+                     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
                   </columnConstraints>
                   <rowConstraints>
                      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
@@ -64,10 +64,13 @@
                       <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                   </rowConstraints>
                   <children>
-                     <Button onAction="#copyUrlAction" alignment="CENTER" mnemonicParsing="false" text="URL" />
-                      <Button onAction="#editMovieAction" alignment="CENTER" mnemonicParsing="false" text="Edytuj" GridPane.columnIndex="1" />
-                     <Button onAction="#deleteMovieAction" alignment="CENTER" mnemonicParsing="false" text="Usuń" GridPane.columnIndex="2" />
+                     <Button alignment="CENTER" mnemonicParsing="false" onAction="#copyUrlAction" text="URL" />
+                      <Button alignment="CENTER" mnemonicParsing="false" onAction="#editMovieAction" text="Edytuj" GridPane.columnIndex="1" />
+                     <Button fx:id="deleteButton" alignment="CENTER" mnemonicParsing="false" onAction="#deleteMovieAction" text="Usuń" textFill="#ee0000" GridPane.columnIndex="2" />
                   </children>
+                  <VBox.margin>
+                     <Insets top="10.0" />
+                  </VBox.margin>
                </GridPane>
             </children>
          </VBox>

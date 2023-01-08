@@ -1,40 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
+<?import java.net.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.layout.*?>
-<?import java.net.URL?>
+
 <!--            fx:controller="TO.project.CinemaStreet.controller.UserController"-->
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            prefHeight="400.0" prefWidth="600.0"
-            fx:controller="TO.project.CinemaStreet.controller.MenuController"
-            minHeight="10" minWidth="10"
-            styleClass="linear-grad-to-bottom-right"
->
 
+<BorderPane minHeight="10" minWidth="10" prefHeight="524.0" prefWidth="300.0" styleClass="linear-grad-to-bottom-right" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TO.project.CinemaStreet.controller.MenuController">
 
-    <!--    buttons opening each application component-->
-    <center>
-        <VBox>
-            <Label text="Witaj w CinemaStreet!" prefWidth="300"/>
-            <Label text="------------------------" prefWidth="300"/>
-            <Label text="Jesteś zalogowany jako:" prefWidth="300"/>
-            <Label fx:id="userInfo" text=""/>
-            <Label text="------------------------" prefWidth="300"/>
-            <Button text="Konfiguracja użytkowników" onAction="#openUsers" prefWidth="300"/>
-            <Button text="Sprzedaj bilety" onAction="#sellTickets" prefWidth="300"/>
-            <Button text="Filmy" onAction="#openMovies" prefWidth="300"/>
-            <Button text="Konfiguracja filmów" onAction="#openEditMovies" prefWidth="300"/>
-            <Button text="Zarzadzanie seansami" onAction="#openHallMovies" prefWidth="300"/>
-            <Button text="Rekomendowane filmy" onAction="#openRecommendedMovies" prefWidth="300"/>
-            <Button text="Zaktualizuj sale" onAction="#updateHalls" prefWidth="300"/>
-            <Button text="Statystyki" onAction="#openStats" prefWidth="300"/>
-            <Button  fx:id="signOutButton"  text="Wyloguj" onAction="#signOut" prefWidth="300"/>
-        </VBox>
-    </center>
+    <top>
+        <FlowPane fx:id="menuPane" hgap="20.0" prefHeight="399.0" prefWidth="600.0" vgap="20.0" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding></FlowPane>
+    </top>
 
     <stylesheets>
         <URL value="@style.css" />

@@ -5,14 +5,20 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane minHeight="10" minWidth="10" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TO.project.CinemaStreet.controller.MovieController">
+<BorderPane minHeight="10" minWidth="10" prefHeight="506.0" prefWidth="856.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TO.project.CinemaStreet.controller.MovieController">
     <!--           search bar-->
     <top>
         <HBox>
-            <HBox fx:id="movieHBox" >
-                <TextField fx:id="searchTextField" promptText="Szukaj po tytule" prefWidth="300"/>
-                <ComboBox fx:id="searchByCategoryComboBox" prefWidth="200.0" promptText="Wyszukaj po kategorii"></ComboBox>
-                <Button onAction="#addNewMovieAction" text="Dodaj nowy film" prefWidth="100.0"/>
+            <HBox fx:id="movieHBox">
+                <TextField fx:id="searchTextField" prefHeight="37.0" prefWidth="300" promptText="Szukaj po tytule" />
+                <ComboBox fx:id="searchByCategoryComboBox" prefWidth="200.0" promptText="Wyszukaj po kategorii" />
+                <Button onAction="#addNewMovieAction" prefHeight="0.0" prefWidth="201.0" text="Dodaj nowy film">
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin></Button>
+            <HBox.margin>
+               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </HBox.margin>
             </HBox>
             <HBox.margin>
                <Insets bottom="10.0" />
